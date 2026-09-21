@@ -1,6 +1,10 @@
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
+using SmartSolarMicrogrid.Api.Common;
 using SmartSolarMicrogrid.Api.Configuration;
+using SmartSolarMicrogrid.Api.Models;
 using SmartSolarMicrogrid.Api.Repositories;
 using SmartSolarMicrogrid.Api.Services;
 
@@ -8,7 +12,28 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddControllers();
+builder.Services
+    .AddControllers()
+    .ConfigureApiBehaviorOptions(options =>
+    {
+        options.InvalidModelStateResponseFactory = context =>
+        {
+            var errors = context.ModelState
+                .Where(entry => entry.Value?.Errors.Count > 0)
+                .ToDictionary(
+                    entry => entry.Key,
+                    entry => entry.Value!.Errors
+                        .Select(error => string.IsNullOrWhiteSpace(error.ErrorMessage)
+                            ? "The supplied value is invalid."
+                            : error.ErrorMessage)
+                        .ToArray());
+
+            return new BadRequestObjectResult(new ApiErrorResponse(
+                "VALIDATION_ERROR",
+                "One or more registration fields are invalid.",
+                errors));
+        };
+    });
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
@@ -38,6 +63,8 @@ builder.Services.AddSingleton<IMongoDatabase>(serviceProvider =>
 });
 
 builder.Services.AddSingleton<IUserDetailsRepository, UserDetailsRepository>();
+builder.Services.AddScoped<IPasswordHasher<UserDetails>, PasswordHasher<UserDetails>>();
+builder.Services.AddScoped<IProsumerRegistrationService, ProsumerRegistrationService>();
 builder.Services.AddHostedService<MongoDbInitializer>();
 
 var app = builder.Build();

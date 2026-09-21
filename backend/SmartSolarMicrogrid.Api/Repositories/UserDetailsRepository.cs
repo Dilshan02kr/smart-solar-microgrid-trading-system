@@ -60,7 +60,23 @@ public sealed class UserDetailsRepository : IUserDetailsRepository
         user.CreatedAt = now;
         user.UpdatedAt = now;
 
-        await _users.InsertOneAsync(user, cancellationToken: cancellationToken);
+        try
+        {
+            await _users.InsertOneAsync(user, cancellationToken: cancellationToken);
+        }
+        catch (MongoWriteException exception)
+            when (exception.WriteError.Category == ServerErrorCategory.DuplicateKey)
+        {
+            var field = exception.Message.Contains(
+                "ux_userdetails_nic_when_present",
+                StringComparison.Ordinal)
+                ? DuplicateUserField.Nic
+                : exception.Message.Contains("ux_userdetails_email", StringComparison.Ordinal)
+                    ? DuplicateUserField.Email
+                    : DuplicateUserField.Unknown;
+
+            throw new DuplicateUserDetailsException(field, exception);
+        }
     }
 
     public async Task EnsureIndexesAsync(CancellationToken cancellationToken = default)
