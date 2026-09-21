@@ -1,5 +1,4 @@
 # IDE
-.vscode/
 .idea/
 *.user
 *.suo
@@ -27,3 +26,7 @@ appsettings.Development.json
 # OS
 .DS_Store
 Thumbs.db
+branch_structure.json
+temp_auto_push.bat
+temp_interactive_push.bat
+.gitignore
