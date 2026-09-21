@@ -48,6 +48,10 @@ builder.Services
         $"{MongoDbSettings.SectionName}:DatabaseName is required.")
     .ValidateOnStart();
 
+builder.Services
+    .AddOptions<BootstrapAdminSettings>()
+    .Bind(builder.Configuration.GetSection(BootstrapAdminSettings.SectionName));
+
 // MongoClient is thread-safe and intended to be reused for the application's lifetime.
 builder.Services.AddSingleton<IMongoClient>(serviceProvider =>
 {
@@ -63,9 +67,10 @@ builder.Services.AddSingleton<IMongoDatabase>(serviceProvider =>
 });
 
 builder.Services.AddSingleton<IUserDetailsRepository, UserDetailsRepository>();
-builder.Services.AddScoped<IPasswordHasher<UserDetails>, PasswordHasher<UserDetails>>();
+builder.Services.AddSingleton<IPasswordHasher<UserDetails>, PasswordHasher<UserDetails>>();
 builder.Services.AddScoped<IProsumerRegistrationService, ProsumerRegistrationService>();
 builder.Services.AddHostedService<MongoDbInitializer>();
+builder.Services.AddHostedService<BackofficeBootstrapInitializer>();
 
 var app = builder.Build();
 

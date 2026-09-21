@@ -49,6 +49,16 @@ public sealed class UserDetailsRepository : IUserDetailsRepository
             .FirstOrDefaultAsync(cancellationToken);
     }
 
+    public async Task<bool> ExistsByRoleAsync(
+        UserRole role,
+        CancellationToken cancellationToken = default)
+    {
+        return await _users
+            .Find(user => user.Role == role)
+            .Limit(1)
+            .AnyAsync(cancellationToken);
+    }
+
     public async Task CreateAsync(
         UserDetails user,
         CancellationToken cancellationToken = default)

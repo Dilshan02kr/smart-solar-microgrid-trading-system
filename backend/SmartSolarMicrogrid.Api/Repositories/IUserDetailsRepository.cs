@@ -10,6 +10,8 @@ public interface IUserDetailsRepository
 
     Task<UserDetails?> GetByNicAsync(string nic, CancellationToken cancellationToken = default);
 
+    Task<bool> ExistsByRoleAsync(UserRole role, CancellationToken cancellationToken = default);
+
     Task CreateAsync(UserDetails user, CancellationToken cancellationToken = default);
 
     Task EnsureIndexesAsync(CancellationToken cancellationToken = default);
