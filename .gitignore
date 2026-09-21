@@ -1,0 +1,29 @@
+# IDE
+.vscode/
+.idea/
+*.user
+*.suo
+
+# .NET
+bin/
+obj/
+.vs/
+
+# Node / Web
+node_modules/
+dist/
+build/
+
+# Android / Gradle
+.gradle/
+local.properties
+**/build/
+
+# Environment / secrets
+.env
+.env.*
+appsettings.Development.json
+
+# OS
+.DS_Store
+Thumbs.db
