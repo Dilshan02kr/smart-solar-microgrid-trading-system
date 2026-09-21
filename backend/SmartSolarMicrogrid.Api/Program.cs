@@ -112,6 +112,7 @@ builder.Services.AddSingleton<IMongoDatabase>(serviceProvider =>
 builder.Services.AddSingleton<IUserDetailsRepository, UserDetailsRepository>();
 builder.Services.AddSingleton<IPasswordHasher<UserDetails>, PasswordHasher<UserDetails>>();
 builder.Services.AddScoped<IProsumerRegistrationService, ProsumerRegistrationService>();
+builder.Services.AddScoped<IProsumerManagementService, ProsumerManagementService>();
 builder.Services.AddScoped<IJwtTokenService, JwtTokenService>();
 builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
 builder.Services.AddScoped<ActiveAccountJwtBearerEvents>();

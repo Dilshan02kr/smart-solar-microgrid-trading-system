@@ -59,6 +59,57 @@ public sealed class UserDetailsRepository : IUserDetailsRepository
             .AnyAsync(cancellationToken);
     }
 
+    public async Task<IReadOnlyList<UserDetails>> GetByRoleAsync(
+        UserRole role,
+        CancellationToken cancellationToken = default)
+    {
+        return await _users
+            .Find(user => user.Role == role)
+            .SortByDescending(user => user.CreatedAt)
+            .ToListAsync(cancellationToken);
+    }
+
+    public async Task<IReadOnlyList<UserDetails>> GetByRoleAndStatusAsync(
+        UserRole role,
+        AccountStatus accountStatus,
+        CancellationToken cancellationToken = default)
+    {
+        return await _users
+            .Find(user => user.Role == role && user.AccountStatus == accountStatus)
+            .SortByDescending(user => user.CreatedAt)
+            .ToListAsync(cancellationToken);
+    }
+
+    public async Task<UserDetails?> TryTransitionAccountStatusAsync(
+        string id,
+        UserRole role,
+        AccountStatus expectedStatus,
+        AccountStatus newStatus,
+        CancellationToken cancellationToken = default)
+    {
+        if (!ObjectId.TryParse(id, out var objectId))
+        {
+            return null;
+        }
+
+        var filter = Builders<UserDetails>.Filter.And(
+            Builders<UserDetails>.Filter.Eq(user => user.Id, objectId),
+            Builders<UserDetails>.Filter.Eq(user => user.Role, role),
+            Builders<UserDetails>.Filter.Eq(user => user.AccountStatus, expectedStatus));
+        var update = Builders<UserDetails>.Update
+            .Set(user => user.AccountStatus, newStatus)
+            .Set(user => user.UpdatedAt, DateTime.UtcNow);
+
+        return await _users.FindOneAndUpdateAsync(
+            filter,
+            update,
+            new FindOneAndUpdateOptions<UserDetails>
+            {
+                ReturnDocument = ReturnDocument.After
+            },
+            cancellationToken);
+    }
+
     public async Task CreateAsync(
         UserDetails user,
         CancellationToken cancellationToken = default)

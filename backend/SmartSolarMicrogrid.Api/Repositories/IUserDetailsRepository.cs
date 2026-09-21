@@ -12,6 +12,22 @@ public interface IUserDetailsRepository
 
     Task<bool> ExistsByRoleAsync(UserRole role, CancellationToken cancellationToken = default);
 
+    Task<IReadOnlyList<UserDetails>> GetByRoleAsync(
+        UserRole role,
+        CancellationToken cancellationToken = default);
+
+    Task<IReadOnlyList<UserDetails>> GetByRoleAndStatusAsync(
+        UserRole role,
+        AccountStatus accountStatus,
+        CancellationToken cancellationToken = default);
+
+    Task<UserDetails?> TryTransitionAccountStatusAsync(
+        string id,
+        UserRole role,
+        AccountStatus expectedStatus,
+        AccountStatus newStatus,
+        CancellationToken cancellationToken = default);
+
     Task CreateAsync(UserDetails user, CancellationToken cancellationToken = default);
 
     Task EnsureIndexesAsync(CancellationToken cancellationToken = default);
