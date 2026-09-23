@@ -24,6 +24,9 @@ public sealed class EnergyBookingSlot
     [BsonElement("capacityKw")]
     public double CapacityKw { get; set; }
 
+    [BsonElement("isAvailable")]
+    public bool IsAvailable { get; set; } = true;
+
     [BsonElement("createdAt")]
     [BsonDateTimeOptions(Kind = DateTimeKind.Utc)]
     public DateTime CreatedAt { get; set; }

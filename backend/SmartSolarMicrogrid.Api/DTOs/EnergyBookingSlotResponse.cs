@@ -7,5 +7,6 @@ public sealed record EnergyBookingSlotResponse(
     TimeSpan StartTime,
     TimeSpan EndTime,
     double CapacityKw,
+    bool IsAvailable,
     DateTime CreatedAt,
     DateTime UpdatedAt);
