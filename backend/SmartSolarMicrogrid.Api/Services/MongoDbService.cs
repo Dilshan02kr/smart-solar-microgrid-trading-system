@@ -48,7 +48,22 @@ namespace SmartSolarMicrogrid.Api.Services
             return await _reservationsCollection.FindOneAndUpdateAsync(filter, update, options);
         }
 
-        // 3. Save a new reservation
+        // 3. Count reservations by exact status (server-side, no in-memory load)
+        public async Task<long> CountByStatusAsync(string status) =>
+            await _reservationsCollection.CountDocumentsAsync(
+                Builders<EnergyReservation>.Filter.Eq(r => r.Status, status));
+
+        // 3a. Count approved reservations whose ScheduledTime is in the future
+        public async Task<long> CountApprovedFutureAsync()
+        {
+            var filter = Builders<EnergyReservation>.Filter.And(
+                Builders<EnergyReservation>.Filter.Eq(r => r.Status, "Approved"),
+                Builders<EnergyReservation>.Filter.Gt(r => r.ScheduledTime, DateTime.UtcNow)
+            );
+            return await _reservationsCollection.CountDocumentsAsync(filter);
+        }
+
+        // 4. Save a new reservation
         public async Task CreateAsync(EnergyReservation reservation) =>
             await _reservationsCollection.InsertOneAsync(reservation);
 

@@ -12,7 +12,8 @@ namespace SmartSolarMicrogrid.Api.Controllers;
 [Authorize(Roles = nameof(UserRole.GRID_OPERATOR))]
 public sealed class OperatorController(
     ITransactionVerificationService verificationService,
-    ITransactionCompletionService completionService) : ControllerBase
+    ITransactionCompletionService completionService,
+    IOperatorDashboardService dashboardService) : ControllerBase
 {
     [HttpPost("verify-transaction")]
     [ProducesResponseType<VerifyTransactionResponse>(StatusCodes.Status200OK)]
@@ -115,4 +116,12 @@ public sealed class OperatorController(
                 "The reservation could not be completed."))
         };
     }
+
+    [HttpGet("dashboard/summary")]
+    [ProducesResponseType<DashboardSummaryResponse>(StatusCodes.Status200OK)]
+    [ProducesResponseType<ApiErrorResponse>(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType<ApiErrorResponse>(StatusCodes.Status403Forbidden)]
+    public async Task<ActionResult<DashboardSummaryResponse>> GetDashboardSummary(
+        CancellationToken cancellationToken) =>
+        Ok(await dashboardService.GetSummaryAsync(cancellationToken));
 }
