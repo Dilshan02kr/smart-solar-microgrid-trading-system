@@ -30,6 +30,24 @@ namespace SmartSolarMicrogrid.Api.Services
         public async Task<EnergyReservation?> GetByTransactionReferenceAsync(string transactionReference) =>
             await _reservationsCollection.Find(r => r.TransactionReference == transactionReference).FirstOrDefaultAsync();
 
+        // 2b. Atomically complete an approved reservation to prevent race conditions
+        public async Task<EnergyReservation?> TryCompleteApprovedReservationAsync(string reservationId)
+        {
+            var filter = Builders<EnergyReservation>.Filter.And(
+                Builders<EnergyReservation>.Filter.Eq(r => r.Id, reservationId),
+                Builders<EnergyReservation>.Filter.Eq(r => r.Status, "Approved")
+            );
+
+            var update = Builders<EnergyReservation>.Update.Set(r => r.Status, "Completed");
+
+            var options = new FindOneAndUpdateOptions<EnergyReservation>
+            {
+                ReturnDocument = ReturnDocument.After
+            };
+
+            return await _reservationsCollection.FindOneAndUpdateAsync(filter, update, options);
+        }
+
         // 3. Save a new reservation
         public async Task CreateAsync(EnergyReservation reservation) =>
             await _reservationsCollection.InsertOneAsync(reservation);

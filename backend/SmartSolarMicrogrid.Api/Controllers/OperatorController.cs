@@ -11,7 +11,8 @@ namespace SmartSolarMicrogrid.Api.Controllers;
 [Route("api/operator")]
 [Authorize(Roles = nameof(UserRole.GRID_OPERATOR))]
 public sealed class OperatorController(
-    ITransactionVerificationService verificationService) : ControllerBase
+    ITransactionVerificationService verificationService,
+    ITransactionCompletionService completionService) : ControllerBase
 {
     [HttpPost("verify-transaction")]
     [ProducesResponseType<VerifyTransactionResponse>(StatusCodes.Status200OK)]
@@ -61,6 +62,57 @@ public sealed class OperatorController(
             _ => Conflict(new ApiErrorResponse(
                 ReservationErrorCodes.ReservationNotApproved,
                 "The reservation could not be verified."))
+        };
+    }
+
+    [HttpPost("reservations/{reservationId}/complete")]
+    [ProducesResponseType<CompleteReservationResponse>(StatusCodes.Status200OK)]
+    [ProducesResponseType<ApiErrorResponse>(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType<ApiErrorResponse>(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType<ApiErrorResponse>(StatusCodes.Status403Forbidden)]
+    [ProducesResponseType<ApiErrorResponse>(StatusCodes.Status404NotFound)]
+    [ProducesResponseType<ApiErrorResponse>(StatusCodes.Status409Conflict)]
+    public async Task<ActionResult<CompleteReservationResponse>> CompleteReservation(
+        string reservationId,
+        CancellationToken cancellationToken)
+    {
+        var result = await completionService.CompleteReservationAsync(
+            reservationId,
+            cancellationToken);
+
+        return result.Status switch
+        {
+            TransactionCompletionStatus.Success =>
+                Ok(result.Response),
+
+            TransactionCompletionStatus.InvalidReservationId =>
+                BadRequest(new ApiErrorResponse(
+                    ReservationErrorCodes.InvalidReservationId,
+                    "The supplied reservation ID is invalid.")),
+
+            TransactionCompletionStatus.ReservationNotFound =>
+                NotFound(new ApiErrorResponse(
+                    ReservationErrorCodes.ReservationNotFound,
+                    "No reservation was found for the supplied reservation ID.")),
+
+            TransactionCompletionStatus.ReservationNotApproved =>
+                Conflict(new ApiErrorResponse(
+                    ReservationErrorCodes.ReservationNotApproved,
+                    "The reservation is not in an approved state.")),
+
+            TransactionCompletionStatus.ReservationCancelled =>
+                Conflict(new ApiErrorResponse(
+                    ReservationErrorCodes.ReservationCancelled,
+                    "The reservation has been cancelled.")),
+
+            TransactionCompletionStatus.ReservationAlreadyCompleted =>
+                Conflict(new ApiErrorResponse(
+                    ReservationErrorCodes.ReservationAlreadyCompleted,
+                    "The reservation has already been completed.")),
+
+            _ => Conflict(new ApiErrorResponse(
+                ReservationErrorCodes.ReservationNotApproved,
+                "The reservation could not be completed."))
         };
     }
 }
