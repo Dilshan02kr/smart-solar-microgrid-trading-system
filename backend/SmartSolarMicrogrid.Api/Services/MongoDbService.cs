@@ -26,6 +26,10 @@ namespace SmartSolarMicrogrid.Api.Services
         public async Task<EnergyReservation?> GetByIdAsync(string id) =>
             await _reservationsCollection.Find(r => r.Id == id).FirstOrDefaultAsync();
 
+        // 2a. Get a single reservation by transaction reference
+        public async Task<EnergyReservation?> GetByTransactionReferenceAsync(string transactionReference) =>
+            await _reservationsCollection.Find(r => r.TransactionReference == transactionReference).FirstOrDefaultAsync();
+
         // 3. Save a new reservation
         public async Task CreateAsync(EnergyReservation reservation) =>
             await _reservationsCollection.InsertOneAsync(reservation);

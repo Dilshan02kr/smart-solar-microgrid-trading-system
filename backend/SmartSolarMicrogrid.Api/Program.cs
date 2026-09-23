@@ -138,6 +138,9 @@ builder.Services.AddScoped<ActiveAccountJwtBearerEvents>();
 // Member 3 Reservation Service
 builder.Services.AddSingleton<MongoDbService>();
 
+// Member 4 Transaction Verification Service
+builder.Services.AddScoped<ITransactionVerificationService, TransactionVerificationService>();
+
 // Hosted Initializers
 builder.Services.AddHostedService<MongoDbInitializer>();
 builder.Services.AddHostedService<BackofficeBootstrapInitializer>();

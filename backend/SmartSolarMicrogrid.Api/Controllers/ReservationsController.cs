@@ -36,7 +36,6 @@ namespace SmartSolarMicrogrid.Api.Controllers
                 return BadRequest(new { message = "Reservations must be scheduled within the allowed 7-day window." });
             }
 
-            reservation.Status = "Approved";
             reservation.CreatedAt = DateTime.UtcNow;
 
             await _mongoDbService.CreateAsync(reservation);
