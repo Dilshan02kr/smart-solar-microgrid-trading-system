@@ -1,9 +1,11 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SmartSolarMicrogrid.Api.Models;
 using SmartSolarMicrogrid.Api.Services;
 
 namespace SmartSolarMicrogrid.Api.Controllers
 {
+    [Authorize] // Require JWT authentication for FAT Service validation
     [ApiController]
     [Route("api/[controller]")]
     public class ReservationsController : ControllerBase
@@ -21,6 +23,24 @@ namespace SmartSolarMicrogrid.Api.Controllers
         {
             var reservations = await _mongoDbService.GetByProsumerAsync(prosumerId);
             return Ok(reservations);
+        }
+
+        // GET: api/reservations/650000000000000000000001
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetById(string id)
+        {
+            var reservation = await _mongoDbService.GetByIdAsync(id);
+            if (reservation == null) return NotFound(new { message = "Reservation not found." });
+            return Ok(reservation);
+        }
+
+        // GET: api/reservations/check-active/STATION_123 (Required for Member 2)
+        [AllowAnonymous] // Member 2 station check endpoint
+        [HttpGet("check-active/{stationId}")]
+        public async Task<IActionResult> CheckActiveReservations(string stationId)
+        {
+            bool hasActive = await _mongoDbService.HasActiveReservationsAsync(stationId);
+            return Ok(new { stationId, hasActiveReservations = hasActive });
         }
 
         // POST: api/reservations
@@ -41,7 +61,7 @@ namespace SmartSolarMicrogrid.Api.Controllers
 
             await _mongoDbService.CreateAsync(reservation);
 
-            return Ok(new { message = "Reservation created successfully.", data = reservation });
+            return CreatedAtAction(nameof(GetById), new { id = reservation.Id }, new { message = "Reservation created successfully.", data = reservation });
         }
 
         // PUT: api/reservations/{id}/cancel
@@ -67,42 +87,42 @@ namespace SmartSolarMicrogrid.Api.Controllers
         }
 
         // GET: api/reservations/search?prosumerId=123&status=Approved&searchTerm=station1
-[HttpGet("search")]
-public async Task<IActionResult> SearchReservations([FromQuery] string prosumerId, [FromQuery] string? status, [FromQuery] string? searchTerm)
-{
-    var results = await _mongoDbService.GetFilteredAsync(prosumerId, status, searchTerm);
-    return Ok(results);
-}
+        [HttpGet("search")]
+        public async Task<IActionResult> SearchReservations([FromQuery] string prosumerId, [FromQuery] string? status, [FromQuery] string? searchTerm)
+        {
+            var results = await _mongoDbService.GetFilteredAsync(prosumerId, status, searchTerm);
+            return Ok(results);
+        }
 
-// PUT: api/reservations/{id}
-[HttpPut("{id}")]
-public async Task<IActionResult> UpdateReservation(string id, [FromBody] EnergyReservation updatedData)
-{
-    var existing = await _mongoDbService.GetByIdAsync(id);
-    if (existing == null) return NotFound(new { message = "Reservation not found." });
+        // PUT: api/reservations/{id}
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateReservation(string id, [FromBody] EnergyReservation updatedData)
+        {
+            var existing = await _mongoDbService.GetByIdAsync(id);
+            if (existing == null) return NotFound(new { message = "Reservation not found." });
 
-    DateTime now = DateTime.UtcNow;
-    TimeSpan timeDifference = existing.ScheduledTime - now;
+            DateTime now = DateTime.UtcNow;
+            TimeSpan timeDifference = existing.ScheduledTime - now;
 
-    // 12-hour rule validation for modification
-    if (timeDifference.TotalHours < 12)
-    {
-        return BadRequest(new { message = "Updates require at least 12 hours notice prior to scheduled time." });
-    }
+            // 12-hour rule validation for modification
+            if (timeDifference.TotalHours < 12)
+            {
+                return BadRequest(new { message = "Updates require at least 12 hours notice prior to scheduled time." });
+            }
 
-    // 7-day rule validation for new requested time
-    DateTime maxAllowedDate = now.AddDays(7);
-    if (updatedData.ScheduledTime < now || updatedData.ScheduledTime > maxAllowedDate)
-    {
-        return BadRequest(new { message = "New time must be within the allowed 7-day window." });
-    }
+            // 7-day rule validation for new requested time
+            DateTime maxAllowedDate = now.AddDays(7);
+            if (updatedData.ScheduledTime < now || updatedData.ScheduledTime > maxAllowedDate)
+            {
+                return BadRequest(new { message = "New time must be within the allowed 7-day window." });
+            }
 
-    existing.ScheduledTime = updatedData.ScheduledTime;
-    existing.SlotId = updatedData.SlotId;
+            existing.ScheduledTime = updatedData.ScheduledTime;
+            existing.SlotId = updatedData.SlotId;
 
-    await _mongoDbService.UpdateAsync(id, existing);
+            await _mongoDbService.UpdateAsync(id, existing);
 
-    return Ok(new { message = "Reservation updated successfully.", data = existing });
-}
+            return Ok(new { message = "Reservation updated successfully.", data = existing });
+        }
     }
 }
