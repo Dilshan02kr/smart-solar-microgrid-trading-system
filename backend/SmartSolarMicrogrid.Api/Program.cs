@@ -15,7 +15,6 @@ using SmartSolarMicrogrid.Api.Services;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
 builder.Services
     .AddControllers()
     .ConfigureApiBehaviorOptions(options =>
@@ -38,9 +37,27 @@ builder.Services
                 errors));
         };
     });
+
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
+// 1. Configure MongoDbSettings with fallback values directly in configuration
+var mongoSection = builder.Configuration.GetSection(MongoDbSettings.SectionName);
+if (string.IsNullOrWhiteSpace(mongoSection["ConnectionString"]))
+{
+    // Replace with your actual team MongoDB connection link if appsettings.json fails to load
+    builder.Configuration[$"{MongoDbSettings.SectionName}:ConnectionString"] = "";
+}
+{
+    // A secure fallback key that is at least 32 characters long
+    builder.Configuration[$"{JwtSettings.SectionName}:SigningKey"] = "SuperSecretSmartSolarMicrogridKey2026!@#$";
+}
+if (string.IsNullOrWhiteSpace(mongoSection["DatabaseName"]))
+{
+    builder.Configuration[$"{MongoDbSettings.SectionName}:DatabaseName"] = "SmartSolarMicrogridDb";
+}
+
+// 2. Register & Validate MongoDbSettings Options
 builder.Services
     .AddOptions<MongoDbSettings>()
     .Bind(builder.Configuration.GetSection(MongoDbSettings.SectionName))
@@ -109,6 +126,7 @@ builder.Services.AddSingleton<IMongoDatabase>(serviceProvider =>
     return client.GetDatabase(settings.DatabaseName);
 });
 
+// Domain Services & Repositories Registration
 builder.Services.AddSingleton<IUserDetailsRepository, UserDetailsRepository>();
 builder.Services.AddSingleton<IPasswordHasher<UserDetails>, PasswordHasher<UserDetails>>();
 builder.Services.AddScoped<IProsumerRegistrationService, ProsumerRegistrationService>();
@@ -116,6 +134,11 @@ builder.Services.AddScoped<IProsumerManagementService, ProsumerManagementService
 builder.Services.AddScoped<IJwtTokenService, JwtTokenService>();
 builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
 builder.Services.AddScoped<ActiveAccountJwtBearerEvents>();
+
+// Member 3 Reservation Service
+builder.Services.AddSingleton<MongoDbService>();
+
+// Hosted Initializers
 builder.Services.AddHostedService<MongoDbInitializer>();
 builder.Services.AddHostedService<BackofficeBootstrapInitializer>();
 
