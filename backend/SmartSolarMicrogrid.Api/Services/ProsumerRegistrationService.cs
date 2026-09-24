@@ -1,3 +1,4 @@
+// Validates Prosumer self-registration and creates a securely hashed pending account.
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Identity;
 using SmartSolarMicrogrid.Api.DTOs;
@@ -14,6 +15,7 @@ public sealed class ProsumerRegistrationService(
         RegisterProsumerRequest request,
         CancellationToken cancellationToken = default)
     {
+        // Validates unique Prosumer details and persists a securely hashed pending account.
         var nic = request.Nic?.Trim();
         var firstName = request.FirstName?.Trim();
         var lastName = request.LastName?.Trim();
@@ -96,6 +98,7 @@ public sealed class ProsumerRegistrationService(
         return new ProsumerRegistrationResult(ProsumerRegistrationStatus.Created, response);
     }
 
+    // Creates a validation-failure result with a safe client-facing message.
     private static ProsumerRegistrationResult Invalid(string message) =>
         new(ProsumerRegistrationStatus.Invalid, Message: message);
 }

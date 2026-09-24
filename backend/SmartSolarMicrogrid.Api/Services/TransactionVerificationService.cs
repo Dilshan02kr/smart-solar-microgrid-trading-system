@@ -1,56 +1,76 @@
+// Verifies approved transaction references within the operator's assigned station.
 using SmartSolarMicrogrid.Api.DTOs;
+using SmartSolarMicrogrid.Api.Models;
+using SmartSolarMicrogrid.Api.Repositories;
 
 namespace SmartSolarMicrogrid.Api.Services;
 
-public sealed class TransactionVerificationService(MongoDbService mongoDbService) : ITransactionVerificationService
+public sealed class TransactionVerificationService(
+    IEnergyReservationRepository reservationRepository,
+    IOperatorAssignmentService operatorAssignmentService) : ITransactionVerificationService
 {
     public async Task<TransactionVerificationResult> VerifyTransactionAsync(
+        string? operatorUserId,
         string? transactionReference,
         CancellationToken cancellationToken = default)
     {
+        // Verify an approved reference only after resolving the operator's current station assignment.
+        var assignment = await operatorAssignmentService.ResolveAsync(
+            operatorUserId,
+            cancellationToken);
+        var assignmentFailure = MapAssignmentFailure(assignment.Status);
+        if (assignmentFailure.HasValue)
+        {
+            return new TransactionVerificationResult(assignmentFailure.Value);
+        }
+
         if (string.IsNullOrWhiteSpace(transactionReference))
         {
             return new TransactionVerificationResult(
                 TransactionVerificationStatus.InvalidTransactionReference);
         }
 
-        var normalizedReference = transactionReference.Trim();
-
-        var reservation = await mongoDbService.GetByTransactionReferenceAsync(normalizedReference);
+        var reservation = await reservationRepository.GetByTransactionReferenceAsync(
+            transactionReference.Trim(),
+            cancellationToken);
         if (reservation is null)
         {
             return new TransactionVerificationResult(
                 TransactionVerificationStatus.ReservationNotFound);
         }
 
-        if (string.Equals(reservation.Status, "Cancelled", StringComparison.OrdinalIgnoreCase))
+        if (!string.Equals(
+                reservation.StationId,
+                assignment.StationId,
+                StringComparison.OrdinalIgnoreCase))
+        {
+            return new TransactionVerificationResult(
+                TransactionVerificationStatus.AccessDenied);
+        }
+
+        if (reservation.Status == ReservationStatus.CANCELLED)
         {
             return new TransactionVerificationResult(
                 TransactionVerificationStatus.ReservationCancelled);
         }
 
-        if (string.Equals(reservation.Status, "Completed", StringComparison.OrdinalIgnoreCase))
+        if (reservation.Status == ReservationStatus.COMPLETED)
         {
             return new TransactionVerificationResult(
                 TransactionVerificationStatus.ReservationAlreadyCompleted);
         }
 
-        if (string.Equals(reservation.Status, "Pending", StringComparison.OrdinalIgnoreCase))
-        {
-            return new TransactionVerificationResult(
-                TransactionVerificationStatus.ReservationNotApproved);
-        }
-
-        if (!string.Equals(reservation.Status, "Approved", StringComparison.OrdinalIgnoreCase))
+        if (reservation.Status != ReservationStatus.APPROVED ||
+            string.IsNullOrWhiteSpace(reservation.TransactionReference))
         {
             return new TransactionVerificationResult(
                 TransactionVerificationStatus.ReservationNotApproved);
         }
 
         var response = new VerifyTransactionResponse(
-            reservation.Id ?? string.Empty,
+            reservation.Id,
             reservation.TransactionReference,
-            reservation.Status,
+            reservation.Status.ToString(),
             reservation.ProsumerId,
             reservation.StationId,
             reservation.SlotId,
@@ -59,5 +79,21 @@ public sealed class TransactionVerificationService(MongoDbService mongoDbService
         return new TransactionVerificationResult(
             TransactionVerificationStatus.Success,
             response);
+    }
+
+    private static TransactionVerificationStatus? MapAssignmentFailure(
+        OperatorAssignmentStatus status)
+    {
+        // Convert assignment-resolution failures into verification outcomes.
+        return status switch
+        {
+            OperatorAssignmentStatus.AuthenticationRequired =>
+                TransactionVerificationStatus.AuthenticationRequired,
+            OperatorAssignmentStatus.AccessDenied =>
+                TransactionVerificationStatus.AccessDenied,
+            OperatorAssignmentStatus.StationNotAssigned =>
+                TransactionVerificationStatus.OperatorStationNotAssigned,
+            _ => null
+        };
     }
 }

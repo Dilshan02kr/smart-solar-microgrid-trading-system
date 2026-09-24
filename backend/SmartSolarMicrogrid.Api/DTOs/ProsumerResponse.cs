@@ -1,3 +1,4 @@
+// Exposes safe Prosumer profile and account-lifecycle information.
 namespace SmartSolarMicrogrid.Api.DTOs;
 
 public sealed record ProsumerResponse(

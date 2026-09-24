@@ -1,25 +1,40 @@
+// Represents a server-controlled reservation persisted in MongoDB.
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
-namespace SmartSolarMicrogrid.Api.Models
+namespace SmartSolarMicrogrid.Api.Models;
+
+public sealed class EnergyReservation
 {
-    public class EnergyReservation
-    {
-        [BsonId]
-        [BsonRepresentation(BsonType.ObjectId)]
-        public string? Id { get; set; }
+    [BsonId]
+    [BsonRepresentation(BsonType.ObjectId)]
+    public string Id { get; set; } = ObjectId.GenerateNewId().ToString();
 
-        public string ProsumerId { get; set; } = string.Empty;
-        public string StationId { get; set; } = string.Empty;
-        public string SlotId { get; set; } = string.Empty;
+    [BsonRepresentation(BsonType.ObjectId)]
+    public required string ProsumerId { get; set; }
 
-        public DateTime ScheduledTime { get; set; }
-        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+    [BsonRepresentation(BsonType.ObjectId)]
+    public required string StationId { get; set; }
 
-        // Statuses: "Pending", "Approved", "Completed", "Cancelled"
-        public string Status { get; set; } = "Pending";
+    [BsonRepresentation(BsonType.ObjectId)]
+    public required string SlotId { get; set; }
 
-        // Transaction reference for Member 4's QR scanning workflow
-        public string TransactionReference { get; set; } = Guid.NewGuid().ToString("N");
-    }
+    [BsonDateTimeOptions(Kind = DateTimeKind.Utc)]
+    public DateTime ScheduledTime { get; set; }
+
+    [BsonSerializer(typeof(ReservationStatusSerializer))]
+    public ReservationStatus Status { get; set; } = ReservationStatus.PENDING;
+
+    [BsonIgnoreIfNull]
+    public string? TransactionReference { get; set; }
+
+    [BsonDateTimeOptions(Kind = DateTimeKind.Utc)]
+    public DateTime CreatedAt { get; set; }
+
+    [BsonDateTimeOptions(Kind = DateTimeKind.Utc)]
+    public DateTime UpdatedAt { get; set; }
+
+    [BsonIgnoreIfNull]
+    [BsonDateTimeOptions(Kind = DateTimeKind.Utc)]
+    public DateTime? CompletedAt { get; set; }
 }

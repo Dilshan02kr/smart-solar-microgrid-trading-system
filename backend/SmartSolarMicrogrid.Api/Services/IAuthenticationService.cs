@@ -1,17 +1,21 @@
+// Defines login and current-user operations for centralized authentication.
 using SmartSolarMicrogrid.Api.DTOs;
 
 namespace SmartSolarMicrogrid.Api.Services;
 
 public interface IAuthenticationService
 {
+    // Authenticates a Backoffice or Grid Operator by email and password.
     Task<AuthenticationResult> WebLoginAsync(
         WebLoginRequest request,
         CancellationToken cancellationToken = default);
 
+    // Authenticates a Prosumer by NIC and password.
     Task<AuthenticationResult> ProsumerLoginAsync(
         ProsumerLoginRequest request,
         CancellationToken cancellationToken = default);
 
+    // Returns safe current-user data for an active account.
     Task<AuthenticatedUserResponse?> GetCurrentUserAsync(
         string userId,
         CancellationToken cancellationToken = default);

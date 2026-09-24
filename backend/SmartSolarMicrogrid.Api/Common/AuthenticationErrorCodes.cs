@@ -1,3 +1,4 @@
+// Defines stable error codes for authentication and authorization failures.
 namespace SmartSolarMicrogrid.Api.Common;
 
 public static class AuthenticationErrorCodes

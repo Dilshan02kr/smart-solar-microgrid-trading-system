@@ -1,32 +1,66 @@
+// Completes approved reservations within the authenticated operator's assigned station.
 using MongoDB.Bson;
 using SmartSolarMicrogrid.Api.DTOs;
+using SmartSolarMicrogrid.Api.Models;
+using SmartSolarMicrogrid.Api.Repositories;
 
 namespace SmartSolarMicrogrid.Api.Services;
 
-public sealed class TransactionCompletionService(MongoDbService mongoDbService) : ITransactionCompletionService
+public sealed class TransactionCompletionService(
+    IEnergyReservationRepository reservationRepository,
+    IOperatorAssignmentService operatorAssignmentService) : ITransactionCompletionService
 {
     public async Task<TransactionCompletionResult> CompleteReservationAsync(
+        string? operatorUserId,
         string? reservationId,
         CancellationToken cancellationToken = default)
     {
-        if (string.IsNullOrWhiteSpace(reservationId) || !ObjectId.TryParse(reservationId.Trim(), out _))
+        // Authorize the current station before atomically completing an approved reservation.
+        var assignment = await operatorAssignmentService.ResolveAsync(
+            operatorUserId,
+            cancellationToken);
+        var assignmentFailure = MapAssignmentFailure(assignment.Status);
+        if (assignmentFailure.HasValue)
+        {
+            return new TransactionCompletionResult(assignmentFailure.Value);
+        }
+
+        if (string.IsNullOrWhiteSpace(reservationId) ||
+            !ObjectId.TryParse(reservationId.Trim(), out _))
         {
             return new TransactionCompletionResult(
                 TransactionCompletionStatus.InvalidReservationId);
         }
 
         var normalizedId = reservationId.Trim();
+        var existing = await reservationRepository.GetByIdAsync(normalizedId, cancellationToken);
+        if (existing is null)
+        {
+            return new TransactionCompletionResult(
+                TransactionCompletionStatus.ReservationNotFound);
+        }
 
-        // 1. Attempt atomic conditional transition from "Approved" to "Completed"
-        // This guarantees that concurrent completion attempts cannot both succeed.
-        var updatedReservation = await mongoDbService.TryCompleteApprovedReservationAsync(normalizedId);
+        if (!string.Equals(
+                existing.StationId,
+                assignment.StationId,
+                StringComparison.OrdinalIgnoreCase))
+        {
+            return new TransactionCompletionResult(TransactionCompletionStatus.AccessDenied);
+        }
+
+        var completedAt = DateTime.UtcNow;
+        var updatedReservation = await reservationRepository.TryCompleteApprovedAsync(
+            normalizedId,
+            assignment.StationId!,
+            completedAt,
+            cancellationToken);
 
         if (updatedReservation is not null)
         {
             var response = new CompleteReservationResponse(
-                updatedReservation.Id ?? normalizedId,
-                updatedReservation.TransactionReference,
-                updatedReservation.Status,
+                updatedReservation.Id,
+                updatedReservation.TransactionReference ?? string.Empty,
+                updatedReservation.Status.ToString(),
                 updatedReservation.ProsumerId,
                 updatedReservation.StationId,
                 updatedReservation.SlotId,
@@ -37,33 +71,45 @@ public sealed class TransactionCompletionService(MongoDbService mongoDbService) 
                 response);
         }
 
-        // 2. If the atomic update returned null, inspect the current state to return the exact failure reason
-        var existing = await mongoDbService.GetByIdAsync(normalizedId);
+        existing = await reservationRepository.GetByIdAsync(normalizedId, cancellationToken);
         if (existing is null)
         {
             return new TransactionCompletionResult(
                 TransactionCompletionStatus.ReservationNotFound);
         }
 
-        if (string.Equals(existing.Status, "Completed", StringComparison.OrdinalIgnoreCase))
+        if (!string.Equals(
+                existing.StationId,
+                assignment.StationId,
+                StringComparison.OrdinalIgnoreCase))
         {
-            return new TransactionCompletionResult(
-                TransactionCompletionStatus.ReservationAlreadyCompleted);
+            return new TransactionCompletionResult(TransactionCompletionStatus.AccessDenied);
         }
 
-        if (string.Equals(existing.Status, "Cancelled", StringComparison.OrdinalIgnoreCase))
+        return existing.Status switch
         {
-            return new TransactionCompletionResult(
-                TransactionCompletionStatus.ReservationCancelled);
-        }
+            ReservationStatus.COMPLETED => new TransactionCompletionResult(
+                TransactionCompletionStatus.ReservationAlreadyCompleted),
+            ReservationStatus.CANCELLED => new TransactionCompletionResult(
+                TransactionCompletionStatus.ReservationCancelled),
+            _ => new TransactionCompletionResult(
+                TransactionCompletionStatus.ReservationNotApproved)
+        };
+    }
 
-        if (string.Equals(existing.Status, "Pending", StringComparison.OrdinalIgnoreCase))
+    private static TransactionCompletionStatus? MapAssignmentFailure(
+        OperatorAssignmentStatus status)
+    {
+        // Convert assignment-resolution failures into completion outcomes.
+        return status switch
         {
-            return new TransactionCompletionResult(
-                TransactionCompletionStatus.ReservationNotApproved);
-        }
-
-        return new TransactionCompletionResult(
-            TransactionCompletionStatus.ReservationNotApproved);
+            OperatorAssignmentStatus.AuthenticationRequired =>
+                TransactionCompletionStatus.AuthenticationRequired,
+            OperatorAssignmentStatus.AccessDenied =>
+                TransactionCompletionStatus.AccessDenied,
+            OperatorAssignmentStatus.StationNotAssigned =>
+                TransactionCompletionStatus.OperatorStationNotAssigned,
+            _ => null
+        };
     }
 }

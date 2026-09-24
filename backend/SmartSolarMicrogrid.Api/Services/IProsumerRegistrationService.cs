@@ -1,9 +1,11 @@
+// Defines public Prosumer self-registration with server-controlled initial state.
 using SmartSolarMicrogrid.Api.DTOs;
 
 namespace SmartSolarMicrogrid.Api.Services;
 
 public interface IProsumerRegistrationService
 {
+    // Validates and creates a pending Prosumer account.
     Task<ProsumerRegistrationResult> RegisterAsync(
         RegisterProsumerRequest request,
         CancellationToken cancellationToken = default);

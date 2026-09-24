@@ -1,3 +1,4 @@
+// Defines NIC and password credentials for Prosumer login.
 using System.ComponentModel.DataAnnotations;
 
 namespace SmartSolarMicrogrid.Api.DTOs;

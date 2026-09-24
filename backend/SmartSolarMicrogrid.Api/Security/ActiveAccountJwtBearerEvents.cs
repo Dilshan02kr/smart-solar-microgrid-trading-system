@@ -1,3 +1,4 @@
+// Enforces current database role and ACTIVE account status for every validated JWT.
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using SmartSolarMicrogrid.Api.Common;
 using SmartSolarMicrogrid.Api.Models;
@@ -13,6 +14,7 @@ public sealed class ActiveAccountJwtBearerEvents(
 
     public override async Task TokenValidated(TokenValidatedContext context)
     {
+        // Reloads the account and rejects stale role claims or non-active users.
         var userId = context.Principal?.FindFirst("userId")?.Value;
         var tokenRole = context.Principal?.FindFirst("role")?.Value;
         var user = string.IsNullOrWhiteSpace(userId)
@@ -42,6 +44,7 @@ public sealed class ActiveAccountJwtBearerEvents(
 
     public override async Task Challenge(JwtBearerChallengeContext context)
     {
+        // Returns a structured 401 response for authentication failures.
         context.HandleResponse();
 
         var code = context.HttpContext.Items[ErrorCodeItem] as string
@@ -56,6 +59,7 @@ public sealed class ActiveAccountJwtBearerEvents(
 
     public override async Task Forbidden(ForbiddenContext context)
     {
+        // Returns a structured 403 response for authenticated role failures.
         context.Response.StatusCode = StatusCodes.Status403Forbidden;
         context.Response.ContentType = "application/json";
         await context.Response.WriteAsJsonAsync(new ApiErrorResponse(
@@ -68,6 +72,7 @@ public sealed class ActiveAccountJwtBearerEvents(
         string code,
         string message)
     {
+        // Records the safe error details used by the later authentication challenge.
         context.HttpContext.Items[ErrorCodeItem] = code;
         context.HttpContext.Items[ErrorMessageItem] = message;
         context.Fail(code);

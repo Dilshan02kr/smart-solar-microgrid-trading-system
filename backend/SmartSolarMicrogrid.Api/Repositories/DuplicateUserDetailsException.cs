@@ -1,3 +1,4 @@
+// Identifies MongoDB unique-index conflicts encountered while persisting user accounts.
 namespace SmartSolarMicrogrid.Api.Repositories;
 
 public enum DuplicateUserField

@@ -1,3 +1,4 @@
+// Returns safe account details after Prosumer self-registration.
 namespace SmartSolarMicrogrid.Api.DTOs;
 
 public sealed record ProsumerRegistrationResponse(

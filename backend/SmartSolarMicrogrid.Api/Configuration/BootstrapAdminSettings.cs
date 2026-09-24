@@ -1,3 +1,4 @@
+// Represents secure configuration used to bootstrap the initial Backoffice account.
 namespace SmartSolarMicrogrid.Api.Configuration;
 
 public sealed class BootstrapAdminSettings

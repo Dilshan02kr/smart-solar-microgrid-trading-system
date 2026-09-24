@@ -1,3 +1,4 @@
+// Returns the authenticated user's safe identity, role, status, and applicable assignment data.
 namespace SmartSolarMicrogrid.Api.DTOs;
 
 public sealed record AuthenticatedUserResponse(
