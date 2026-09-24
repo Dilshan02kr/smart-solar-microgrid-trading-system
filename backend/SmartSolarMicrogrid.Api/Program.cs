@@ -128,9 +128,11 @@ builder.Services.AddSingleton<IMongoDatabase>(serviceProvider =>
 
 // Domain Services & Repositories Registration
 builder.Services.AddSingleton<IUserDetailsRepository, UserDetailsRepository>();
+builder.Services.AddSingleton<ISolarStationRepository, SolarStationRepository>();
 builder.Services.AddSingleton<IPasswordHasher<UserDetails>, PasswordHasher<UserDetails>>();
 builder.Services.AddScoped<IProsumerRegistrationService, ProsumerRegistrationService>();
 builder.Services.AddScoped<IProsumerManagementService, ProsumerManagementService>();
+builder.Services.AddScoped<IStationManagementService, StationManagementService>();
 builder.Services.AddScoped<IJwtTokenService, JwtTokenService>();
 builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
 builder.Services.AddScoped<ActiveAccountJwtBearerEvents>();
