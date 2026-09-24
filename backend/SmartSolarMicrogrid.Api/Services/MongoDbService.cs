@@ -26,7 +26,44 @@ namespace SmartSolarMicrogrid.Api.Services
         public async Task<EnergyReservation?> GetByIdAsync(string id) =>
             await _reservationsCollection.Find(r => r.Id == id).FirstOrDefaultAsync();
 
-        // 3. Save a new reservation
+        // 2a. Get a single reservation by transaction reference
+        public async Task<EnergyReservation?> GetByTransactionReferenceAsync(string transactionReference) =>
+            await _reservationsCollection.Find(r => r.TransactionReference == transactionReference).FirstOrDefaultAsync();
+
+        // 2b. Atomically complete an approved reservation to prevent race conditions
+        public async Task<EnergyReservation?> TryCompleteApprovedReservationAsync(string reservationId)
+        {
+            var filter = Builders<EnergyReservation>.Filter.And(
+                Builders<EnergyReservation>.Filter.Eq(r => r.Id, reservationId),
+                Builders<EnergyReservation>.Filter.Eq(r => r.Status, "Approved")
+            );
+
+            var update = Builders<EnergyReservation>.Update.Set(r => r.Status, "Completed");
+
+            var options = new FindOneAndUpdateOptions<EnergyReservation>
+            {
+                ReturnDocument = ReturnDocument.After
+            };
+
+            return await _reservationsCollection.FindOneAndUpdateAsync(filter, update, options);
+        }
+
+        // 3. Count reservations by exact status (server-side, no in-memory load)
+        public async Task<long> CountByStatusAsync(string status) =>
+            await _reservationsCollection.CountDocumentsAsync(
+                Builders<EnergyReservation>.Filter.Eq(r => r.Status, status));
+
+        // 3a. Count approved reservations whose ScheduledTime is in the future
+        public async Task<long> CountApprovedFutureAsync()
+        {
+            var filter = Builders<EnergyReservation>.Filter.And(
+                Builders<EnergyReservation>.Filter.Eq(r => r.Status, "Approved"),
+                Builders<EnergyReservation>.Filter.Gt(r => r.ScheduledTime, DateTime.UtcNow)
+            );
+            return await _reservationsCollection.CountDocumentsAsync(filter);
+        }
+
+        // 4. Save a new reservation
         public async Task CreateAsync(EnergyReservation reservation) =>
             await _reservationsCollection.InsertOneAsync(reservation);
 
