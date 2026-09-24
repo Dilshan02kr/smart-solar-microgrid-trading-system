@@ -1,3 +1,4 @@
+// Represents JWT issuer, audience, signing, and expiration configuration.
 namespace SmartSolarMicrogrid.Api.Configuration;
 
 public sealed class JwtSettings

@@ -1,3 +1,4 @@
+// Defines validated client fields for Prosumer self-registration.
 using System.ComponentModel.DataAnnotations;
 
 namespace SmartSolarMicrogrid.Api.DTOs;

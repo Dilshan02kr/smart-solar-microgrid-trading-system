@@ -1,3 +1,4 @@
+// Creates the configured initial Backoffice account when none exists.
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
@@ -15,6 +16,7 @@ public sealed class BackofficeBootstrapInitializer(
 {
     public async Task StartAsync(CancellationToken cancellationToken)
     {
+        // Creates the initial active Backoffice user only when no Backoffice account exists.
         if (await userDetailsRepository.ExistsByRoleAsync(UserRole.BACKOFFICE, cancellationToken))
         {
             logger.LogInformation("Backoffice account already exists; bootstrap skipped.");
@@ -59,10 +61,12 @@ public sealed class BackofficeBootstrapInitializer(
         }
     }
 
+    // Completes immediately because bootstrap initialization owns no shutdown resources.
     public Task StopAsync(CancellationToken cancellationToken) => Task.CompletedTask;
 
     private static void ValidateSettings(BootstrapAdminSettings settings)
     {
+        // Ensures all required bootstrap values are present and the email is valid.
         if (string.IsNullOrWhiteSpace(settings.FirstName) ||
             string.IsNullOrWhiteSpace(settings.LastName) ||
             string.IsNullOrWhiteSpace(settings.Email) ||

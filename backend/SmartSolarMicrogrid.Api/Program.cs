@@ -1,3 +1,4 @@
+// Configures dependency injection, security, persistence, CORS, and the HTTP pipeline.
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
@@ -13,6 +14,7 @@ using SmartSolarMicrogrid.Api.Security;
 using SmartSolarMicrogrid.Api.Services;
 
 var builder = WebApplication.CreateBuilder(args);
+const string WebClientCorsPolicy = "WebClient";
 
 // Add services to the container.
 builder.Services
@@ -33,7 +35,7 @@ builder.Services
 
             return new BadRequestObjectResult(new ApiErrorResponse(
                 "VALIDATION_ERROR",
-                "One or more registration fields are invalid.",
+                "One or more request fields are invalid.",
                 errors));
         };
     });
@@ -41,16 +43,33 @@ builder.Services
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
+var configuredCorsOrigins = builder.Configuration
+    .GetSection("Cors:AllowedOrigins")
+    .Get<string[]>()?
+    .Where(origin => !string.IsNullOrWhiteSpace(origin))
+    .Select(origin => origin.Trim())
+    .Distinct(StringComparer.OrdinalIgnoreCase)
+    .ToArray() ?? [];
+
+builder.Services.AddCors(options =>
+{
+    // Permit browser requests only from explicitly configured origins.
+    options.AddPolicy(WebClientCorsPolicy, policy =>
+    {
+        policy.AllowAnyHeader().AllowAnyMethod();
+        if (configuredCorsOrigins.Length > 0)
+        {
+            policy.WithOrigins(configuredCorsOrigins);
+        }
+    });
+});
+
 // 1. Configure MongoDbSettings with fallback values directly in configuration
 var mongoSection = builder.Configuration.GetSection(MongoDbSettings.SectionName);
 if (string.IsNullOrWhiteSpace(mongoSection["ConnectionString"]))
 {
     // Replace with your actual team MongoDB connection link if appsettings.json fails to load
     builder.Configuration[$"{MongoDbSettings.SectionName}:ConnectionString"] = "";
-}
-{
-    // A secure fallback key that is at least 32 characters long
-    builder.Configuration[$"{JwtSettings.SectionName}:SigningKey"] = "SuperSecretSmartSolarMicrogridKey2026!@#$";
 }
 if (string.IsNullOrWhiteSpace(mongoSection["DatabaseName"]))
 {
@@ -87,6 +106,13 @@ builder.Services
 var jwtSettings = builder.Configuration
     .GetRequiredSection(JwtSettings.SectionName)
     .Get<JwtSettings>() ?? new JwtSettings();
+
+if (string.IsNullOrWhiteSpace(jwtSettings.SigningKey) ||
+    Encoding.UTF8.GetByteCount(jwtSettings.SigningKey) < 32)
+{
+    throw new InvalidOperationException(
+        "Jwt:SigningKey must be supplied by a secure configuration provider and contain at least 32 bytes.");
+}
 
 builder.Services
     .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -128,15 +154,20 @@ builder.Services.AddSingleton<IMongoDatabase>(serviceProvider =>
 
 // Domain Services & Repositories Registration
 builder.Services.AddSingleton<IUserDetailsRepository, UserDetailsRepository>();
+builder.Services.AddSingleton<ISolarStationRepository, SolarStationRepository>();
+builder.Services.AddSingleton<IEnergyBookingSlotRepository, EnergyBookingSlotRepository>();
+builder.Services.AddSingleton<IEnergyReservationRepository, EnergyReservationRepository>();
 builder.Services.AddSingleton<IPasswordHasher<UserDetails>, PasswordHasher<UserDetails>>();
 builder.Services.AddScoped<IProsumerRegistrationService, ProsumerRegistrationService>();
 builder.Services.AddScoped<IProsumerManagementService, ProsumerManagementService>();
+builder.Services.AddScoped<IWebUserManagementService, WebUserManagementService>();
+builder.Services.AddScoped<IStationManagementService, StationManagementService>();
+builder.Services.AddScoped<IEnergyBookingSlotService, EnergyBookingSlotService>();
+builder.Services.AddScoped<IReservationService, ReservationService>();
 builder.Services.AddScoped<IJwtTokenService, JwtTokenService>();
 builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
+builder.Services.AddScoped<IOperatorAssignmentService, OperatorAssignmentService>();
 builder.Services.AddScoped<ActiveAccountJwtBearerEvents>();
-
-// Member 3 Reservation Service
-builder.Services.AddSingleton<MongoDbService>();
 
 // Member 4 Transaction Verification & Completion Services
 builder.Services.AddScoped<ITransactionVerificationService, TransactionVerificationService>();
@@ -157,6 +188,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseCors(WebClientCorsPolicy);
 app.UseAuthentication();
 app.UseAuthorization();
 

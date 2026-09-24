@@ -1,3 +1,4 @@
+// Returns an issued access token together with expiration and authenticated-user details.
 namespace SmartSolarMicrogrid.Api.DTOs;
 
 public sealed record AuthenticationResponse(

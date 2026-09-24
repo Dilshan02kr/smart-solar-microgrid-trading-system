@@ -1,3 +1,4 @@
+// Creates signed JWTs containing the authoritative user identity and role claims.
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -12,6 +13,7 @@ public sealed class JwtTokenService(IOptions<JwtSettings> jwtOptions) : IJwtToke
 {
     public JwtTokenResult CreateToken(UserDetails user)
     {
+        // Creates a time-limited signed JWT containing only user identity and role claims.
         var settings = jwtOptions.Value;
         var expiresAtUtc = DateTime.UtcNow.AddMinutes(settings.ExpirationMinutes);
         var credentials = new SigningCredentials(
