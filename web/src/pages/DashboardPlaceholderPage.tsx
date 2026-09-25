@@ -5,15 +5,16 @@ import { PageContent, PageHeader } from '@/layouts/PageLayout'
 export function DashboardPlaceholderPage() {
   return (
     <>
-      <PageHeader title="Web foundation" description="The shared application structure is ready for feature teams to build on in later stages." />
+      <PageHeader title="Backoffice Dashboard" description="Manage accounts, microgrid infrastructure, and reservation approvals." />
       <PageContent>
-        <Card className="dashboard-welcome" title="Foundation stage">
-          <p>This page intentionally contains no production data or business functionality. Visit the <Link to="/components">component showcase</Link> to review the shared interface primitives.</p>
+        <Card className="dashboard-welcome" title="Backoffice workspace">
+          <p>Choose a management area below. Dashboard metrics are not displayed because the Backoffice API does not provide an aggregate summary.</p>
         </Card>
         <div className="foundation-grid">
-          <Card title="Consistent design"><p>Semantic tokens provide one visual language for color, spacing, typography, and layout.</p></Card>
-          <Card title="Reusable structure"><p>The responsive shell, page layout, and accessible primitives can be composed by each feature team.</p></Card>
-          <Card title="Ready for later stages"><p>Authentication, API integration, role filtering, and business screens remain intentionally unimplemented.</p></Card>
+          <Card title="Web users"><p>Create and manage Backoffice and Grid Operator accounts.</p><Link to="/users">Manage users</Link></Card>
+          <Card title="Prosumers"><p>Review Prosumer profiles and account activation states.</p><Link to="/prosumers">Manage Prosumers</Link></Card>
+          <Card title="Microgrid Nodes"><p>Manage stations, operating details, and energy slots.</p><Link to="/stations">Manage nodes</Link></Card>
+          <Card title="Reservations"><p>Monitor reservations and approve eligible pending requests.</p><Link to="/reservations">Manage reservations</Link></Card>
         </div>
       </PageContent>
     </>

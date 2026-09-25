@@ -4,6 +4,8 @@ import { PublicOnlyRoute } from "@/features/auth/components/PublicOnlyRoute";
 import { RequireRole } from "@/features/auth/components/RequireRole";
 import { LoginPage } from "@/features/auth/pages/LoginPage";
 import { UserRole, WEB_APP_ROLES } from "@/features/auth/types/authTypes";
+import { OperatorOperationsPage } from "@/features/operator/pages/OperatorOperationsPage";
+import { RoleAwareDashboardPage } from "@/features/operator/pages/RoleAwareDashboardPage";
 import { PendingProsumersPage } from "@/features/prosumers/pages/PendingProsumersPage";
 import { ProsumerDetailsPage } from "@/features/prosumers/pages/ProsumerDetailsPage";
 import { ProsumersPage } from "@/features/prosumers/pages/ProsumersPage";
@@ -22,10 +24,10 @@ import { UsersPage } from "@/features/users/pages/UsersPage";
 import { AppLayout } from "@/layouts/AppLayout";
 import { AccessDeniedPage } from "@/pages/AccessDeniedPage";
 import { ComponentShowcasePage } from "@/pages/ComponentShowcasePage";
-import { DashboardPlaceholderPage } from "@/pages/DashboardPlaceholderPage";
 import { NotFoundPage } from "@/pages/NotFoundPage";
 
 const BACKOFFICE_ROLES = [UserRole.BACKOFFICE] as const;
+const OPERATOR_ROLES = [UserRole.GRID_OPERATOR] as const;
 
 export function AppRouter() {
   return (
@@ -37,8 +39,11 @@ export function AppRouter() {
         <Route path="/403" element={<AccessDeniedPage />} />
         <Route element={<RequireRole allowedRoles={WEB_APP_ROLES} />}>
           <Route element={<AppLayout />}>
-            <Route index element={<DashboardPlaceholderPage />} />
+            <Route index element={<RoleAwareDashboardPage />} />
             <Route path="components" element={<ComponentShowcasePage />} />
+            <Route element={<RequireRole allowedRoles={OPERATOR_ROLES} />}>
+              <Route path="operator/operations" element={<OperatorOperationsPage />} />
+            </Route>
             <Route element={<RequireRole allowedRoles={BACKOFFICE_ROLES} />}>
               <Route path="users" element={<UsersPage />} />
               <Route path="users/new" element={<CreateUserPage />} />
