@@ -14,6 +14,9 @@ const routeTitles: Record<string, string> = {
   '/prosumers/pending': 'Pending registrations',
   '/stations': 'Microgrid Nodes',
   '/stations/new': 'Create microgrid node',
+  '/reservations': 'Reservations',
+  '/operator/operations': 'Operator Operations',
+  '/404': 'Page not found',
 }
 
 function getRouteTitle(pathname: string): string {
@@ -25,13 +28,22 @@ function getRouteTitle(pathname: string): string {
   if (/^\/stations\/[^/]+\/slots$/.test(pathname)) return 'Energy Slots'
   if (/^\/stations\/[^/]+\/edit$/.test(pathname)) return 'Edit microgrid node'
   if (/^\/stations\/[^/]+$/.test(pathname)) return 'Microgrid node details'
+  if (/^\/reservations\/[^/]+$/.test(pathname)) return 'Reservation details'
   return 'Smart Solar Microgrid'
 }
 
 export function AppLayout() {
   const [navigationOpen, setNavigationOpen] = useState(false)
+  const [isNarrowViewport, setIsNarrowViewport] = useState(() => window.matchMedia('(max-width: 56rem)').matches)
   const location = useLocation()
   const { user, logout } = useAuth()
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia('(max-width: 56rem)')
+    const updateViewport = (event: MediaQueryListEvent) => setIsNarrowViewport(event.matches)
+    mediaQuery.addEventListener('change', updateViewport)
+    return () => mediaQuery.removeEventListener('change', updateViewport)
+  }, [])
 
   useEffect(() => {
     if (!navigationOpen) return
@@ -48,10 +60,15 @@ export function AppLayout() {
 
   if (!user) return null
 
+  function handleNavigation() {
+    setNavigationOpen(false)
+    if (isNarrowViewport) window.requestAnimationFrame(() => document.getElementById('main-content')?.focus())
+  }
+
   return (
     <div className="app-shell">
       <a className="skip-link" href="#main-content">Skip to main content</a>
-      <Sidebar open={navigationOpen} onNavigate={() => setNavigationOpen(false)} role={user.role} />
+      <Sidebar open={navigationOpen} inertWhenClosed={isNarrowViewport && !navigationOpen} onNavigate={handleNavigation} role={user.role} />
       {navigationOpen && <button className="sidebar-backdrop" type="button" aria-label="Close navigation menu" onClick={() => {
         setNavigationOpen(false)
         document.getElementById('navigation-menu-button')?.focus()
@@ -60,7 +77,7 @@ export function AppLayout() {
         <Topbar
           title={getRouteTitle(location.pathname)}
           menuOpen={navigationOpen}
-          onMenuClick={() => setNavigationOpen(true)}
+          onMenuClick={() => setNavigationOpen((open) => !open)}
           userName={`${user.firstName} ${user.lastName}`.trim()}
           roleLabel={getRoleLabel(user.role)}
           onLogout={logout}
