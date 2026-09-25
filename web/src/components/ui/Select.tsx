@@ -13,7 +13,7 @@ export interface SelectProps extends SelectHTMLAttributes<HTMLSelectElement> {
   error?: string
 }
 
-export function Select({ label, options, placeholder, error, required, id, className = '', ...props }: SelectProps) {
+export function Select({ label, options, placeholder, error, required, id, className = '', value, defaultValue, ...props }: SelectProps) {
   const generatedId = useId()
   const selectId = id ?? generatedId
   const errorId = `${selectId}-error`
@@ -29,7 +29,8 @@ export function Select({ label, options, placeholder, error, required, id, class
         required={required}
         aria-invalid={Boolean(error)}
         aria-describedby={error ? errorId : undefined}
-        defaultValue={placeholder ? '' : undefined}
+        value={value}
+        defaultValue={value === undefined ? defaultValue ?? (placeholder ? '' : undefined) : undefined}
         {...props}
       >
         {placeholder && <option value="" disabled>{placeholder}</option>}
