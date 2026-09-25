@@ -52,12 +52,26 @@
 .reservation-summary__actions { display: flex; flex-wrap: wrap; gap: var(--space-md); padding-top: var(--space-md); border-top: 1px solid var(--color-border); }
 .identifier-text { overflow-wrap: anywhere; }
 
+.operator-summary { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-lg); }
+.operator-summary__card { min-width: 0; }
+.operator-summary__value { margin: var(--space-md) 0 var(--space-xs); color: var(--color-primary); font-size: clamp(2rem, 6vw, 3.5rem); font-weight: var(--font-weight-bold); line-height: var(--line-height-tight); }
+.operator-summary__description { margin: 0; color: var(--color-text-secondary); }
+.operator-operations { max-width: 58rem; }
+.transaction-verification-form { display: flex; flex-direction: column; gap: var(--space-md); }
+.transaction-verification-form__actions { display: flex; justify-content: flex-end; }
+.verified-transaction__status { display: flex; align-items: flex-start; justify-content: space-between; gap: var(--space-md); margin-top: var(--space-md); }
+.verified-transaction__status p { margin: 0; color: var(--color-text-secondary); }
+.verified-transaction__details { padding: var(--space-lg) 0; }
+.verified-transaction__actions { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: var(--space-sm); padding-top: var(--space-md); border-top: 1px solid var(--color-border); }
+.verified-transaction dd { overflow-wrap: anywhere; }
+
 @media (max-width: 64rem) {
-  .foundation-grid, .reservation-summary { grid-template-columns: 1fr; }
+  .foundation-grid, .reservation-summary, .operator-summary { grid-template-columns: 1fr; }
   .reservation-filters { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 @media (max-width: 45rem) {
   .showcase-grid, .showcase-controls, .form-grid, .details-grid, .reservation-filters { grid-template-columns: 1fr; }
   .form-actions .button { flex: 1 1 auto; }
   .reservation-filters__actions .button { flex: 1 1 auto; }
+  .transaction-verification-form__actions .button, .verified-transaction__actions .button { flex: 1 1 auto; }
 }
