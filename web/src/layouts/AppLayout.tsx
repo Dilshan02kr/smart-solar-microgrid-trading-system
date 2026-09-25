@@ -8,6 +8,17 @@ import { getRoleLabel } from '@/features/auth/utils/rolePresentation'
 const routeTitles: Record<string, string> = {
   '/': 'Dashboard',
   '/components': 'Component showcase',
+  '/users': 'Web users',
+  '/users/new': 'Create Web user',
+  '/prosumers': 'Prosumers',
+  '/prosumers/pending': 'Pending registrations',
+}
+
+function getRouteTitle(pathname: string): string {
+  if (routeTitles[pathname]) return routeTitles[pathname]
+  if (/^\/users\/[^/]+\/edit$/.test(pathname)) return 'Edit Web user'
+  if (/^\/prosumers\/[^/]+$/.test(pathname)) return 'Prosumer details'
+  return 'Smart Solar Microgrid'
 }
 
 export function AppLayout() {
@@ -40,7 +51,7 @@ export function AppLayout() {
       }} />}
       <div className="app-shell__main">
         <Topbar
-          title={routeTitles[location.pathname] ?? 'Smart Solar Microgrid'}
+          title={getRouteTitle(location.pathname)}
           menuOpen={navigationOpen}
           onMenuClick={() => setNavigationOpen(true)}
           userName={`${user.firstName} ${user.lastName}`.trim()}
