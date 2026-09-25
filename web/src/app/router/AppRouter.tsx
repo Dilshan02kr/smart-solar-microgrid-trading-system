@@ -7,6 +7,8 @@ import { UserRole, WEB_APP_ROLES } from "@/features/auth/types/authTypes";
 import { PendingProsumersPage } from "@/features/prosumers/pages/PendingProsumersPage";
 import { ProsumerDetailsPage } from "@/features/prosumers/pages/ProsumerDetailsPage";
 import { ProsumersPage } from "@/features/prosumers/pages/ProsumersPage";
+import { ReservationDetailsPage } from "@/features/reservations/pages/ReservationDetailsPage";
+import { ReservationsPage } from "@/features/reservations/pages/ReservationsPage";
 import { CreateSlotPage } from "@/features/slots/pages/CreateSlotPage";
 import { EditSlotPage } from "@/features/slots/pages/EditSlotPage";
 import { StationSlotsPage } from "@/features/slots/pages/StationSlotsPage";
@@ -50,6 +52,8 @@ export function AppRouter() {
                 path="prosumers/:prosumerId"
                 element={<ProsumerDetailsPage />}
               />
+              <Route path="reservations" element={<ReservationsPage />} />
+              <Route path="reservations/:reservationId" element={<ReservationDetailsPage />} />
               <Route path="stations" element={<StationsPage />} />
               <Route path="stations/new" element={<CreateStationPage />} />
               <Route path="stations/:stationId" element={<StationDetailsPage />} />
