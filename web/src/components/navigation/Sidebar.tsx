@@ -4,15 +4,23 @@ import type { UserRole } from '@/features/auth/types/authTypes'
 
 export interface SidebarProps {
   open: boolean
+  inertWhenClosed: boolean
   onNavigate: () => void
   role: UserRole
 }
 
-export function Sidebar({ open, onNavigate, role }: SidebarProps) {
+export function Sidebar({ open, inertWhenClosed, onNavigate, role }: SidebarProps) {
   const visibleItems = navigationItems.filter((item) => item.allowedRoles.includes(role))
 
   return (
-    <aside id="app-sidebar" className={`sidebar${open ? ' sidebar--open' : ''}`} aria-label="Primary navigation" tabIndex={-1}>
+    <aside
+      id="app-sidebar"
+      className={`sidebar${open ? ' sidebar--open' : ''}`}
+      aria-label="Primary navigation"
+      aria-hidden={inertWhenClosed || undefined}
+      inert={inertWhenClosed || undefined}
+      tabIndex={-1}
+    >
       <div className="brand">
         <span className="brand__mark" aria-hidden="true">S</span>
         <span><strong>Smart Solar</strong><small>Microgrid Platform</small></span>
@@ -25,9 +33,9 @@ export function Sidebar({ open, onNavigate, role }: SidebarProps) {
             {item.label}
           </NavLink>
         ) : (
-          <span key={item.path} className="sidebar__link sidebar__link--unavailable" aria-disabled="true" title="Available in a later Web stage">
+          <span key={item.path} className="sidebar__link sidebar__link--unavailable" aria-disabled="true" title={item.unavailableTitle ?? 'Unavailable'}>
             <span className="sidebar__link-icon" aria-hidden="true">{item.shortLabel}</span>
-            <span>{item.label}<small>Coming later</small></span>
+            <span>{item.label}<small>{item.unavailableLabel ?? 'Unavailable'}</small></span>
           </span>
         ))}
       </nav>

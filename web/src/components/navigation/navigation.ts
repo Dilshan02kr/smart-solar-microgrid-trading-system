@@ -6,6 +6,8 @@ export interface NavigationItem {
   shortLabel: string
   allowedRoles: readonly UserRoleValue[]
   available: boolean
+  unavailableLabel?: string
+  unavailableTitle?: string
 }
 
 export const navigationItems: NavigationItem[] = [
@@ -13,7 +15,7 @@ export const navigationItems: NavigationItem[] = [
   { label: 'Users', path: '/users', shortLabel: 'US', allowedRoles: [UserRole.BACKOFFICE], available: true },
   { label: 'Prosumers', path: '/prosumers', shortLabel: 'PR', allowedRoles: [UserRole.BACKOFFICE], available: true },
   { label: 'Microgrid Nodes', path: '/stations', shortLabel: 'MN', allowedRoles: [UserRole.BACKOFFICE], available: true },
-  { label: 'Energy Slots', path: '/slots', shortLabel: 'ES', allowedRoles: [UserRole.BACKOFFICE], available: false },
+  { label: 'Energy Slots', path: '/slots', shortLabel: 'ES', allowedRoles: [UserRole.BACKOFFICE], available: false, unavailableLabel: 'Via Microgrid Nodes', unavailableTitle: 'Manage Energy Slots from a Microgrid Node.' },
   { label: 'Reservations', path: '/reservations', shortLabel: 'RS', allowedRoles: [UserRole.BACKOFFICE], available: true },
   { label: 'Operator Operations', path: '/operator/operations', shortLabel: 'OP', allowedRoles: [UserRole.GRID_OPERATOR], available: true },
   { label: 'Components', path: '/components', shortLabel: 'UI', allowedRoles: [UserRole.BACKOFFICE, UserRole.GRID_OPERATOR], available: true },

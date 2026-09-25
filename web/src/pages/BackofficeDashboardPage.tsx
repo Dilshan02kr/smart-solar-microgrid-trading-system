@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom'
 import { Card } from '@/components/ui/Card'
 import { PageContent, PageHeader } from '@/layouts/PageLayout'
 
-export function DashboardPlaceholderPage() {
+export function BackofficeDashboardPage() {
   return (
     <>
       <PageHeader title="Backoffice Dashboard" description="Manage accounts, microgrid infrastructure, and reservation approvals." />
