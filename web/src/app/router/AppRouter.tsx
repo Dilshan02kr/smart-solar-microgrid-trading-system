@@ -7,6 +7,13 @@ import { UserRole, WEB_APP_ROLES } from "@/features/auth/types/authTypes";
 import { PendingProsumersPage } from "@/features/prosumers/pages/PendingProsumersPage";
 import { ProsumerDetailsPage } from "@/features/prosumers/pages/ProsumerDetailsPage";
 import { ProsumersPage } from "@/features/prosumers/pages/ProsumersPage";
+import { CreateSlotPage } from "@/features/slots/pages/CreateSlotPage";
+import { EditSlotPage } from "@/features/slots/pages/EditSlotPage";
+import { StationSlotsPage } from "@/features/slots/pages/StationSlotsPage";
+import { CreateStationPage } from "@/features/stations/pages/CreateStationPage";
+import { EditStationPage } from "@/features/stations/pages/EditStationPage";
+import { StationDetailsPage } from "@/features/stations/pages/StationDetailsPage";
+import { StationsPage } from "@/features/stations/pages/StationsPage";
 import { CreateUserPage } from "@/features/users/pages/CreateUserPage";
 import { EditUserPage } from "@/features/users/pages/EditUserPage";
 import { UsersPage } from "@/features/users/pages/UsersPage";
@@ -43,6 +50,13 @@ export function AppRouter() {
                 path="prosumers/:prosumerId"
                 element={<ProsumerDetailsPage />}
               />
+              <Route path="stations" element={<StationsPage />} />
+              <Route path="stations/new" element={<CreateStationPage />} />
+              <Route path="stations/:stationId" element={<StationDetailsPage />} />
+              <Route path="stations/:stationId/edit" element={<EditStationPage />} />
+              <Route path="stations/:stationId/slots" element={<StationSlotsPage />} />
+              <Route path="stations/:stationId/slots/new" element={<CreateSlotPage />} />
+              <Route path="stations/:stationId/slots/:slotId/edit" element={<EditSlotPage />} />
             </Route>
             <Route path="404" element={<NotFoundPage />} />
             <Route path="*" element={<Navigate to="/404" replace />} />

@@ -12,12 +12,19 @@ const routeTitles: Record<string, string> = {
   '/users/new': 'Create Web user',
   '/prosumers': 'Prosumers',
   '/prosumers/pending': 'Pending registrations',
+  '/stations': 'Microgrid Nodes',
+  '/stations/new': 'Create microgrid node',
 }
 
 function getRouteTitle(pathname: string): string {
   if (routeTitles[pathname]) return routeTitles[pathname]
   if (/^\/users\/[^/]+\/edit$/.test(pathname)) return 'Edit Web user'
   if (/^\/prosumers\/[^/]+$/.test(pathname)) return 'Prosumer details'
+  if (/^\/stations\/[^/]+\/slots\/new$/.test(pathname)) return 'Add Energy Slot'
+  if (/^\/stations\/[^/]+\/slots\/[^/]+\/edit$/.test(pathname)) return 'Edit Energy Slot'
+  if (/^\/stations\/[^/]+\/slots$/.test(pathname)) return 'Energy Slots'
+  if (/^\/stations\/[^/]+\/edit$/.test(pathname)) return 'Edit microgrid node'
+  if (/^\/stations\/[^/]+$/.test(pathname)) return 'Microgrid node details'
   return 'Smart Solar Microgrid'
 }
 
