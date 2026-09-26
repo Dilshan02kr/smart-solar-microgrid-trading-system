@@ -15,6 +15,7 @@ using SmartSolarMicrogrid.Api.Services;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddHealthChecks();
 builder.Services
     .AddControllers()
     .ConfigureApiBehaviorOptions(options =>
@@ -159,6 +160,8 @@ app.UseHttpsRedirection();
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.MapHealthChecks("/health").AllowAnonymous();
 
 app.MapControllers();
 
