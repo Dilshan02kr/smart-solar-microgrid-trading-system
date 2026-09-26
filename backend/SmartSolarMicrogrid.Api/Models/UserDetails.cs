@@ -1,3 +1,4 @@
+// Represents a MongoDB-backed user account shared by all supported roles.
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 

@@ -1,3 +1,4 @@
+// Authenticates supported roles and issues JWTs only for active current accounts.
 using Microsoft.AspNetCore.Identity;
 using SmartSolarMicrogrid.Api.DTOs;
 using SmartSolarMicrogrid.Api.Models;
@@ -14,6 +15,7 @@ public sealed class AuthenticationService(
         WebLoginRequest request,
         CancellationToken cancellationToken = default)
     {
+        // Validates email credentials for Backoffice and Grid Operator accounts.
         if (string.IsNullOrWhiteSpace(request.Email) ||
             string.IsNullOrWhiteSpace(request.Password))
         {
@@ -38,6 +40,7 @@ public sealed class AuthenticationService(
         ProsumerLoginRequest request,
         CancellationToken cancellationToken = default)
     {
+        // Validates NIC credentials for a Prosumer account.
         if (string.IsNullOrWhiteSpace(request.Nic) ||
             string.IsNullOrWhiteSpace(request.Password))
         {
@@ -62,12 +65,14 @@ public sealed class AuthenticationService(
         string userId,
         CancellationToken cancellationToken = default)
     {
+        // Returns safe current-user data only while the account remains active.
         var user = await userDetailsRepository.GetByIdAsync(userId, cancellationToken);
         return user?.AccountStatus == AccountStatus.ACTIVE ? MapUser(user) : null;
     }
 
     private AuthenticationResult AuthenticateActiveUser(UserDetails user)
     {
+        // Applies account-state rules before issuing a JWT for a valid credential match.
         if (user.AccountStatus == AccountStatus.PENDING)
         {
             return new AuthenticationResult(AuthenticationStatus.AccountPending);
@@ -89,10 +94,12 @@ public sealed class AuthenticationService(
             new AuthenticationResponse(token.Token, token.ExpiresAtUtc, MapUser(user)));
     }
 
+    // Verifies a supplied password against the stored ASP.NET Core password hash.
     private bool PasswordMatches(UserDetails user, string password) =>
         passwordHasher.VerifyHashedPassword(user, user.PasswordHash, password) !=
         PasswordVerificationResult.Failed;
 
+    // Maps a user record to the safe authenticated-user response contract.
     private static AuthenticatedUserResponse MapUser(UserDetails user) =>
         new(
             user.Id.ToString(),
@@ -103,6 +110,7 @@ public sealed class AuthenticationService(
             user.Role == UserRole.PROSUMER ? user.Nic : null,
             user.Role == UserRole.GRID_OPERATOR ? user.AssignedMicrogridNodeId?.ToString() : null);
 
+    // Creates the uniform invalid-credentials outcome without revealing account details.
     private static AuthenticationResult InvalidCredentials() =>
         new(AuthenticationStatus.InvalidCredentials);
 }

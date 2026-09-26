@@ -1,3 +1,4 @@
+// Exposes station-scoped verification, completion, and dashboard operations for Grid Operators.
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SmartSolarMicrogrid.Api.Common;
@@ -26,7 +27,9 @@ public sealed class OperatorController(
         VerifyTransactionRequest request,
         CancellationToken cancellationToken)
     {
+        // Resolve the operator identity from the validated JWT before station-scoped verification.
         var result = await verificationService.VerifyTransactionAsync(
+            User.FindFirst("userId")?.Value,
             request.TransactionReference,
             cancellationToken);
 
@@ -34,6 +37,21 @@ public sealed class OperatorController(
         {
             TransactionVerificationStatus.Success =>
                 Ok(result.Response),
+
+            TransactionVerificationStatus.AuthenticationRequired =>
+                Unauthorized(new ApiErrorResponse(
+                    AuthenticationErrorCodes.AuthenticationRequired,
+                    "Authentication is required.")),
+
+            TransactionVerificationStatus.AccessDenied =>
+                StatusCode(StatusCodes.Status403Forbidden, new ApiErrorResponse(
+                    AuthenticationErrorCodes.AccessDenied,
+                    "The reservation does not belong to the assigned station.")),
+
+            TransactionVerificationStatus.OperatorStationNotAssigned =>
+                StatusCode(StatusCodes.Status403Forbidden, new ApiErrorResponse(
+                    "OPERATOR_STATION_NOT_ASSIGNED",
+                    "The Grid Operator is not assigned to a station.")),
 
             TransactionVerificationStatus.InvalidTransactionReference =>
                 BadRequest(new ApiErrorResponse(
@@ -77,7 +95,9 @@ public sealed class OperatorController(
         string reservationId,
         CancellationToken cancellationToken)
     {
+        // Resolve the operator identity from the validated JWT before station-scoped completion.
         var result = await completionService.CompleteReservationAsync(
+            User.FindFirst("userId")?.Value,
             reservationId,
             cancellationToken);
 
@@ -85,6 +105,21 @@ public sealed class OperatorController(
         {
             TransactionCompletionStatus.Success =>
                 Ok(result.Response),
+
+            TransactionCompletionStatus.AuthenticationRequired =>
+                Unauthorized(new ApiErrorResponse(
+                    AuthenticationErrorCodes.AuthenticationRequired,
+                    "Authentication is required.")),
+
+            TransactionCompletionStatus.AccessDenied =>
+                StatusCode(StatusCodes.Status403Forbidden, new ApiErrorResponse(
+                    AuthenticationErrorCodes.AccessDenied,
+                    "The reservation does not belong to the assigned station.")),
+
+            TransactionCompletionStatus.OperatorStationNotAssigned =>
+                StatusCode(StatusCodes.Status403Forbidden, new ApiErrorResponse(
+                    "OPERATOR_STATION_NOT_ASSIGNED",
+                    "The Grid Operator is not assigned to a station.")),
 
             TransactionCompletionStatus.InvalidReservationId =>
                 BadRequest(new ApiErrorResponse(
@@ -122,6 +157,26 @@ public sealed class OperatorController(
     [ProducesResponseType<ApiErrorResponse>(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType<ApiErrorResponse>(StatusCodes.Status403Forbidden)]
     public async Task<ActionResult<DashboardSummaryResponse>> GetDashboardSummary(
-        CancellationToken cancellationToken) =>
-        Ok(await dashboardService.GetSummaryAsync(cancellationToken));
+        CancellationToken cancellationToken)
+    {
+        // Return counts scoped to the current operator assignment from UserDetails.
+        var result = await dashboardService.GetSummaryAsync(
+            User.FindFirst("userId")?.Value,
+            cancellationToken);
+
+        return result.Status switch
+        {
+            OperatorDashboardStatus.Success => Ok(result.Response),
+            OperatorDashboardStatus.AuthenticationRequired => Unauthorized(new ApiErrorResponse(
+                AuthenticationErrorCodes.AuthenticationRequired,
+                "Authentication is required.")),
+            OperatorDashboardStatus.OperatorStationNotAssigned =>
+                StatusCode(StatusCodes.Status403Forbidden, new ApiErrorResponse(
+                    "OPERATOR_STATION_NOT_ASSIGNED",
+                    "The Grid Operator is not assigned to a station.")),
+            _ => StatusCode(StatusCodes.Status403Forbidden, new ApiErrorResponse(
+                AuthenticationErrorCodes.AccessDenied,
+                "Access is denied."))
+        };
+    }
 }

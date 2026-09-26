@@ -1,3 +1,4 @@
+// Defines email and password credentials for Backoffice and Grid Operator login.
 using System.ComponentModel.DataAnnotations;
 
 namespace SmartSolarMicrogrid.Api.DTOs;

@@ -1,3 +1,4 @@
+// Exposes login and current-user endpoints backed by centralized authentication services.
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SmartSolarMicrogrid.Api.Common;
@@ -15,6 +16,7 @@ public sealed class AuthController(IAuthenticationService authenticationService)
     [ProducesResponseType<AuthenticationResponse>(StatusCodes.Status200OK)]
     [ProducesResponseType<ApiErrorResponse>(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType<ApiErrorResponse>(StatusCodes.Status403Forbidden)]
+    // Authenticates Backoffice or Grid Operator credentials and returns an access token.
     public Task<ActionResult<AuthenticationResponse>> WebLogin(
         WebLoginRequest request,
         CancellationToken cancellationToken) =>
@@ -25,6 +27,7 @@ public sealed class AuthController(IAuthenticationService authenticationService)
     [ProducesResponseType<AuthenticationResponse>(StatusCodes.Status200OK)]
     [ProducesResponseType<ApiErrorResponse>(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType<ApiErrorResponse>(StatusCodes.Status403Forbidden)]
+    // Authenticates Prosumer NIC credentials and returns an access token.
     public Task<ActionResult<AuthenticationResponse>> ProsumerLogin(
         ProsumerLoginRequest request,
         CancellationToken cancellationToken) =>
@@ -37,6 +40,7 @@ public sealed class AuthController(IAuthenticationService authenticationService)
     public async Task<ActionResult<AuthenticatedUserResponse>> Me(
         CancellationToken cancellationToken)
     {
+        // Returns the current active user's safe identity from the validated JWT subject.
         var userId = User.FindFirst("userId")?.Value;
         var user = string.IsNullOrWhiteSpace(userId)
             ? null
@@ -49,6 +53,7 @@ public sealed class AuthController(IAuthenticationService authenticationService)
             : Ok(user);
     }
 
+    // Maps authentication outcomes to consistent success or structured error responses.
     private ActionResult<AuthenticationResponse> LoginAsyncResult(AuthenticationResult result) =>
         result.Status switch
         {
@@ -68,6 +73,7 @@ public sealed class AuthController(IAuthenticationService authenticationService)
                 "The supplied credentials are invalid."))
         };
 
+    // Awaits a login operation and applies the shared HTTP result mapping.
     private async Task<ActionResult<AuthenticationResponse>> LoginAsync(
         Task<AuthenticationResult> authenticationTask) =>
         LoginAsyncResult(await authenticationTask);

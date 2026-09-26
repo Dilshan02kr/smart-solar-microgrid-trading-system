@@ -1,3 +1,4 @@
+// Accepts a server-issued transaction reference for operator verification.
 using System.ComponentModel.DataAnnotations;
 
 namespace SmartSolarMicrogrid.Api.DTOs;

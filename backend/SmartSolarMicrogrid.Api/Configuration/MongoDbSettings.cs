@@ -1,3 +1,4 @@
+// Represents MongoDB connection and database configuration.
 namespace SmartSolarMicrogrid.Api.Configuration;
 
 public sealed class MongoDbSettings

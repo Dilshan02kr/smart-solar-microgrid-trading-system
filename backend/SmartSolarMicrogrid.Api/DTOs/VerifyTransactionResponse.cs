@@ -1,3 +1,4 @@
+// Returns authorized reservation details after transaction-reference verification.
 namespace SmartSolarMicrogrid.Api.DTOs;
 
 public sealed record VerifyTransactionResponse(
