@@ -16,14 +16,19 @@ public sealed class BackofficeBootstrapInitializer(
 {
     public async Task StartAsync(CancellationToken cancellationToken)
     {
-        // Creates the initial active Backoffice user only when no Backoffice account exists.
-        if (await userDetailsRepository.ExistsByRoleAsync(UserRole.BACKOFFICE, cancellationToken))
+        var settings = bootstrapOptions.Value;
+        if (string.IsNullOrWhiteSpace(settings.Email))
         {
-            logger.LogInformation("Backoffice account already exists; bootstrap skipped.");
             return;
         }
 
-        var settings = bootstrapOptions.Value;
+        // Creates the configured active Backoffice user if this specific account does not exist.
+        if (await userDetailsRepository.GetByEmailAsync(settings.Email.Trim().ToLowerInvariant(), cancellationToken) is not null)
+        {
+            logger.LogInformation("Backoffice account '{Email}' already exists; bootstrap skipped.", settings.Email);
+            return;
+        }
+
         ValidateSettings(settings);
 
         var backoffice = new UserDetails
@@ -44,14 +49,14 @@ public sealed class BackofficeBootstrapInitializer(
         try
         {
             await userDetailsRepository.CreateAsync(backoffice, cancellationToken);
-            logger.LogInformation("Initial Backoffice account created.");
+            logger.LogInformation("Initial Backoffice account '{Email}' created.", backoffice.Email);
         }
         catch (DuplicateUserDetailsException exception)
         {
             // Another application instance may have completed bootstrap after the first check.
-            if (await userDetailsRepository.ExistsByRoleAsync(UserRole.BACKOFFICE, cancellationToken))
+            if (await userDetailsRepository.GetByEmailAsync(settings.Email.Trim().ToLowerInvariant(), cancellationToken) is not null)
             {
-                logger.LogInformation("Backoffice account already exists; bootstrap skipped.");
+                logger.LogInformation("Backoffice account '{Email}' already exists; bootstrap skipped.", settings.Email);
                 return;
             }
 
