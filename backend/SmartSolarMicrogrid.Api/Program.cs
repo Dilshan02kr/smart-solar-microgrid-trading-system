@@ -14,6 +14,40 @@ using SmartSolarMicrogrid.Api.Security;
 using SmartSolarMicrogrid.Api.Services;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Load .env configuration file if present in the project directory or parent
+var envCandidates = new[]
+{
+    Path.Combine(builder.Environment.ContentRootPath, ".env"),
+    Path.Combine(builder.Environment.ContentRootPath, "..", ".env")
+};
+
+foreach (var envPath in envCandidates)
+{
+    if (File.Exists(envPath))
+    {
+        foreach (var line in File.ReadAllLines(envPath))
+        {
+            var trimmed = line.Trim();
+            if (string.IsNullOrWhiteSpace(trimmed) || trimmed.StartsWith('#'))
+            {
+                continue;
+            }
+
+            var separatorIndex = trimmed.IndexOf('=');
+            if (separatorIndex > 0)
+            {
+                var key = trimmed[..separatorIndex].Trim();
+                var value = trimmed[(separatorIndex + 1)..].Trim();
+                Environment.SetEnvironmentVariable(key, value);
+                builder.Configuration[key] = value;
+                builder.Configuration[key.Replace("__", ":")] = value;
+            }
+        }
+        break;
+    }
+}
+
 const string WebClientCorsPolicy = "WebClient";
 
 // Add services to the container.
@@ -92,6 +126,10 @@ builder.Services
 builder.Services
     .AddOptions<BootstrapAdminSettings>()
     .Bind(builder.Configuration.GetSection(BootstrapAdminSettings.SectionName));
+
+builder.Services
+    .AddOptions<DevelopmentSeedSettings>()
+    .Bind(builder.Configuration.GetSection(DevelopmentSeedSettings.SectionName));
 
 builder.Services
     .AddOptions<JwtSettings>()
@@ -178,6 +216,7 @@ builder.Services.AddScoped<IOperatorDashboardService, OperatorDashboardService>(
 // Hosted Initializers
 builder.Services.AddHostedService<MongoDbInitializer>();
 builder.Services.AddHostedService<BackofficeBootstrapInitializer>();
+builder.Services.AddHostedService<DevelopmentSeedInitializer>();
 
 var app = builder.Build();
 

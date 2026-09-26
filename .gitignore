@@ -22,6 +22,7 @@ local.properties
 # Environment / secrets
 .env
 .env.*
+!.env.example
 appsettings.Development.json
 
 # OS
