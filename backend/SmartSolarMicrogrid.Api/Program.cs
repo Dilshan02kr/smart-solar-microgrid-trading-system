@@ -17,6 +17,7 @@ var builder = WebApplication.CreateBuilder(args);
 const string WebClientCorsPolicy = "WebClient";
 
 // Add services to the container.
+builder.Services.AddHealthChecks();
 builder.Services
     .AddControllers()
     .ConfigureApiBehaviorOptions(options =>
@@ -191,6 +192,8 @@ app.UseHttpsRedirection();
 app.UseCors(WebClientCorsPolicy);
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.MapHealthChecks("/health").AllowAnonymous();
 
 app.MapControllers();
 
