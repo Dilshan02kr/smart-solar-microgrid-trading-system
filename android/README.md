@@ -36,6 +36,14 @@ Restrict API usage to **Maps SDK for Android**. Google Cloud billing/API configu
 
 This stage displays station markers and links them to the existing station-details flow. It intentionally does not request device location or add Places, geocoding, Directions, route drawing, or background tracking.
 
+## Supported mobile flows
+
+- Prosumers can register, sign in after activation, manage their own profile, browse stations/maps/slots, create and manage reservations, review reservation history, and display an approved reservation QR.
+- Grid Operators use a separate email login, see their server-assigned station dashboard, verify transaction references through QR scanning or manual fallback, and complete server-approved transfers.
+- Backoffice administration remains web-only. Authentication, reservation mutations, active QR authority, operator assignment, verification, and completion always require the backend.
+
+`android.permission.CAMERA` is used only by the Grid Operator QR scanner. Device-location and storage permissions are not requested.
+
 ## API base URL
 
 `API_BASE_URL` is a Gradle property and is exposed centrally as `BuildConfig.API_BASE_URL`. The checked-in development default is `http://10.0.2.2:5221/`, matching the backend HTTP launch profile through the emulator host alias; a trailing slash is added when absent.
@@ -57,12 +65,10 @@ Never place credentials, JWTs, API keys, or other secrets in Gradle properties c
 - `core/error` normalizes the backend `{ code, message, errors }` response into safe UI errors.
 - `data/remote` owns the exact authentication, Prosumer, station, energy-slot, and reservation contracts.
 - `data/repository` restores session state, enforces active Prosumer role safety, normalizes network errors, and maps transport models to domain models.
-- `data/local` uses `SQLiteOpenHelper` with a versioned `app_metadata` table. Tokens are not stored in SQLite.
+- `data/local` uses `SQLiteOpenHelper` with a versioned `app_metadata` table. The app records and displays the last successful server-backed station refresh as non-sensitive integration metadata. Tokens and authoritative business data are not stored in SQLite.
 - `domain/model` contains exact, safely parsed backend account, station, and reservation statuses.
 - `ui/auth`, `ui/prosumer`, `ui/stations`, `ui/slots`, `ui/reservations`, `ui/launch`, and `ui/common` use Fragment -> ViewModel -> Repository flow and safe ViewBinding lifecycles.
 
-Reservation mutations, operator verification, and completion are never queued offline; failures remain retryable server operations. SQLite remains limited to the existing metadata foundation. QR bitmaps and transaction references are not persisted locally, and decoded QR content is never trusted without server verification.
-
-Future feature packages can be added under `ui/operator` and `ui/map` as their contracts are implemented.
+Reservation mutations, operator verification, and completion are never queued offline; failures remain retryable server operations. SQLite remains limited to non-sensitive app metadata, including the displayed timestamp of the last successful server-backed station refresh. QR bitmaps and transaction references are not persisted locally, and decoded QR content is never trusted without server verification.
 
 All API services must be created from `NetworkModule`; Fragments must not create Retrofit clients or make direct network calls.
