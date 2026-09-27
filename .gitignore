@@ -1,5 +1,4 @@
 # IDE
-.vscode/
 .idea/
 *.user
 *.suo
@@ -20,11 +19,10 @@ local.properties
 **/build/
 
 # Environment / secrets
-.env
-.env.*
 !.env.example
 appsettings.Development.json
 
 # OS
 .DS_Store
 Thumbs.db
+config.bat
