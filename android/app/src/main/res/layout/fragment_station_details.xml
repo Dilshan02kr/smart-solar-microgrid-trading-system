@@ -12,6 +12,7 @@
    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="@dimen/spacing_medium" android:text="@string/status_label"/><TextView android:id="@+id/status_value" android:layout_width="match_parent" android:layout_height="wrap_content"/>
    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="@dimen/spacing_medium" android:text="@string/coordinates_label"/><TextView android:id="@+id/coordinates_value" android:layout_width="match_parent" android:layout_height="wrap_content"/>
    <TextView android:id="@+id/unavailable_message" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="@dimen/spacing_large" android:text="@string/station_unavailable" android:textColor="@color/status_error" android:visibility="gone"/>
+   <com.google.android.material.button.MaterialButton android:id="@+id/view_map_button" style="@style/Widget.Material3.Button.OutlinedButton" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="@dimen/spacing_large" android:text="@string/view_on_map" android:visibility="gone"/>
    <com.google.android.material.button.MaterialButton android:id="@+id/slots_button" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="@dimen/spacing_large" android:text="@string/view_slots"/>
   </LinearLayout>
  </LinearLayout>
