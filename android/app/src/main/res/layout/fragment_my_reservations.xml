@@ -53,17 +53,19 @@
             android:text="@string/retry" />
     </LinearLayout>
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/content_container"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        android:orientation="vertical">
+        android:layout_weight="1">
 
         <com.google.android.material.button.MaterialButtonToggleGroup
             android:id="@+id/filter_group"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
             app:checkedButton="@id/pending_filter"
             app:singleSelection="true">
             <com.google.android.material.button.MaterialButton
@@ -93,7 +95,10 @@
             android:layout_marginTop="@dimen/spacing_small"
             android:text="@string/station_names_unavailable"
             android:textColor="@color/status_warning"
-            android:visibility="gone" />
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/filter_group" />
 
         <TextView
             android:id="@+id/empty_message"
@@ -101,15 +106,21 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/spacing_large"
             android:gravity="center"
-            android:text="@string/no_pending_reservations" />
+            android:text="@string/no_pending_reservations"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/station_warning" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/reservation_list"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_marginTop="@dimen/spacing_small"
-            android:layout_weight="1"
             android:clipToPadding="false"
-            android:paddingBottom="@dimen/spacing_medium" />
-    </LinearLayout>
+            android:paddingBottom="@dimen/spacing_medium"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/station_warning" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </LinearLayout>
