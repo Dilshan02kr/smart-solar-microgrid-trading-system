@@ -7,10 +7,25 @@
     <fragment android:id="@+id/launchFragment" android:name="com.smartsolar.microgrid.ui.launch.LaunchFragment" android:label="@string/launch_title">
         <action android:id="@+id/action_launchFragment_to_loginFragment" app:destination="@id/loginFragment" app:popUpTo="@id/launchFragment" app:popUpToInclusive="true" />
         <action android:id="@+id/action_launchFragment_to_prosumerHomeFragment" app:destination="@id/prosumerHomeFragment" app:popUpTo="@id/launchFragment" app:popUpToInclusive="true" />
+        <action android:id="@+id/action_launchFragment_to_operatorDashboardFragment" app:destination="@id/operatorDashboardFragment" app:popUpTo="@id/launchFragment" app:popUpToInclusive="true" />
     </fragment>
     <fragment android:id="@+id/loginFragment" android:name="com.smartsolar.microgrid.ui.auth.LoginFragment" android:label="@string/login_title">
         <action android:id="@+id/action_loginFragment_to_registerFragment" app:destination="@id/registerFragment" />
+        <action android:id="@+id/action_loginFragment_to_operatorLoginFragment" app:destination="@id/operatorLoginFragment" />
         <action android:id="@+id/action_loginFragment_to_prosumerHomeFragment" app:destination="@id/prosumerHomeFragment" app:popUpTo="@id/loginFragment" app:popUpToInclusive="true" />
+    </fragment>
+    <fragment android:id="@+id/operatorLoginFragment" android:name="com.smartsolar.microgrid.ui.operator.OperatorLoginFragment" android:label="@string/operator_login_title">
+        <action android:id="@+id/action_operatorLoginFragment_to_operatorDashboardFragment" app:destination="@id/operatorDashboardFragment" app:popUpTo="@id/loginFragment" app:popUpToInclusive="true" />
+    </fragment>
+    <fragment android:id="@+id/operatorDashboardFragment" android:name="com.smartsolar.microgrid.ui.operator.OperatorDashboardFragment" android:label="@string/operator_dashboard_title">
+        <action android:id="@+id/action_operatorDashboardFragment_to_qrScannerFragment" app:destination="@id/qrScannerFragment" />
+    </fragment>
+    <fragment android:id="@+id/qrScannerFragment" android:name="com.smartsolar.microgrid.ui.operator.QrScannerFragment" android:label="@string/scan_qr_title">
+        <action android:id="@+id/action_qrScannerFragment_to_verifiedTransactionFragment" app:destination="@id/verifiedTransactionFragment" />
+    </fragment>
+    <fragment android:id="@+id/verifiedTransactionFragment" android:name="com.smartsolar.microgrid.ui.operator.VerifiedTransactionFragment" android:label="@string/verified_reservation">
+        <argument android:name="transactionReference" app:argType="string" />
+        <action android:id="@+id/action_verifiedTransactionFragment_to_operatorDashboardFragment" app:destination="@id/operatorDashboardFragment" app:launchSingleTop="true" app:popUpTo="@id/operatorDashboardFragment" />
     </fragment>
     <fragment android:id="@+id/registerFragment" android:name="com.smartsolar.microgrid.ui.auth.RegisterFragment" android:label="@string/register_title" />
     <fragment android:id="@+id/prosumerHomeFragment" android:name="com.smartsolar.microgrid.ui.prosumer.ProsumerHomeFragment" android:label="@string/home_title">

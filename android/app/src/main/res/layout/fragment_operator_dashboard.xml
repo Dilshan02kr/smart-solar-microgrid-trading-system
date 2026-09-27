@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="@dimen/screen_padding">
+        <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="@string/operator_dashboard_title" android:textAppearance="@style/TextAppearance.Material3.HeadlineMedium" />
+        <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="@dimen/spacing_small" android:text="@string/operator_dashboard_subtitle" android:textColor="@color/text_secondary" />
+        <com.google.android.material.progressindicator.LinearProgressIndicator android:id="@+id/progress_indicator" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="@dimen/spacing_medium" android:visibility="gone" />
+        <LinearLayout android:id="@+id/error_container" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="@dimen/spacing_large" android:gravity="center" android:orientation="vertical" android:visibility="gone">
+            <TextView android:id="@+id/error_message" android:layout_width="match_parent" android:layout_height="wrap_content" android:accessibilityLiveRegion="polite" android:gravity="center" android:textColor="@color/status_error" />
+            <com.google.android.material.button.MaterialButton android:id="@+id/retry_button" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/retry" />
+        </LinearLayout>
+        <LinearLayout android:id="@+id/content_container" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="@dimen/spacing_large" android:orientation="vertical" android:visibility="gone">
+            <com.google.android.material.card.MaterialCardView android:layout_width="match_parent" android:layout_height="wrap_content" app:cardBackgroundColor="@color/surface_card" app:cardCornerRadius="@dimen/card_corner_radius" app:cardElevation="@dimen/card_elevation">
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="@dimen/card_padding">
+                    <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="@string/assigned_station_label" android:textColor="@color/text_secondary" />
+                    <TextView android:id="@+id/station_value" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="@dimen/spacing_small" android:breakStrategy="simple" android:textAppearance="@style/TextAppearance.Material3.TitleMedium" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+            <com.google.android.material.card.MaterialCardView android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="@dimen/spacing_medium" app:cardBackgroundColor="@color/surface_card" app:cardCornerRadius="@dimen/card_corner_radius" app:cardElevation="@dimen/card_elevation">
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="@dimen/card_padding">
+                    <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="@string/pending_reservations_label" />
+                    <TextView android:id="@+id/pending_count" android:layout_width="match_parent" android:layout_height="wrap_content" android:textAppearance="@style/TextAppearance.Material3.HeadlineMedium" />
+                    <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="@dimen/spacing_medium" android:text="@string/approved_future_label" />
+                    <TextView android:id="@+id/approved_count" android:layout_width="match_parent" android:layout_height="wrap_content" android:textAppearance="@style/TextAppearance.Material3.HeadlineMedium" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+            <com.google.android.material.button.MaterialButton android:id="@+id/scan_button" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="@dimen/spacing_large" android:text="@string/scan_reservation_qr" />
+            <com.google.android.material.button.MaterialButton android:id="@+id/refresh_button" style="@style/Widget.Material3.Button.OutlinedButton" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="@dimen/spacing_small" android:text="@string/refresh_dashboard" />
+            <com.google.android.material.button.MaterialButton android:id="@+id/logout_button" style="@style/Widget.Material3.Button.TextButton" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="@dimen/spacing_small" android:text="@string/logout_action" />
+        </LinearLayout>
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>
