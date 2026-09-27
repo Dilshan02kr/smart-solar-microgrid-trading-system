@@ -5,7 +5,10 @@ import com.smartsolar.microgrid.core.error.ErrorNormalizer
 import com.smartsolar.microgrid.core.session.SessionManager
 import com.smartsolar.microgrid.core.util.AppResult
 import com.smartsolar.microgrid.data.remote.AuthApiService
+import com.smartsolar.microgrid.data.remote.dto.ProsumerLoginRequestDto
+import com.smartsolar.microgrid.domain.model.AccountStatus
 import com.smartsolar.microgrid.domain.model.SessionUser
+import com.smartsolar.microgrid.domain.model.UserRole
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -18,6 +21,24 @@ class SessionRepository(
     private val mutableSessionState = MutableStateFlow<SessionState>(SessionState.Initializing)
     val sessionState: StateFlow<SessionState> = mutableSessionState.asStateFlow()
 
+    suspend fun loginProsumer(nic: String, password: String): AppResult<SessionUser> {
+        return try {
+            val response = authApiService.loginProsumer(
+                ProsumerLoginRequestDto(nic = nic.trim(), password = password),
+            )
+            val user = response.user.toDomainOrNull()
+                ?: return invalidContractResult()
+            if (!user.isActiveProsumer()) {
+                return unsupportedSessionResult()
+            }
+            sessionManager.saveToken(response.token)
+            mutableSessionState.value = SessionState.Authenticated(user)
+            AppResult.Success(user)
+        } catch (throwable: Throwable) {
+            AppResult.Error(errorNormalizer.normalize(throwable))
+        }
+    }
+
     suspend fun restoreSession(): AppResult<SessionUser?> {
         if (sessionManager.getToken() == null) {
             mutableSessionState.value = SessionState.Unauthenticated
@@ -27,6 +48,9 @@ class SessionRepository(
         return try {
             val user = authApiService.getCurrentUser().toDomainOrNull()
                 ?: return invalidContractResult()
+            if (!user.isActiveProsumer()) {
+                return unsupportedSessionResult()
+            }
             mutableSessionState.value = SessionState.Authenticated(user)
             AppResult.Success(user)
         } catch (throwable: Throwable) {
@@ -45,6 +69,12 @@ class SessionRepository(
         mutableSessionState.value = SessionState.Unauthenticated
     }
 
+    fun invalidateIfUnauthorized(error: AppError) {
+        if (error.httpStatus == 401) {
+            clearSession()
+        }
+    }
+
     private fun invalidContractResult(): AppResult.Error {
         val error = AppError(
             message = "The server returned unsupported account information.",
@@ -53,6 +83,18 @@ class SessionRepository(
         mutableSessionState.value = SessionState.Failed(error)
         return AppResult.Error(error)
     }
+
+    private fun unsupportedSessionResult(): AppResult.Error {
+        val error = AppError(
+            message = "This Android application supports active Prosumer accounts only.",
+            code = "UNSUPPORTED_ANDROID_SESSION",
+        )
+        mutableSessionState.value = SessionState.Failed(error)
+        return AppResult.Error(error)
+    }
+
+    private fun SessionUser.isActiveProsumer(): Boolean =
+        role == UserRole.PROSUMER && accountStatus == AccountStatus.ACTIVE
 }
 
 sealed interface SessionState {

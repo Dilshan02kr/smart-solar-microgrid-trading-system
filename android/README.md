@@ -1,6 +1,6 @@
 # Smart Solar Microgrid Android
 
-Native Android foundation built with Kotlin, XML Views, AndroidX, ViewBinding, and a single-Activity Navigation Component architecture. Stage 1 intentionally contains no authentication forms or business-feature screens.
+Native Android client built with Kotlin, XML Views, AndroidX, ViewBinding, and a single-Activity Navigation Component architecture. It currently supports the complete Prosumer account flow: registration, NIC/password login, session restoration, account home, profile viewing/editing, self-deactivation, and logout.
 
 ## Open and build
 
@@ -35,12 +35,12 @@ Never place credentials, JWTs, API keys, or other secrets in Gradle properties c
 - `core/network` owns the sole Retrofit/OkHttp construction path, bearer-token injection, redacted debug-only BASIC logging, and 401 invalidation. A 403 never clears the token.
 - `core/session` isolates JWT persistence in private SharedPreferences. Passwords and form data are never stored.
 - `core/error` normalizes the backend `{ code, message, errors }` response into safe UI errors.
-- `data/remote` contains the minimal `/api/auth/me` service and its DTO.
-- `data/repository` restores session state and maps transport models to domain models.
+- `data/remote` owns `/api/auth/me` plus the exact Prosumer login, registration, own-profile, update, and self-deactivation contracts.
+- `data/repository` restores session state, enforces active Prosumer role safety, and maps transport models to domain models.
 - `data/local` uses `SQLiteOpenHelper` with a versioned `app_metadata` table. Tokens are not stored in SQLite.
 - `domain/model` contains exact, safely parsed backend role and account-status values.
-- `ui/launch` and `ui/common` demonstrate Fragment → ViewModel → Repository flow and safe ViewBinding lifecycles.
+- `ui/auth`, `ui/prosumer`, `ui/launch`, and `ui/common` use Fragment -> ViewModel -> Repository flow and safe ViewBinding lifecycles.
 
-Future feature packages can be added under `ui/auth`, `ui/prosumer`, `ui/stations`, `ui/reservations`, `ui/operator`, and `ui/map` as their contracts are implemented.
+Future feature packages can be added under `ui/stations`, `ui/reservations`, `ui/operator`, and `ui/map` as their contracts are implemented.
 
 All API services must be created from `NetworkModule`; Fragments must not create Retrofit clients or make direct network calls.
