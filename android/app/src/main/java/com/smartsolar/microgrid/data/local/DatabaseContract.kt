@@ -11,6 +11,7 @@ object DatabaseContract {
         const val COLUMN_KEY = "metadata_key"
         const val COLUMN_VALUE = "metadata_value"
         const val COLUMN_UPDATED_AT = "updated_at"
+        const val KEY_LAST_SUCCESSFUL_STATION_SYNC = "last_successful_station_sync_epoch_millis"
 
         const val CREATE_TABLE = """
             CREATE TABLE $TABLE_NAME (

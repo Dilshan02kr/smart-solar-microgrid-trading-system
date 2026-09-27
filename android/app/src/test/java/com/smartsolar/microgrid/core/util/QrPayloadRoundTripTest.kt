@@ -23,5 +23,6 @@ class QrPayloadRoundTripTest {
         )
 
         assertEquals(serverReference, decoded.text)
+        assertEquals(serverReference, OperatorPresentation.normalizeReference(decoded.text))
     }
 }

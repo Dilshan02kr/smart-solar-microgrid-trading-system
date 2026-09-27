@@ -185,4 +185,5 @@
         <item quantity="other">%1$d stations could not be placed because their coordinates are invalid.</item>
     </plurals>
     <string name="station_marker_snippet">%1$s • %2$s • %3$.1f kW</string>
+    <string name="last_station_sync">Last successful station refresh: %1$s</string>
 </resources>
