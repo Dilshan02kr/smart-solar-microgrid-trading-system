@@ -39,6 +39,9 @@ class ProsumerHomeFragment : Fragment() {
         binding?.profileButton?.setOnClickListener {
             findNavController().navigate(R.id.action_prosumerHomeFragment_to_prosumerProfileFragment)
         }
+        binding?.reservationsButton?.setOnClickListener {
+            findNavController().navigate(R.id.action_prosumerHomeFragment_to_myReservationsFragment)
+        }
         binding?.logoutButton?.setOnClickListener { viewModel.logout() }
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
