@@ -14,25 +14,27 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.smartsolar.microgrid.R
 import com.smartsolar.microgrid.SmartSolarApplication
-import com.smartsolar.microgrid.databinding.FragmentListStateBinding
+import com.smartsolar.microgrid.databinding.FragmentStationsBinding
 import com.smartsolar.microgrid.domain.model.Station
 import com.smartsolar.microgrid.ui.common.AppViewModelFactory
 import com.smartsolar.microgrid.ui.common.UiState
 import kotlinx.coroutines.launch
 
 class StationsFragment : Fragment() {
-    private var binding: FragmentListStateBinding? = null
+    private var binding: FragmentStationsBinding? = null
     private val adapter = StationAdapter(::openStation)
     private val viewModel: StationsViewModel by viewModels {
         val app = (requireActivity().application as SmartSolarApplication).appContainer
         AppViewModelFactory { StationsViewModel(app.stationRepository) }
     }
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, state: Bundle?): View =
-        FragmentListStateBinding.inflate(inflater, container, false).also { binding = it }.root
+        FragmentStationsBinding.inflate(inflater, container, false).also { binding = it }.root
     override fun onViewCreated(view: View, state: Bundle?) {
-        binding?.screenTitle?.setText(R.string.stations_title)
         binding?.items?.adapter = adapter
         binding?.retryButton?.setOnClickListener { viewModel.load() }
+        binding?.viewMapButton?.setOnClickListener {
+            findNavController().navigate(R.id.action_stationsFragment_to_stationsMapFragment)
+        }
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) { viewModel.state.collect(::render) }
         }

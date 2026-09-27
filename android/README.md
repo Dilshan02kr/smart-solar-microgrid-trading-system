@@ -16,6 +16,26 @@ From PowerShell:
 
 Do not commit `local.properties`, generated build directories, APKs, or AABs.
 
+## Google Maps setup
+
+Station discovery uses Google Maps SDK for Android and real coordinates returned by `GET /api/stations`. Create a Google Maps Platform key, enable **Maps SDK for Android** in its Google Cloud project, and add the key only to your untracked `android/local.properties` file:
+
+```properties
+MAPS_API_KEY=your_local_key
+```
+
+Keep any existing `sdk.dir` entry. The project compiles without a key and shows a setup message instead of initializing the map. Never commit `local.properties` or place the key in Kotlin, XML resources, README content, or tracked Gradle properties.
+
+Restrict the key to **Android apps** using the application package and signing-certificate SHA-1. The base application ID is `com.smartsolar.microgrid`; debug builds use `com.smartsolar.microgrid.debug`. Obtain the relevant SHA-1 with:
+
+```powershell
+.\gradlew.bat signingReport
+```
+
+Restrict API usage to **Maps SDK for Android**. Google Cloud billing/API configuration may be required. Runtime testing needs an Internet-connected device or emulator with Google APIs/Play services.
+
+This stage displays station markers and links them to the existing station-details flow. It intentionally does not request device location or add Places, geocoding, Directions, route drawing, or background tracking.
+
 ## API base URL
 
 `API_BASE_URL` is a Gradle property and is exposed centrally as `BuildConfig.API_BASE_URL`. The checked-in development default is `http://10.0.2.2:5221/`, matching the backend HTTP launch profile through the emulator host alias; a trailing slash is added when absent.
