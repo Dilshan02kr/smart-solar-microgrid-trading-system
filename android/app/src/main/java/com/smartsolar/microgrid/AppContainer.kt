@@ -7,6 +7,8 @@ import com.smartsolar.microgrid.data.local.AppDatabaseHelper
 import com.smartsolar.microgrid.data.local.DatabaseProvider
 import com.smartsolar.microgrid.data.local.MetadataDao
 import com.smartsolar.microgrid.data.remote.AuthApiService
+import com.smartsolar.microgrid.data.remote.ProsumerApiService
+import com.smartsolar.microgrid.data.repository.ProsumerRepository
 import com.smartsolar.microgrid.data.repository.SessionRepository
 
 class AppContainer(context: Context) {
@@ -16,7 +18,9 @@ class AppContainer(context: Context) {
 
     private val retrofit = NetworkModule.createRetrofit(sessionManager)
     private val authApiService = retrofit.create(AuthApiService::class.java)
+    private val prosumerApiService = retrofit.create(ProsumerApiService::class.java)
 
     val sessionRepository = SessionRepository(authApiService, sessionManager)
+    val prosumerRepository = ProsumerRepository(prosumerApiService, sessionRepository)
 }
 

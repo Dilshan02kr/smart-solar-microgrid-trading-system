@@ -3,21 +3,24 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/nav_graph"
     app:startDestination="@id/launchFragment">
-
-    <fragment
-        android:id="@+id/launchFragment"
-        android:name="com.smartsolar.microgrid.ui.launch.LaunchFragment"
-        android:label="@string/launch_title">
-        <action
-            android:id="@+id/action_launchFragment_to_foundationFragment"
-            app:destination="@id/foundationFragment"
-            app:popUpTo="@id/launchFragment"
-            app:popUpToInclusive="true" />
+    <fragment android:id="@+id/launchFragment" android:name="com.smartsolar.microgrid.ui.launch.LaunchFragment" android:label="@string/launch_title">
+        <action android:id="@+id/action_launchFragment_to_loginFragment" app:destination="@id/loginFragment" app:popUpTo="@id/launchFragment" app:popUpToInclusive="true" />
+        <action android:id="@+id/action_launchFragment_to_prosumerHomeFragment" app:destination="@id/prosumerHomeFragment" app:popUpTo="@id/launchFragment" app:popUpToInclusive="true" />
     </fragment>
-
-    <fragment
-        android:id="@+id/foundationFragment"
-        android:name="com.smartsolar.microgrid.ui.common.FoundationFragment"
-        android:label="@string/foundation_title" />
+    <fragment android:id="@+id/loginFragment" android:name="com.smartsolar.microgrid.ui.auth.LoginFragment" android:label="@string/login_title">
+        <action android:id="@+id/action_loginFragment_to_registerFragment" app:destination="@id/registerFragment" />
+        <action android:id="@+id/action_loginFragment_to_prosumerHomeFragment" app:destination="@id/prosumerHomeFragment" app:popUpTo="@id/loginFragment" app:popUpToInclusive="true" />
+    </fragment>
+    <fragment android:id="@+id/registerFragment" android:name="com.smartsolar.microgrid.ui.auth.RegisterFragment" android:label="@string/register_title" />
+    <fragment android:id="@+id/prosumerHomeFragment" android:name="com.smartsolar.microgrid.ui.prosumer.ProsumerHomeFragment" android:label="@string/home_title">
+        <action android:id="@+id/action_prosumerHomeFragment_to_prosumerProfileFragment" app:destination="@id/prosumerProfileFragment" />
+        <action android:id="@+id/action_prosumerHomeFragment_to_loginFragment" app:destination="@id/loginFragment" app:popUpTo="@id/nav_graph" app:popUpToInclusive="true" />
+    </fragment>
+    <fragment android:id="@+id/prosumerProfileFragment" android:name="com.smartsolar.microgrid.ui.prosumer.ProsumerProfileFragment" android:label="@string/profile_title">
+        <action android:id="@+id/action_prosumerProfileFragment_to_editProsumerProfileFragment" app:destination="@id/editProsumerProfileFragment" />
+        <action android:id="@+id/action_prosumerProfileFragment_to_loginFragment" app:destination="@id/loginFragment" app:popUpTo="@id/nav_graph" app:popUpToInclusive="true" />
+    </fragment>
+    <fragment android:id="@+id/editProsumerProfileFragment" android:name="com.smartsolar.microgrid.ui.prosumer.EditProsumerProfileFragment" android:label="@string/edit_profile_title">
+        <action android:id="@+id/action_editProsumerProfileFragment_to_loginFragment" app:destination="@id/loginFragment" app:popUpTo="@id/nav_graph" app:popUpToInclusive="true" />
+    </fragment>
 </navigation>
-

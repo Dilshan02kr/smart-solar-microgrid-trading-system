@@ -13,6 +13,7 @@ import androidx.navigation.fragment.findNavController
 import com.smartsolar.microgrid.R
 import com.smartsolar.microgrid.SmartSolarApplication
 import com.smartsolar.microgrid.databinding.FragmentLaunchBinding
+import com.smartsolar.microgrid.ui.common.AppViewModelFactory
 import kotlinx.coroutines.launch
 
 class LaunchFragment : Fragment() {
@@ -20,7 +21,7 @@ class LaunchFragment : Fragment() {
 
     private val viewModel: LaunchViewModel by viewModels {
         val container = (requireActivity().application as SmartSolarApplication).appContainer
-        LaunchViewModelFactory(container.sessionRepository)
+        AppViewModelFactory { LaunchViewModel(container.sessionRepository) }
     }
 
     override fun onCreateView(
@@ -34,12 +35,30 @@ class LaunchFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.state.collect { state ->
-                    if (state == LaunchUiState.Ready && findNavController().currentDestination?.id == R.id.launchFragment) {
-                        findNavController().navigate(R.id.action_launchFragment_to_foundationFragment)
-                    }
-                }
+                viewModel.state.collect(::render)
             }
+        }
+        binding?.retryButton?.setOnClickListener { viewModel.retry() }
+        binding?.continueButton?.setOnClickListener { viewModel.continueToLogin() }
+    }
+
+    private fun render(state: LaunchUiState) {
+        val currentBinding = binding ?: return
+        currentBinding.progressIndicator.visibility =
+            if (state is LaunchUiState.Loading) View.VISIBLE else View.GONE
+        currentBinding.errorMessage.visibility =
+            if (state is LaunchUiState.Error) View.VISIBLE else View.GONE
+        currentBinding.retryButton.visibility = currentBinding.errorMessage.visibility
+        currentBinding.continueButton.visibility = currentBinding.errorMessage.visibility
+        if (state is LaunchUiState.Error) currentBinding.errorMessage.text = state.error.message
+
+        if (findNavController().currentDestination?.id != R.id.launchFragment) return
+        when (state) {
+            LaunchUiState.NavigateToLogin ->
+                findNavController().navigate(R.id.action_launchFragment_to_loginFragment)
+            LaunchUiState.NavigateToHome ->
+                findNavController().navigate(R.id.action_launchFragment_to_prosumerHomeFragment)
+            else -> Unit
         }
     }
 
