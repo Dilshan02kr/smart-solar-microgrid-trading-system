@@ -14,6 +14,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.smartsolar.microgrid.R
 import com.smartsolar.microgrid.SmartSolarApplication
+import com.smartsolar.microgrid.core.util.StationMapPresentation
 import com.smartsolar.microgrid.databinding.FragmentStationDetailsBinding
 import com.smartsolar.microgrid.domain.model.Station
 import com.smartsolar.microgrid.domain.model.StationStatus
@@ -35,6 +36,12 @@ class StationDetailsFragment : Fragment() {
         binding?.slotsButton?.setOnClickListener {
             findNavController().navigate(R.id.action_stationDetailsFragment_to_stationSlotsFragment, bundleOf(StationsFragment.ARG_STATION_ID to stationId))
         }
+        binding?.viewMapButton?.setOnClickListener {
+            findNavController().navigate(
+                R.id.action_stationDetailsFragment_to_stationsMapFragment,
+                bundleOf(StationsMapFragment.ARG_FOCUS_STATION_ID to stationId),
+            )
+        }
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) { viewModel.state.collect(::render) }
         }
@@ -54,6 +61,7 @@ class StationDetailsFragment : Fragment() {
             b.scheduleValue.text = operationalSchedule; b.statusValue.text = status.name
             b.coordinatesValue.text = getString(R.string.coordinates_value, latitude, longitude)
             b.slotsButton.isVisible = status == StationStatus.ACTIVE
+            b.viewMapButton.isVisible = StationMapPresentation.hasValidCoordinates(latitude, longitude)
             b.unavailableMessage.isVisible = status == StationStatus.INACTIVE
         }
     }
