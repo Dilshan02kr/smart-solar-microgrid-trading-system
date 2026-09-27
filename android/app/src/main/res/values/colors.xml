@@ -11,5 +11,7 @@
     <color name="text_primary">#17211B</color>
     <color name="text_secondary">#536158</color>
     <color name="white">#FFFFFF</color>
+    <color name="qr_foreground">#000000</color>
+    <color name="qr_background">#FFFFFF</color>
 </resources>
 

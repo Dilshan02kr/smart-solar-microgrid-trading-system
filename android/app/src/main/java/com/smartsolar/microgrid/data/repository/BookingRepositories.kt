@@ -56,6 +56,12 @@ class ReservationRepository(
     private val sessionRepository: SessionRepository,
     private val errors: ErrorNormalizer = ErrorNormalizer(),
 ) {
+    suspend fun getMine(): AppResult<List<Reservation>> = networkResult(sessionRepository, errors) {
+        api.getMyReservations().map {
+            it.toDomainOrNull() ?: throw InvalidBookingContractException()
+        }
+    }
+
     suspend fun create(stationId: String, slotId: String): AppResult<Reservation> = execute {
         api.createReservation(ReservationRequestDto(stationId, slotId))
     }
