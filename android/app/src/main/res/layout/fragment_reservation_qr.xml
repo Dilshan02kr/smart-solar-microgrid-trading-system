@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:padding="@dimen/screen_padding">
+        <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="@string/reservation_qr_title" android:textAppearance="@style/TextAppearance.Material3.HeadlineMedium" />
+        <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="@dimen/spacing_small" android:text="@string/reservation_qr_explanation" android:textColor="@color/text_secondary" />
+        <com.google.android.material.progressindicator.CircularProgressIndicator android:id="@+id/progress_indicator" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="@dimen/spacing_large" />
+        <LinearLayout android:id="@+id/error_container" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="@dimen/spacing_large" android:gravity="center" android:orientation="vertical" android:visibility="gone">
+            <TextView android:id="@+id/error_message" android:layout_width="match_parent" android:layout_height="wrap_content" android:gravity="center" android:textColor="@color/status_error" />
+            <com.google.android.material.button.MaterialButton android:id="@+id/retry_button" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/retry" />
+            <com.google.android.material.button.MaterialButton android:id="@+id/back_button" style="@style/Widget.Material3.Button.TextButton" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/back_to_reservation" />
+        </LinearLayout>
+        <LinearLayout android:id="@+id/content_container" android:layout_width="match_parent" android:layout_height="wrap_content" android:gravity="center_horizontal" android:orientation="vertical" android:visibility="gone">
+            <ImageView android:id="@+id/qr_image" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="@dimen/spacing_large" android:adjustViewBounds="true" android:background="@color/qr_background" android:contentDescription="@string/qr_content_description_generic" android:padding="@dimen/spacing_small" android:scaleType="fitCenter" />
+            <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="@dimen/spacing_large" android:text="@string/reference_label" android:textStyle="bold" />
+            <TextView android:id="@+id/reference_value" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="@dimen/spacing_small" android:breakStrategy="simple" android:textIsSelectable="true" />
+            <com.google.android.material.button.MaterialButton android:id="@+id/copy_button" style="@style/Widget.Material3.Button.OutlinedButton" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="@dimen/spacing_small" android:text="@string/copy_reference_action" />
+            <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="@dimen/spacing_medium" android:text="@string/station_label" android:textStyle="bold" />
+            <TextView android:id="@+id/station_value" android:layout_width="match_parent" android:layout_height="wrap_content" />
+            <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="@dimen/spacing_medium" android:text="@string/scheduled_label" android:textStyle="bold" />
+            <TextView android:id="@+id/scheduled_value" android:layout_width="match_parent" android:layout_height="wrap_content" />
+        </LinearLayout>
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>

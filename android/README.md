@@ -1,6 +1,6 @@
 # Smart Solar Microgrid Android
 
-Native Android client built with Kotlin, XML Views, AndroidX, ViewBinding, and a single-Activity Navigation Component architecture. It supports the Prosumer account flow plus active-station browsing, station energy slots, and server-authoritative reservation creation, details, update, and cancellation.
+Native Android client built with Kotlin, XML Views, AndroidX, ViewBinding, and a single-Activity Navigation Component architecture. It supports the Prosumer account flow, station booking, grouped reservation overview/history, and authoritative approved-reservation QR display.
 
 ## Open and build
 
@@ -41,7 +41,7 @@ Never place credentials, JWTs, API keys, or other secrets in Gradle properties c
 - `domain/model` contains exact, safely parsed backend account, station, and reservation statuses.
 - `ui/auth`, `ui/prosumer`, `ui/stations`, `ui/slots`, `ui/reservations`, `ui/launch`, and `ui/common` use Fragment -> ViewModel -> Repository flow and safe ViewBinding lifecycles.
 
-Reservation mutations are never queued offline; failures remain retryable server operations. SQLite remains limited to the existing metadata foundation because Stage 3 has no safe offline booking requirement.
+Reservation mutations are never queued offline; failures remain retryable server operations. SQLite remains limited to the existing metadata foundation because offline caching is optional and an active QR must always be revalidated against the server. QR bitmaps and transaction references are not persisted locally.
 
 Future feature packages can be added under `ui/operator` and `ui/map` as their contracts are implemented.
 

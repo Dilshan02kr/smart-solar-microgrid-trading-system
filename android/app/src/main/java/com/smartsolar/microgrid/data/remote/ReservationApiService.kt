@@ -9,6 +9,9 @@ import retrofit2.http.PUT
 import retrofit2.http.Path
 
 interface ReservationApiService {
+    @GET("api/reservations/me")
+    suspend fun getMyReservations(): List<ReservationResponseDto>
+
     @POST("api/reservations")
     suspend fun createReservation(@Body request: ReservationRequestDto): ReservationResponseDto
 
