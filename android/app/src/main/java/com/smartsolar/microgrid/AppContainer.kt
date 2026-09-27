@@ -34,7 +34,7 @@ class AppContainer(context: Context) {
 
     val sessionRepository = SessionRepository(authApiService, sessionManager)
     val prosumerRepository = ProsumerRepository(prosumerApiService, sessionRepository)
-    val stationRepository = StationRepository(stationApiService, sessionRepository)
+    val stationRepository = StationRepository(stationApiService, sessionRepository, metadataDao)
     val energySlotRepository = EnergySlotRepository(energySlotApiService, sessionRepository)
     val reservationRepository = ReservationRepository(reservationApiService, sessionRepository)
     val operatorRepository = OperatorRepository(operatorApiService, sessionRepository)
