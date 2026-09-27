@@ -15,6 +15,11 @@ data class LoginInput(
     val password: String,
 )
 
+data class OperatorLoginInput(
+    val email: String,
+    val password: String,
+)
+
 data class RegistrationInput(
     val nic: String,
     val firstName: String,
@@ -37,6 +42,11 @@ object FormValidator {
 
     fun validateLogin(input: LoginInput): Set<FormField> = buildSet {
         if (input.nic.isBlank()) add(FormField.NIC)
+        if (input.password.isBlank()) add(FormField.PASSWORD)
+    }
+
+    fun validateOperatorLogin(input: OperatorLoginInput): Set<FormField> = buildSet {
+        if (!emailPattern.matches(input.email.trim())) add(FormField.EMAIL)
         if (input.password.isBlank()) add(FormField.PASSWORD)
     }
 

@@ -9,6 +9,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import com.smartsolar.microgrid.domain.model.SessionDestination
+import com.smartsolar.microgrid.domain.model.SessionRouting
 
 class LaunchViewModel(
     private val sessionRepository: SessionRepository,
@@ -35,8 +37,12 @@ class LaunchViewModel(
             mutableState.value = when (val result = sessionRepository.restoreSession()) {
                 is AppResult.Success -> if (result.value == null) {
                     LaunchUiState.NavigateToLogin
-                } else {
-                    LaunchUiState.NavigateToHome
+                } else when (SessionRouting.destination(result.value)) {
+                    SessionDestination.PROSUMER_HOME -> LaunchUiState.NavigateToProsumerHome
+                    SessionDestination.OPERATOR_DASHBOARD -> LaunchUiState.NavigateToOperatorDashboard
+                    SessionDestination.UNSUPPORTED -> LaunchUiState.Error(
+                        AppError("This account role is not supported by the Android application.", "UNSUPPORTED_ANDROID_SESSION"),
+                    )
                 }
                 is AppResult.Error -> if (result.error.httpStatus == 401) {
                     LaunchUiState.NavigateToLogin
@@ -51,7 +57,8 @@ class LaunchViewModel(
 sealed interface LaunchUiState {
     data object Loading : LaunchUiState
     data object NavigateToLogin : LaunchUiState
-    data object NavigateToHome : LaunchUiState
+    data object NavigateToProsumerHome : LaunchUiState
+    data object NavigateToOperatorDashboard : LaunchUiState
     data class Error(val error: AppError) : LaunchUiState
 }
 

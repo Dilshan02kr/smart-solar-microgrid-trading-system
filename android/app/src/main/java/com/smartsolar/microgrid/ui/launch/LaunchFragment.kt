@@ -56,8 +56,10 @@ class LaunchFragment : Fragment() {
         when (state) {
             LaunchUiState.NavigateToLogin ->
                 findNavController().navigate(R.id.action_launchFragment_to_loginFragment)
-            LaunchUiState.NavigateToHome ->
+            LaunchUiState.NavigateToProsumerHome ->
                 findNavController().navigate(R.id.action_launchFragment_to_prosumerHomeFragment)
+            LaunchUiState.NavigateToOperatorDashboard ->
+                findNavController().navigate(R.id.action_launchFragment_to_operatorDashboardFragment)
             else -> Unit
         }
     }

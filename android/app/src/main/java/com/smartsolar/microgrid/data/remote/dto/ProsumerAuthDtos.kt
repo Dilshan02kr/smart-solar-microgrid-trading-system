@@ -5,6 +5,11 @@ data class ProsumerLoginRequestDto(
     val password: String,
 )
 
+data class WebLoginRequestDto(
+    val email: String,
+    val password: String,
+)
+
 data class AuthenticationResponseDto(
     val token: String,
     val expiresAtUtc: String,
