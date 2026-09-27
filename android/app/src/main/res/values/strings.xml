@@ -173,4 +173,16 @@
     <string name="scan_another_qr">Scan Another QR</string>
     <string name="back_to_dashboard">Back to Dashboard</string>
     <string name="count_value">%1$d</string>
+    <string name="view_map">View Map</string>
+    <string name="view_on_map">View on Map</string>
+    <string name="stations_map_title">Microgrid Node Map</string>
+    <string name="stations_map_instruction">Select a station marker, then tap its information window to view station details. The station list remains available as an accessible alternative.</string>
+    <string name="map_configuration_required">Google Maps is not configured for this build. Add MAPS_API_KEY to android/local.properties and rebuild. The station list remains available.</string>
+    <string name="map_unavailable">Google Maps could not be initialized. Check the API-key restrictions, Maps SDK setup, and device connectivity.</string>
+    <string name="no_mappable_stations">No stations currently have valid map coordinates. Use the station list to continue browsing.</string>
+    <plurals name="invalid_station_coordinates_notice">
+        <item quantity="one">%1$d station could not be placed because its coordinates are invalid.</item>
+        <item quantity="other">%1$d stations could not be placed because their coordinates are invalid.</item>
+    </plurals>
+    <string name="station_marker_snippet">%1$s • %2$s • %3$.1f kW</string>
 </resources>
