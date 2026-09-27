@@ -6,9 +6,12 @@ import com.smartsolar.microgrid.core.session.SessionManager
 import com.smartsolar.microgrid.core.util.AppResult
 import com.smartsolar.microgrid.data.remote.AuthApiService
 import com.smartsolar.microgrid.data.remote.dto.ProsumerLoginRequestDto
+import com.smartsolar.microgrid.data.remote.dto.WebLoginRequestDto
 import com.smartsolar.microgrid.domain.model.AccountStatus
 import com.smartsolar.microgrid.domain.model.SessionUser
 import com.smartsolar.microgrid.domain.model.UserRole
+import com.smartsolar.microgrid.domain.model.SessionDestination
+import com.smartsolar.microgrid.domain.model.SessionRouting
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -39,6 +42,28 @@ class SessionRepository(
         }
     }
 
+    suspend fun loginOperator(email: String, password: String): AppResult<SessionUser> {
+        return try {
+            val response = authApiService.loginWeb(
+                WebLoginRequestDto(email = email.trim(), password = password),
+            )
+            val user = response.user.toDomainOrNull() ?: return invalidContractResult()
+            if (SessionRouting.destination(user) != SessionDestination.OPERATOR_DASHBOARD) {
+                return AppResult.Error(
+                    AppError(
+                        message = "This Android operator login is available only for active Grid Operator accounts.",
+                        code = "UNSUPPORTED_OPERATOR_LOGIN_ROLE",
+                    ),
+                )
+            }
+            sessionManager.saveToken(response.token)
+            mutableSessionState.value = SessionState.Authenticated(user)
+            AppResult.Success(user)
+        } catch (throwable: Throwable) {
+            AppResult.Error(errorNormalizer.normalize(throwable))
+        }
+    }
+
     suspend fun restoreSession(): AppResult<SessionUser?> {
         if (sessionManager.getToken() == null) {
             mutableSessionState.value = SessionState.Unauthenticated
@@ -48,7 +73,7 @@ class SessionRepository(
         return try {
             val user = authApiService.getCurrentUser().toDomainOrNull()
                 ?: return invalidContractResult()
-            if (!user.isActiveProsumer()) {
+            if (SessionRouting.destination(user) == SessionDestination.UNSUPPORTED) {
                 return unsupportedSessionResult()
             }
             mutableSessionState.value = SessionState.Authenticated(user)
@@ -86,7 +111,7 @@ class SessionRepository(
 
     private fun unsupportedSessionResult(): AppResult.Error {
         val error = AppError(
-            message = "This Android application supports active Prosumer accounts only.",
+            message = "This Android application supports active Prosumer and Grid Operator accounts only.",
             code = "UNSUPPORTED_ANDROID_SESSION",
         )
         mutableSessionState.value = SessionState.Failed(error)
