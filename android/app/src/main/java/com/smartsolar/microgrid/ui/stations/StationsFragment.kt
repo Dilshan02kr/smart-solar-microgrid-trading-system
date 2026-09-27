@@ -14,6 +14,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.smartsolar.microgrid.R
 import com.smartsolar.microgrid.SmartSolarApplication
+import com.smartsolar.microgrid.core.util.BookingPresentation
 import com.smartsolar.microgrid.databinding.FragmentStationsBinding
 import com.smartsolar.microgrid.domain.model.Station
 import com.smartsolar.microgrid.ui.common.AppViewModelFactory
@@ -36,7 +37,21 @@ class StationsFragment : Fragment() {
             findNavController().navigate(R.id.action_stationsFragment_to_stationsMapFragment)
         }
         viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) { viewModel.state.collect(::render) }
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                launch { viewModel.state.collect(::render) }
+                launch { viewModel.lastSuccessfulSync.collect(::renderLastSuccessfulSync) }
+            }
+        }
+    }
+
+    private fun renderLastSuccessfulSync(epochMillis: Long?) {
+        val current = binding ?: return
+        current.lastSyncMessage.isVisible = epochMillis != null
+        current.lastSyncMessage.text = epochMillis?.let {
+            getString(
+                R.string.last_station_sync,
+                BookingPresentation.timestamp(java.time.Instant.ofEpochMilli(it).toString()),
+            )
         }
     }
     private fun render(state: UiState<List<Station>>) {

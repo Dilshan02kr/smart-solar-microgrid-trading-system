@@ -7,9 +7,13 @@ import com.smartsolar.microgrid.data.remote.EnergySlotApiService
 import com.smartsolar.microgrid.data.remote.ReservationApiService
 import com.smartsolar.microgrid.data.remote.StationApiService
 import com.smartsolar.microgrid.data.remote.dto.ReservationRequestDto
+import com.smartsolar.microgrid.data.local.DatabaseContract
+import com.smartsolar.microgrid.data.local.MetadataDao
 import com.smartsolar.microgrid.domain.model.EnergySlot
 import com.smartsolar.microgrid.domain.model.Reservation
 import com.smartsolar.microgrid.domain.model.Station
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 private suspend fun <T> networkResult(
     sessionRepository: SessionRepository,
@@ -26,14 +30,34 @@ private suspend fun <T> networkResult(
 class StationRepository(
     private val api: StationApiService,
     private val sessionRepository: SessionRepository,
+    private val metadata: MetadataDao,
     private val errors: ErrorNormalizer = ErrorNormalizer(),
 ) {
     suspend fun getStations(): AppResult<List<Station>> = networkResult(sessionRepository, errors) {
-        api.getStations().map { it.toDomainOrNull() ?: throw InvalidBookingContractException() }
+        val stations = api.getStations().map {
+            it.toDomainOrNull() ?: throw InvalidBookingContractException()
+        }
+        withContext(Dispatchers.IO) {
+            runCatching {
+                metadata.put(
+                    DatabaseContract.AppMetadata.KEY_LAST_SUCCESSFUL_STATION_SYNC,
+                    System.currentTimeMillis().toString(),
+                )
+            }
+        }
+        stations
     }
 
     suspend fun getStation(id: String): AppResult<Station> = networkResult(sessionRepository, errors) {
         api.getStation(id).toDomainOrNull() ?: throw InvalidBookingContractException()
+    }
+
+    suspend fun getLastSuccessfulSyncEpochMillis(): Long? = withContext(Dispatchers.IO) {
+        runCatching {
+            metadata.get(DatabaseContract.AppMetadata.KEY_LAST_SUCCESSFUL_STATION_SYNC)
+                ?.value
+                ?.toLongOrNull()
+        }.getOrNull()
     }
 }
 
