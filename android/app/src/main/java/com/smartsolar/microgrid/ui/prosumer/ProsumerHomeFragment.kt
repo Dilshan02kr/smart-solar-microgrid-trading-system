@@ -33,6 +33,9 @@ class ProsumerHomeFragment : Fragment() {
         .root
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        binding?.stationsButton?.setOnClickListener {
+            findNavController().navigate(R.id.action_prosumerHomeFragment_to_stationsFragment)
+        }
         binding?.profileButton?.setOnClickListener {
             findNavController().navigate(R.id.action_prosumerHomeFragment_to_prosumerProfileFragment)
         }

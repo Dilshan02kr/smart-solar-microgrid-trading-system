@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/nav_graph"
     app:startDestination="@id/launchFragment">
+    <action android:id="@+id/action_global_loginFragment" app:destination="@id/loginFragment" app:popUpTo="@id/nav_graph" app:popUpToInclusive="true" />
     <fragment android:id="@+id/launchFragment" android:name="com.smartsolar.microgrid.ui.launch.LaunchFragment" android:label="@string/launch_title">
         <action android:id="@+id/action_launchFragment_to_loginFragment" app:destination="@id/loginFragment" app:popUpTo="@id/launchFragment" app:popUpToInclusive="true" />
         <action android:id="@+id/action_launchFragment_to_prosumerHomeFragment" app:destination="@id/prosumerHomeFragment" app:popUpTo="@id/launchFragment" app:popUpToInclusive="true" />
@@ -13,6 +14,7 @@
     </fragment>
     <fragment android:id="@+id/registerFragment" android:name="com.smartsolar.microgrid.ui.auth.RegisterFragment" android:label="@string/register_title" />
     <fragment android:id="@+id/prosumerHomeFragment" android:name="com.smartsolar.microgrid.ui.prosumer.ProsumerHomeFragment" android:label="@string/home_title">
+        <action android:id="@+id/action_prosumerHomeFragment_to_stationsFragment" app:destination="@id/stationsFragment" />
         <action android:id="@+id/action_prosumerHomeFragment_to_prosumerProfileFragment" app:destination="@id/prosumerProfileFragment" />
         <action android:id="@+id/action_prosumerHomeFragment_to_loginFragment" app:destination="@id/loginFragment" app:popUpTo="@id/nav_graph" app:popUpToInclusive="true" />
     </fragment>
@@ -22,5 +24,28 @@
     </fragment>
     <fragment android:id="@+id/editProsumerProfileFragment" android:name="com.smartsolar.microgrid.ui.prosumer.EditProsumerProfileFragment" android:label="@string/edit_profile_title">
         <action android:id="@+id/action_editProsumerProfileFragment_to_loginFragment" app:destination="@id/loginFragment" app:popUpTo="@id/nav_graph" app:popUpToInclusive="true" />
+    </fragment>
+    <fragment android:id="@+id/stationsFragment" android:name="com.smartsolar.microgrid.ui.stations.StationsFragment" android:label="@string/stations_title">
+        <action android:id="@+id/action_stationsFragment_to_stationDetailsFragment" app:destination="@id/stationDetailsFragment" />
+    </fragment>
+    <fragment android:id="@+id/stationDetailsFragment" android:name="com.smartsolar.microgrid.ui.stations.StationDetailsFragment" android:label="@string/station_details_title">
+        <argument android:name="stationId" app:argType="string" />
+        <action android:id="@+id/action_stationDetailsFragment_to_stationSlotsFragment" app:destination="@id/stationSlotsFragment" />
+    </fragment>
+    <fragment android:id="@+id/stationSlotsFragment" android:name="com.smartsolar.microgrid.ui.slots.StationSlotsFragment" android:label="@string/slots_title">
+        <argument android:name="stationId" app:argType="string" />
+        <action android:id="@+id/action_stationSlotsFragment_to_createReservationFragment" app:destination="@id/createReservationFragment" />
+    </fragment>
+    <fragment android:id="@+id/createReservationFragment" android:name="com.smartsolar.microgrid.ui.reservations.CreateReservationFragment" android:label="@string/create_reservation_title">
+        <argument android:name="stationId" app:argType="string" />
+        <argument android:name="slotId" app:argType="string" />
+        <action android:id="@+id/action_createReservationFragment_to_reservationDetailsFragment" app:destination="@id/reservationDetailsFragment" app:popUpTo="@id/createReservationFragment" app:popUpToInclusive="true" />
+    </fragment>
+    <fragment android:id="@+id/reservationDetailsFragment" android:name="com.smartsolar.microgrid.ui.reservations.ReservationDetailsFragment" android:label="@string/reservation_details_title">
+        <argument android:name="reservationId" app:argType="string" />
+        <action android:id="@+id/action_reservationDetailsFragment_to_editReservationFragment" app:destination="@id/editReservationFragment" />
+    </fragment>
+    <fragment android:id="@+id/editReservationFragment" android:name="com.smartsolar.microgrid.ui.reservations.EditReservationFragment" android:label="@string/edit_reservation_title">
+        <argument android:name="reservationId" app:argType="string" />
     </fragment>
 </navigation>

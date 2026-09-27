@@ -1,6 +1,6 @@
 # Smart Solar Microgrid Android
 
-Native Android client built with Kotlin, XML Views, AndroidX, ViewBinding, and a single-Activity Navigation Component architecture. It currently supports the complete Prosumer account flow: registration, NIC/password login, session restoration, account home, profile viewing/editing, self-deactivation, and logout.
+Native Android client built with Kotlin, XML Views, AndroidX, ViewBinding, and a single-Activity Navigation Component architecture. It supports the Prosumer account flow plus active-station browsing, station energy slots, and server-authoritative reservation creation, details, update, and cancellation.
 
 ## Open and build
 
@@ -35,12 +35,14 @@ Never place credentials, JWTs, API keys, or other secrets in Gradle properties c
 - `core/network` owns the sole Retrofit/OkHttp construction path, bearer-token injection, redacted debug-only BASIC logging, and 401 invalidation. A 403 never clears the token.
 - `core/session` isolates JWT persistence in private SharedPreferences. Passwords and form data are never stored.
 - `core/error` normalizes the backend `{ code, message, errors }` response into safe UI errors.
-- `data/remote` owns `/api/auth/me` plus the exact Prosumer login, registration, own-profile, update, and self-deactivation contracts.
-- `data/repository` restores session state, enforces active Prosumer role safety, and maps transport models to domain models.
+- `data/remote` owns the exact authentication, Prosumer, station, energy-slot, and reservation contracts.
+- `data/repository` restores session state, enforces active Prosumer role safety, normalizes network errors, and maps transport models to domain models.
 - `data/local` uses `SQLiteOpenHelper` with a versioned `app_metadata` table. Tokens are not stored in SQLite.
-- `domain/model` contains exact, safely parsed backend role and account-status values.
-- `ui/auth`, `ui/prosumer`, `ui/launch`, and `ui/common` use Fragment -> ViewModel -> Repository flow and safe ViewBinding lifecycles.
+- `domain/model` contains exact, safely parsed backend account, station, and reservation statuses.
+- `ui/auth`, `ui/prosumer`, `ui/stations`, `ui/slots`, `ui/reservations`, `ui/launch`, and `ui/common` use Fragment -> ViewModel -> Repository flow and safe ViewBinding lifecycles.
 
-Future feature packages can be added under `ui/stations`, `ui/reservations`, `ui/operator`, and `ui/map` as their contracts are implemented.
+Reservation mutations are never queued offline; failures remain retryable server operations. SQLite remains limited to the existing metadata foundation because Stage 3 has no safe offline booking requirement.
+
+Future feature packages can be added under `ui/operator` and `ui/map` as their contracts are implemented.
 
 All API services must be created from `NetworkModule`; Fragments must not create Retrofit clients or make direct network calls.

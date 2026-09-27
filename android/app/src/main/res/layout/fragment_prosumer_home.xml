@@ -54,10 +54,17 @@
         </com.google.android.material.card.MaterialCardView>
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/profile_button"
+            android:id="@+id/stations_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/spacing_large"
+            android:text="@string/browse_stations_action" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/profile_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_small"
             android:text="@string/my_profile_action" />
 
         <com.google.android.material.button.MaterialButton
