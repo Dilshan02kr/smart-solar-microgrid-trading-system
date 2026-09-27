@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Smart Solar Microgrid</string>
+    <string name="launch_title">Starting</string>
+    <string name="foundation_title">Android foundation ready</string>
+    <string name="session_checking">Checking your session…</string>
+    <string name="session_unauthenticated">No authenticated session. Sign-in will be added in a later stage.</string>
+    <string name="session_authenticated">Session restored for %1$s (%2$s). Role-specific screens will be added later.</string>
+</resources>
+
