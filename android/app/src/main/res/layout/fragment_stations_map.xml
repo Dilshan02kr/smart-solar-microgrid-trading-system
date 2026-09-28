@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/map_title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:paddingStart="@dimen/screen_padding"
+        android:paddingTop="@dimen/screen_padding"
+        android:paddingEnd="@dimen/screen_padding"
+        android:text="@string/stations_map_title"
+        android:textAppearance="@style/TextAppearance.Material3.HeadlineMedium"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/map_instruction"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:paddingStart="@dimen/screen_padding"
+        android:paddingTop="@dimen/spacing_small"
+        android:paddingEnd="@dimen/screen_padding"
+        android:text="@string/stations_map_instruction"
+        android:textColor="@color/text_secondary"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/map_title" />
+
+    <TextView
+        android:id="@+id/coordinate_notice"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:accessibilityLiveRegion="polite"
+        android:paddingStart="@dimen/screen_padding"
+        android:paddingTop="@dimen/spacing_small"
+        android:paddingEnd="@dimen/screen_padding"
+        android:textColor="@color/text_secondary"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/map_instruction" />
+
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/map_container"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="@dimen/spacing_small"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/coordinate_notice" />
+
+    <com.google.android.material.progressindicator.CircularProgressIndicator
+        android:id="@+id/progress_indicator"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@id/map_container"
+        app:layout_constraintEnd_toEndOf="@id/map_container"
+        app:layout_constraintStart_toStartOf="@id/map_container"
+        app:layout_constraintTop_toTopOf="@id/map_container" />
+
+    <TextView
+        android:id="@+id/no_stations_message"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/screen_padding"
+        android:background="@color/surface_card"
+        android:gravity="center"
+        android:padding="@dimen/spacing_medium"
+        android:text="@string/no_mappable_stations"
+        android:textColor="@color/text_secondary"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@id/map_container"
+        app:layout_constraintEnd_toEndOf="@id/map_container"
+        app:layout_constraintStart_toStartOf="@id/map_container"
+        app:layout_constraintTop_toTopOf="@id/map_container" />
+
+    <LinearLayout
+        android:id="@+id/error_container"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/screen_padding"
+        android:background="@color/surface_card"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="@dimen/spacing_medium"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@id/map_container"
+        app:layout_constraintEnd_toEndOf="@id/map_container"
+        app:layout_constraintStart_toStartOf="@id/map_container"
+        app:layout_constraintTop_toTopOf="@id/map_container">
+
+        <TextView
+            android:id="@+id/error_message"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:accessibilityLiveRegion="polite"
+            android:gravity="center"
+            android:textColor="@color/status_error" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/retry_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_medium"
+            android:text="@string/retry" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/configuration_message"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/screen_padding"
+        android:accessibilityLiveRegion="polite"
+        android:gravity="center"
+        android:textColor="@color/status_error"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/map_instruction" />
+</androidx.constraintlayout.widget.ConstraintLayout>
