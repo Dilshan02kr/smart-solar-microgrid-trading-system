@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="energy_green">#187A52</color>
+    <color name="energy_green_dark">#0D5739</color>
+    <color name="solar_gold">#E3A008</color>
+    <color name="status_success">#187A52</color>
+    <color name="status_warning">#A66300</color>
+    <color name="status_error">#BA1A1A</color>
+    <color name="surface_background">#F4F8F5</color>
+    <color name="surface_card">#FFFFFF</color>
+    <color name="text_primary">#17211B</color>
+    <color name="text_secondary">#536158</color>
+    <color name="white">#FFFFFF</color>
+    <color name="qr_foreground">#000000</color>
+    <color name="qr_background">#FFFFFF</color>
+</resources>
+
