@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent" android:layout_height="match_parent" android:fillViewport="true">
+ <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="@dimen/screen_padding">
+  <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="@string/create_reservation_title" android:textAppearance="@style/TextAppearance.Material3.HeadlineMedium"/>
+  <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="@dimen/spacing_small" android:text="@string/booking_window_hint" android:textColor="@color/text_secondary"/>
+  <com.google.android.material.progressindicator.CircularProgressIndicator android:id="@+id/progress_indicator" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_gravity="center" android:layout_marginTop="@dimen/spacing_large"/>
+  <LinearLayout android:id="@+id/error_container" android:layout_width="match_parent" android:layout_height="wrap_content" android:gravity="center" android:orientation="vertical" android:visibility="gone"><TextView android:id="@+id/error_message" android:layout_width="match_parent" android:layout_height="wrap_content" android:gravity="center" android:textColor="@color/status_error"/><com.google.android.material.button.MaterialButton android:id="@+id/retry_button" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/retry"/></LinearLayout>
+  <LinearLayout android:id="@+id/content_container" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="@dimen/spacing_large" android:orientation="vertical" android:visibility="gone">
+   <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/station_label"/><TextView android:id="@+id/station_value" android:layout_width="match_parent" android:layout_height="wrap_content" android:textAppearance="@style/TextAppearance.Material3.TitleMedium"/>
+   <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="@dimen/spacing_medium" android:text="@string/date_label"/><TextView android:id="@+id/date_value" android:layout_width="match_parent" android:layout_height="wrap_content"/>
+   <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="@dimen/spacing_medium" android:text="@string/time_label"/><TextView android:id="@+id/time_value" android:layout_width="match_parent" android:layout_height="wrap_content"/>
+   <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="@dimen/spacing_medium" android:text="@string/capacity_label"/><TextView android:id="@+id/capacity_value" android:layout_width="match_parent" android:layout_height="wrap_content"/>
+   <com.google.android.material.button.MaterialButton android:id="@+id/confirm_button" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="@dimen/spacing_large" android:text="@string/confirm_booking"/>
+  </LinearLayout>
+ </LinearLayout>
+</androidx.core.widget.NestedScrollView>
+
