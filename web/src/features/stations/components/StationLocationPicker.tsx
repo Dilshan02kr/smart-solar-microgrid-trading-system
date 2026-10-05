@@ -14,8 +14,12 @@ const SRI_LANKA_CENTER = { lat: 7.8731, lng: 80.7718 }
 let loaderConfigured = false
 
 function selectedCoordinate(latitude: string, longitude: string): google.maps.LatLngLiteral | null {
-  const lat = Number(latitude)
-  const lng = Number(longitude)
+  const trimmedLat = latitude?.trim()
+  const trimmedLng = longitude?.trim()
+  if (!trimmedLat || !trimmedLng) return null
+
+  const lat = Number(trimmedLat)
+  const lng = Number(trimmedLng)
   return Number.isFinite(lat) && lat >= -90 && lat <= 90 && Number.isFinite(lng) && lng >= -180 && lng <= 180
     ? { lat, lng }
     : null
