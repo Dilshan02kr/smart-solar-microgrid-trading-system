@@ -2,6 +2,7 @@ package com.smartsolar.microgrid.core.util
 
 import com.smartsolar.microgrid.domain.model.Reservation
 import com.smartsolar.microgrid.domain.model.ReservationStatus
+import com.smartsolar.microgrid.domain.model.EnergySlot
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
@@ -33,6 +34,20 @@ class BookingPresentationTest {
         assertFalse(BookingPresentation.canModify(reservation("2026-01-02T00:00:00Z", ReservationStatus.CANCELLED), now))
     }
 
+    @Test
+    fun `booking window includes future slots through exactly seven days`() {
+        val now = Instant.parse("2026-01-01T10:00:00Z")
+        assertTrue(BookingPresentation.isWithinBookingWindow(slot("2026-01-01", "10:00:01"), now))
+        assertTrue(BookingPresentation.isWithinBookingWindow(slot("2026-01-08", "10:00:00"), now))
+    }
+
+    @Test
+    fun `booking window excludes past and beyond seven day slots`() {
+        val now = Instant.parse("2026-01-01T10:00:00Z")
+        assertFalse(BookingPresentation.isWithinBookingWindow(slot("2026-01-01", "10:00:00"), now))
+        assertFalse(BookingPresentation.isWithinBookingWindow(slot("2026-01-08", "10:00:01"), now))
+    }
+
     private fun reservation(time: String, status: ReservationStatus) = Reservation(
         reservationId = "reservation",
         prosumerId = "prosumer",
@@ -44,5 +59,17 @@ class BookingPresentationTest {
         createdAt = time,
         updatedAt = time,
         completedAt = null,
+    )
+
+    private fun slot(date: String, startTime: String) = EnergySlot(
+        id = "slot",
+        stationId = "station",
+        date = date,
+        startTime = startTime,
+        endTime = "12:00:00",
+        capacityKw = 5.0,
+        isAvailable = true,
+        createdAt = "",
+        updatedAt = "",
     )
 }

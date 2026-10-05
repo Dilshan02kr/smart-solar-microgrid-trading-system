@@ -22,7 +22,7 @@ class ProsumerHomeFragment : Fragment() {
     private var binding: FragmentProsumerHomeBinding? = null
     private val viewModel: ProsumerHomeViewModel by viewModels {
         val container = (requireActivity().application as SmartSolarApplication).appContainer
-        AppViewModelFactory { ProsumerHomeViewModel(container.sessionRepository) }
+        AppViewModelFactory { ProsumerHomeViewModel(container.sessionRepository, container.reservationRepository) }
     }
 
     override fun onCreateView(
@@ -37,6 +37,9 @@ class ProsumerHomeFragment : Fragment() {
         binding?.stationsButton?.setOnClickListener {
             findNavController().navigate(R.id.action_prosumerHomeFragment_to_stationsFragment)
         }
+        binding?.findStationsButton?.setOnClickListener {
+            findNavController().navigate(R.id.action_prosumerHomeFragment_to_stationsFragment)
+        }
         binding?.profileButton?.setOnClickListener {
             findNavController().navigate(R.id.action_prosumerHomeFragment_to_prosumerProfileFragment)
         }
@@ -44,9 +47,11 @@ class ProsumerHomeFragment : Fragment() {
             findNavController().navigate(R.id.action_prosumerHomeFragment_to_myReservationsFragment)
         }
         binding?.logoutButton?.setOnClickListener { confirmLogout() }
+        binding?.refreshButton?.setOnClickListener { viewModel.refresh() }
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.sessionState.collect(::render)
+                launch { viewModel.sessionState.collect(::render) }
+                launch { viewModel.dashboardState.collect(::renderDashboard) }
             }
         }
     }
@@ -74,6 +79,16 @@ class ProsumerHomeFragment : Fragment() {
             .setNegativeButton(R.string.cancel, null)
             .setPositiveButton(R.string.logout_confirmation_action) { _, _ -> viewModel.logout() }
             .show()
+    }
+
+    private fun renderDashboard(state: ProsumerDashboardState) {
+        val currentBinding = binding ?: return
+        currentBinding.dashboardProgress.visibility = if (state.isLoading) View.VISIBLE else View.GONE
+        currentBinding.dashboardError.visibility = if (state.error != null) View.VISIBLE else View.GONE
+        currentBinding.dashboardError.text = state.error?.message
+        currentBinding.pendingCount.text = getString(R.string.count_value, state.pendingCount)
+        currentBinding.approvedCount.text = getString(R.string.count_value, state.approvedCount)
+        currentBinding.completedCount.text = getString(R.string.count_value, state.completedCount)
     }
 
     private fun navigateToLoginSelection() {

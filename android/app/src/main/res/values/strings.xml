@@ -10,6 +10,11 @@
     <string name="operator_login_card_support">Manage assigned station operations, verify bookings and complete transfers.</string>
     <string name="operator_login_card_accessibility">Login as Grid Operator. Manage assigned station operations, verify bookings and complete transfers.</string>
     <string name="launch_title">Starting</string>
+    <string name="launch_brand_title">Smart Solar Microgrid</string>
+    <string name="launch_brand_subtitle">Trading System</string>
+    <string name="launch_tagline">Powering local energy, intelligently.</string>
+    <string name="launch_trust_line">Secure • Local • Renewable</string>
+    <string name="app_logo_description">Smart Solar application logo</string>
     <string name="session_checking">Checking your session&#8230;</string>
     <string name="retry">Retry</string>
     <string name="navigate_back">Navigate back</string>
@@ -40,9 +45,16 @@
     <string name="home_title">Prosumer Home</string>
     <string name="home_welcome">Welcome, %1$s</string>
     <string name="home_subtitle">Manage your Prosumer account.</string>
+    <string name="booking_overview_title">Booking overview</string>
+    <string name="booking_overview_subtitle">Live reservation status from the Smart Solar network.</string>
+    <string name="quick_actions_title">Quick actions</string>
+    <string name="refresh_overview">Refresh overview</string>
     <string name="role_label">Role</string>
     <string name="my_profile_action">My Profile</string>
     <string name="logout_action">Logout</string>
+    <string name="account_actions_title">Account</string>
+    <string name="account_security_title">Account security</string>
+    <string name="prosumer_role_value">Prosumer</string>
     <string name="logout_confirmation_title">Log out?</string>
     <string name="logout_confirmation_message">You will need to sign in again to access your account.</string>
     <string name="logout_confirmation_action">Log out</string>
@@ -65,7 +77,12 @@
     <string name="edit_profile_title">Edit Profile</string>
     <string name="save_changes_action">Save Changes</string>
     <string name="browse_stations_action">Browse Microgrid Nodes</string>
+    <string name="book_energy_action">Book Energy</string>
+    <string name="find_stations_action">Find Stations</string>
     <string name="stations_title">Microgrid Nodes</string>
+    <string name="station_search_label">Search by name or location</string>
+    <string name="active_stations_only">Active only</string>
+    <string name="no_matching_stations">No stations match your filters.</string>
     <string name="station_details_title">Station Details</string>
     <string name="no_stations">No stations are available.</string>
     <string name="view_station">View Station</string>
@@ -90,6 +107,7 @@
     <string name="slot_time_value">%1$s – %2$s</string>
     <string name="available">Available</string>
     <string name="unavailable">Unavailable</string>
+    <string name="outside_booking_window">Outside 7-day booking window</string>
     <string name="book_slot">Book Slot</string>
     <string name="create_reservation_title">Confirm Reservation</string>
     <string name="booking_window_hint">The server accepts future slots starting within the next seven days.</string>
@@ -97,6 +115,7 @@
     <string name="date_label">Date</string>
     <string name="time_label">Time</string>
     <string name="confirm_booking">Confirm Booking</string>
+    <string name="pending_booking_explanation">New reservations are submitted as Pending and require Backoffice approval.</string>
     <string name="reservation_details_title">Reservation Details</string>
     <string name="reservation_id_label">Reservation ID</string>
     <string name="slot_label">Energy slot</string>
@@ -148,6 +167,7 @@
     <string name="show_qr_action">Show QR</string>
     <string name="reservation_qr_title">Approved Reservation QR</string>
     <string name="reservation_qr_explanation">This QR visually represents the server-issued transaction reference for this approved reservation.</string>
+    <string name="reservation_qr_instruction">Present this QR code to the assigned Grid Operator.</string>
     <string name="qr_unavailable_message">An active QR is unavailable because this reservation is no longer approved or has no transaction reference.</string>
     <string name="qr_load_error">The approved reservation could not be loaded.</string>
     <string name="qr_generation_error">The QR image could not be generated. The transaction reference remains available in Reservation Details.</string>

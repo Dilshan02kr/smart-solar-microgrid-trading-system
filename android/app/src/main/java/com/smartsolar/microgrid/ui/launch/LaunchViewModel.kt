@@ -9,6 +9,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.Job
 import com.smartsolar.microgrid.domain.model.SessionDestination
 import com.smartsolar.microgrid.domain.model.SessionRouting
 
@@ -17,13 +18,14 @@ class LaunchViewModel(
 ) : ViewModel() {
     private val mutableState = MutableStateFlow<LaunchUiState>(LaunchUiState.Loading)
     val state: StateFlow<LaunchUiState> = mutableState.asStateFlow()
+    private var restoreJob: Job? = null
 
     init {
-        restoreSession()
+        restoreSession(enforceMinimumDuration = true)
     }
 
     fun retry() {
-        restoreSession()
+        restoreSession(enforceMinimumDuration = false)
     }
 
     fun continueToLogin() {
@@ -31,10 +33,13 @@ class LaunchViewModel(
         mutableState.value = LaunchUiState.NavigateToLoginSelection
     }
 
-    private fun restoreSession() {
+    private fun restoreSession(enforceMinimumDuration: Boolean) {
+        if (restoreJob?.isActive == true) return
         mutableState.value = LaunchUiState.Loading
-        viewModelScope.launch {
-            mutableState.value = when (val result = sessionRepository.restoreSession()) {
+        restoreJob = viewModelScope.launch {
+            val restore = suspend { sessionRepository.restoreSession() }
+            val result = if (enforceMinimumDuration) awaitSplashReady(restore) else restore()
+            mutableState.value = when (result) {
                 is AppResult.Success -> when (SessionRouting.destination(result.value)) {
                     SessionDestination.LOGIN_SELECTION -> LaunchUiState.NavigateToLoginSelection
                     SessionDestination.PROSUMER_HOME -> LaunchUiState.NavigateToProsumerHome

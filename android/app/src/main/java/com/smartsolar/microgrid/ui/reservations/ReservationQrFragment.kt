@@ -68,6 +68,7 @@ class ReservationQrFragment : Fragment() {
             currentPayload = content.payload
             currentBinding.referenceValue.text = content.payload
             currentBinding.stationValue.text = content.stationName
+            currentBinding.statusValue.text = content.reservation.status.name
             currentBinding.scheduledValue.text = BookingPresentation.timestamp(content.reservation.scheduledTime)
             currentBinding.qrImage.contentDescription = getString(R.string.qr_content_description, content.payload)
             val horizontalPadding = resources.getDimensionPixelSize(R.dimen.screen_padding) * 2
