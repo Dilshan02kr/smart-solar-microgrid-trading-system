@@ -1,4 +1,14 @@
-// Defines login and current-user operations for centralized authentication.
+/*
+ * Smart Solar Microgrid Trading System
+ * SE4040 - Enterprise Application Development
+ *
+ * File: IAuthenticationService.cs
+ * Component: Authentication and Account Management
+ * Component Owner: WMDD Karunarathna (IT23145320)
+ *
+ * Purpose:
+ * Defines login and current-user operations for centralized authentication.
+ */
 using SmartSolarMicrogrid.Api.DTOs;
 
 namespace SmartSolarMicrogrid.Api.Services;

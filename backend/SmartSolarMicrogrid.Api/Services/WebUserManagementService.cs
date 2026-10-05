@@ -1,4 +1,14 @@
-// Implements validated Backoffice management of Backoffice and Grid Operator accounts.
+/*
+ * Smart Solar Microgrid Trading System
+ * SE4040 - Enterprise Application Development
+ *
+ * File: WebUserManagementService.cs
+ * Component: Web User and Account Management
+ * Component Owner: WMDD Karunarathna (IT23145320)
+ *
+ * Purpose:
+ * Implements validated Backoffice management of Backoffice and Grid Operator accounts.
+ */
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Identity;
 using MongoDB.Bson;

@@ -1,4 +1,14 @@
-// Defines MongoDB persistence operations required by station-management workflows.
+/*
+ * Smart Solar Microgrid Trading System
+ * SE4040 - Enterprise Application Development
+ *
+ * File: ISolarStationRepository.cs
+ * Component: Microgrid Node and Station Management
+ * Component Owner: R A K Hansika (IT23140998)
+ *
+ * Purpose:
+ * Defines MongoDB persistence operations required by station-management workflows.
+ */
 using SmartSolarMicrogrid.Api.Models;
 
 namespace SmartSolarMicrogrid.Api.Repositories;

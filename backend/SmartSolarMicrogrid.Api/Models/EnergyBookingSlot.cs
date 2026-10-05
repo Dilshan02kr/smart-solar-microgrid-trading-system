@@ -1,4 +1,14 @@
-// Represents a MongoDB-backed, individually reservable energy booking slot.
+/*
+ * Smart Solar Microgrid Trading System
+ * SE4040 - Enterprise Application Development
+ *
+ * File: EnergyBookingSlot.cs
+ * Component: Energy Slot Management
+ * Component Owner: R A K Hansika (IT23140998)
+ *
+ * Purpose:
+ * Represents a MongoDB-backed, individually reservable energy booking slot.
+ */
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 

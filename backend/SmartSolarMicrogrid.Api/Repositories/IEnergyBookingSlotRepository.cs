@@ -1,4 +1,14 @@
-// Defines MongoDB persistence operations required by energy-slot business workflows.
+/*
+ * Smart Solar Microgrid Trading System
+ * SE4040 - Enterprise Application Development
+ *
+ * File: IEnergyBookingSlotRepository.cs
+ * Component: Energy Slot Management
+ * Component Owner: R A K Hansika (IT23140998)
+ *
+ * Purpose:
+ * Defines MongoDB persistence operations required by energy-slot business workflows.
+ */
 using MongoDB.Bson;
 using SmartSolarMicrogrid.Api.Models;
 

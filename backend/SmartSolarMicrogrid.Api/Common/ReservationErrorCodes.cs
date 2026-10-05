@@ -1,4 +1,14 @@
-// Defines stable error codes for reservation and transaction workflows.
+/*
+ * Smart Solar Microgrid Trading System
+ * SE4040 - Enterprise Application Development
+ *
+ * File: ReservationErrorCodes.cs
+ * Component: Reservation and Booking Management
+ * Component Owner: N A Illangasinghe (IT23391536)
+ *
+ * Purpose:
+ * Defines stable error codes for reservation and transaction workflows.
+ */
 namespace SmartSolarMicrogrid.Api.Common;
 
 public static class ReservationErrorCodes
