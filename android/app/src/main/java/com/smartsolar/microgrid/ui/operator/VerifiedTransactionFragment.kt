@@ -58,7 +58,7 @@ class VerifiedTransactionFragment : Fragment() {
         current.contentContainer.isVisible = state.transaction != null
         state.error?.let { error ->
             current.errorMessage.text = operatorErrorText(error.code, error.message)
-            if (error.httpStatus == 401) findNavController().navigate(R.id.action_global_loginFragment)
+            if (error.httpStatus == 401) findNavController().navigate(R.id.action_global_loginSelectionFragment)
         }
         state.transaction?.let { transaction ->
             current.resultTitle.setText(
@@ -90,7 +90,7 @@ class VerifiedTransactionFragment : Fragment() {
                 ),
             )
             if (state.completionError?.httpStatus == 401) {
-                findNavController().navigate(R.id.action_global_loginFragment)
+                findNavController().navigate(R.id.action_global_loginSelectionFragment)
             }
         }
     }

@@ -130,7 +130,7 @@ class EditProsumerProfileFragment : Fragment() {
 
     private fun navigateToLogin() {
         if (findNavController().currentDestination?.id == R.id.editProsumerProfileFragment) {
-            findNavController().navigate(R.id.action_editProsumerProfileFragment_to_loginFragment)
+            findNavController().navigate(R.id.action_editProsumerProfileFragment_to_loginSelectionFragment)
         }
     }
 

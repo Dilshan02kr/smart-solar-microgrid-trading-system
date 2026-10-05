@@ -1,17 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Smart Solar Microgrid</string>
+    <string name="app_name">Smart Solar Microgrid Trading System</string>
+    <string name="login_selection_title">Choose Login</string>
+    <string name="login_selection_subtitle">Choose how you want to continue</string>
+    <string name="login_as_prosumer">Login as Prosumer</string>
+    <string name="prosumer_login_card_support">Book energy slots, manage reservations and access your transaction QR.</string>
+    <string name="prosumer_login_card_accessibility">Login as Prosumer. Book energy slots, manage reservations and access your transaction QR.</string>
+    <string name="login_as_grid_operator">Login as Grid Operator</string>
+    <string name="operator_login_card_support">Manage assigned station operations, verify bookings and complete transfers.</string>
+    <string name="operator_login_card_accessibility">Login as Grid Operator. Manage assigned station operations, verify bookings and complete transfers.</string>
     <string name="launch_title">Starting</string>
     <string name="session_checking">Checking your session&#8230;</string>
     <string name="retry">Retry</string>
     <string name="navigate_back">Navigate back</string>
-    <string name="use_prosumer_login">Use Prosumer login</string>
+    <string name="use_prosumer_login">Choose a login</string>
     <string name="login_title">Prosumer Login</string>
     <string name="login_subtitle">Sign in with your NIC and password.</string>
     <string name="nic_label">NIC</string>
     <string name="password_label">Password</string>
     <string name="login_action">Login</string>
-    <string name="create_account_action">Create Account</string>
+    <string name="create_account_action">Register Account</string>
     <string name="error_invalid_credentials">The supplied NIC or password is invalid.</string>
     <string name="error_account_pending">Your account is awaiting Backoffice approval.</string>
     <string name="error_account_deactivated">Your account is deactivated. Contact Backoffice support to request reactivation.</string>
@@ -35,6 +43,9 @@
     <string name="role_label">Role</string>
     <string name="my_profile_action">My Profile</string>
     <string name="logout_action">Logout</string>
+    <string name="logout_confirmation_title">Log out?</string>
+    <string name="logout_confirmation_message">You will need to sign in again to access your account.</string>
+    <string name="logout_confirmation_action">Log out</string>
     <string name="profile_title">My Profile</string>
     <string name="name_label">Name</string>
     <string name="full_name_value">%1$s %2$s</string>
@@ -145,10 +156,8 @@
     <string name="copy_reference_action">Copy Reference</string>
     <string name="reference_copied">Transaction reference copied.</string>
     <string name="back_to_reservation">Back to Reservation</string>
-    <string name="operator_login_action">Grid Operator Login</string>
     <string name="operator_login_title">Grid Operator Login</string>
     <string name="operator_login_subtitle">Sign in with your Grid Operator email and password.</string>
-    <string name="back_to_prosumer_login">Back to Prosumer Login</string>
     <string name="operator_invalid_credentials">The supplied email or password is invalid.</string>
     <string name="operator_dashboard_title">Operator Dashboard</string>
     <string name="operator_dashboard_subtitle">Station-scoped reservation activity from the server.</string>

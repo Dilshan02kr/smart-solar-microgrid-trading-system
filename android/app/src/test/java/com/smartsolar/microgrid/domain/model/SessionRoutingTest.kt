@@ -5,6 +5,11 @@ import org.junit.Test
 
 class SessionRoutingTest {
     @Test
+    fun `no session routes to login selection`() {
+        assertEquals(SessionDestination.LOGIN_SELECTION, SessionRouting.destination(null))
+    }
+
+    @Test
     fun `active supported roles route to their own homes`() {
         assertEquals(SessionDestination.PROSUMER_HOME, SessionRouting.destination(user(UserRole.PROSUMER)))
         assertEquals(SessionDestination.OPERATOR_DASHBOARD, SessionRouting.destination(user(UserRole.GRID_OPERATOR)))

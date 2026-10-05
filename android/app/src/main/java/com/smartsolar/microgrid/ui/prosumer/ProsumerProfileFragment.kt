@@ -123,13 +123,13 @@ class ProsumerProfileFragment : Fragment() {
         if (state.complete && findNavController().currentDestination?.id == R.id.prosumerProfileFragment) {
             deactivationDialog?.dismiss()
             Toast.makeText(requireContext(), R.string.deactivation_complete, Toast.LENGTH_LONG).show()
-            findNavController().navigate(R.id.action_prosumerProfileFragment_to_loginFragment)
+            findNavController().navigate(R.id.action_prosumerProfileFragment_to_loginSelectionFragment)
         }
     }
 
     private fun navigateToLogin() {
         if (findNavController().currentDestination?.id == R.id.prosumerProfileFragment) {
-            findNavController().navigate(R.id.action_prosumerProfileFragment_to_loginFragment)
+            findNavController().navigate(R.id.action_prosumerProfileFragment_to_loginSelectionFragment)
         }
     }
 

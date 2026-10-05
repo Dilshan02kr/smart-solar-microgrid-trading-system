@@ -53,7 +53,7 @@ class StationDetailsFragment : Fragment() {
         b.contentContainer.isVisible = state is UiState.Content
         if (state is UiState.Error) {
             b.errorMessage.text = state.error.message
-            if (state.error.httpStatus == 401) findNavController().navigate(R.id.action_global_loginFragment)
+            if (state.error.httpStatus == 401) findNavController().navigate(R.id.action_global_loginSelectionFragment)
         }
         if (state is UiState.Content) with(state.value) {
             b.stationName.text = name; b.locationValue.text = locationName

@@ -50,7 +50,7 @@ class OperatorReservationsFragment : Fragment() {
         current.emptyMessage.isVisible = !state.isLoading && state.error == null && state.visibleReservations.isEmpty()
         state.error?.let {
             current.errorMessage.text = it.message
-            if (it.httpStatus == 401) findNavController().navigate(R.id.action_global_loginFragment)
+            if (it.httpStatus == 401) findNavController().navigate(R.id.action_global_loginSelectionFragment)
         }
         val selected = if (state.selectedStatus == ReservationStatus.APPROVED) R.id.approved_operator_filter else R.id.pending_operator_filter
         if (current.statusGroup.checkedButtonId != selected) current.statusGroup.check(selected)

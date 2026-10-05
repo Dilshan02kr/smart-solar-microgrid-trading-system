@@ -173,7 +173,7 @@ class QrScannerFragment : Fragment() {
         current.scanAgainButton.isVisible = state.error != null
         state.error?.let { error ->
             current.verificationError.text = operatorErrorText(error.code, error.message)
-            if (error.httpStatus == 401) findNavController().navigate(R.id.action_global_loginFragment)
+            if (error.httpStatus == 401) findNavController().navigate(R.id.action_global_loginSelectionFragment)
         }
         state.verifiedReference?.let { reference ->
             if (findNavController().currentDestination?.id == R.id.qrScannerFragment) {

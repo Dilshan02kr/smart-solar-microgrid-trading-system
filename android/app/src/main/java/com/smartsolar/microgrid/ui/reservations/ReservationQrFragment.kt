@@ -62,7 +62,7 @@ class ReservationQrFragment : Fragment() {
         )
         state.error?.let {
             currentBinding.errorMessage.text = it.message
-            if (it.httpStatus == 401) findNavController().navigate(R.id.action_global_loginFragment)
+            if (it.httpStatus == 401) findNavController().navigate(R.id.action_global_loginSelectionFragment)
         }
         state.content?.let { content ->
             currentPayload = content.payload

@@ -28,16 +28,15 @@ class LaunchViewModel(
 
     fun continueToLogin() {
         sessionRepository.clearSession()
-        mutableState.value = LaunchUiState.NavigateToLogin
+        mutableState.value = LaunchUiState.NavigateToLoginSelection
     }
 
     private fun restoreSession() {
         mutableState.value = LaunchUiState.Loading
         viewModelScope.launch {
             mutableState.value = when (val result = sessionRepository.restoreSession()) {
-                is AppResult.Success -> if (result.value == null) {
-                    LaunchUiState.NavigateToLogin
-                } else when (SessionRouting.destination(result.value)) {
+                is AppResult.Success -> when (SessionRouting.destination(result.value)) {
+                    SessionDestination.LOGIN_SELECTION -> LaunchUiState.NavigateToLoginSelection
                     SessionDestination.PROSUMER_HOME -> LaunchUiState.NavigateToProsumerHome
                     SessionDestination.OPERATOR_DASHBOARD -> LaunchUiState.NavigateToOperatorDashboard
                     SessionDestination.UNSUPPORTED -> LaunchUiState.Error(
@@ -45,7 +44,7 @@ class LaunchViewModel(
                     )
                 }
                 is AppResult.Error -> if (result.error.httpStatus == 401) {
-                    LaunchUiState.NavigateToLogin
+                    LaunchUiState.NavigateToLoginSelection
                 } else {
                     LaunchUiState.Error(result.error)
                 }
@@ -56,7 +55,7 @@ class LaunchViewModel(
 
 sealed interface LaunchUiState {
     data object Loading : LaunchUiState
-    data object NavigateToLogin : LaunchUiState
+    data object NavigateToLoginSelection : LaunchUiState
     data object NavigateToProsumerHome : LaunchUiState
     data object NavigateToOperatorDashboard : LaunchUiState
     data class Error(val error: AppError) : LaunchUiState

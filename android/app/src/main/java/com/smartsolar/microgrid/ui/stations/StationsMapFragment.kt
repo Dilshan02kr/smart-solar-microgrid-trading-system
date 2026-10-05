@@ -86,7 +86,7 @@ class StationsMapFragment : Fragment(), OnMapReadyCallback {
         if (state is StationsMapUiState.Error) {
             current.errorMessage.text = state.error.message
             if (state.error.httpStatus == 401) {
-                findNavController().navigate(R.id.action_global_loginFragment)
+                findNavController().navigate(R.id.action_global_loginSelectionFragment)
             }
         }
         if (state is StationsMapUiState.Content) {

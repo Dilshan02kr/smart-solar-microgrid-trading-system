@@ -57,7 +57,7 @@ class StationSlotsFragment : Fragment() {
         b.emptyMessage.setText(if (filteredEmpty) R.string.no_matching_slots else R.string.no_slots)
         state.error?.let {
             b.errorMessage.text = it.message
-            if (it.httpStatus == 401) findNavController().navigate(R.id.action_global_loginFragment)
+            if (it.httpStatus == 401) findNavController().navigate(R.id.action_global_loginSelectionFragment)
         }
 
         val selectedButton = if (state.availableOnly) R.id.available_only_filter else R.id.all_slots_filter

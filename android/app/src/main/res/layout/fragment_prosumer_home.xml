@@ -74,12 +74,19 @@
             android:layout_marginTop="@dimen/spacing_small"
             android:text="@string/my_profile_action" />
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/divider_thickness"
+            android:layout_marginTop="@dimen/spacing_large"
+            android:background="?attr/colorOutlineVariant" />
+
         <com.google.android.material.button.MaterialButton
             android:id="@+id/logout_button"
             style="@style/Widget.Material3.Button.OutlinedButton"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/spacing_small"
+            android:layout_gravity="end"
+            android:layout_marginTop="@dimen/spacing_medium"
             android:text="@string/logout_action" />
     </LinearLayout>
 </androidx.core.widget.NestedScrollView>
