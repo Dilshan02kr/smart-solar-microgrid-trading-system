@@ -1,4 +1,14 @@
-// Verifies approved transaction references within the operator's assigned station.
+/*
+ * Smart Solar Microgrid Trading System
+ * SE4040 - Enterprise Application Development
+ *
+ * File: TransactionVerificationService.cs
+ * Component: QR Verification and Transaction Completion
+ * Component Owner: Kulunu Kasthuri Arachchi (IT23375628)
+ *
+ * Purpose:
+ * Verifies approved transaction references within the operator's assigned station.
+ */
 using SmartSolarMicrogrid.Api.DTOs;
 using SmartSolarMicrogrid.Api.Models;
 using SmartSolarMicrogrid.Api.Repositories;

@@ -1,4 +1,14 @@
-// Reads legacy TitleCase reservation statuses and writes authoritative uppercase enum names.
+/*
+ * Smart Solar Microgrid Trading System
+ * SE4040 - Enterprise Application Development
+ *
+ * File: ReservationStatusSerializer.cs
+ * Component: Reservation and Booking Management
+ * Component Owner: N A Illangasinghe (IT23391536)
+ *
+ * Purpose:
+ * Reads legacy TitleCase reservation statuses and writes authoritative uppercase enum names.
+ */
 using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Serializers;
 

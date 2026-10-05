@@ -1,4 +1,14 @@
-// Validates Prosumer self-registration and creates a securely hashed pending account.
+/*
+ * Smart Solar Microgrid Trading System
+ * SE4040 - Enterprise Application Development
+ *
+ * File: ProsumerRegistrationService.cs
+ * Component: Prosumer Account Management
+ * Component Owner: WMDD Karunarathna (IT23145320)
+ *
+ * Purpose:
+ * Validates Prosumer self-registration and creates a securely hashed pending account.
+ */
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Identity;
 using SmartSolarMicrogrid.Api.DTOs;

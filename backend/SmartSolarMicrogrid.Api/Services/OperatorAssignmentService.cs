@@ -1,4 +1,14 @@
-// Resolves authoritative Grid Operator station assignments from the current user record.
+/*
+ * Smart Solar Microgrid Trading System
+ * SE4040 - Enterprise Application Development
+ *
+ * File: OperatorAssignmentService.cs
+ * Component: Grid Operator Workflow
+ * Component Owner: Kulunu Kasthuri Arachchi (IT23375628)
+ *
+ * Purpose:
+ * Resolves authoritative Grid Operator station assignments from the current user record.
+ */
 using MongoDB.Bson;
 using SmartSolarMicrogrid.Api.Models;
 using SmartSolarMicrogrid.Api.Repositories;

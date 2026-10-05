@@ -1,4 +1,14 @@
-// Defines validated client fields for creating a solar station.
+/*
+ * Smart Solar Microgrid Trading System
+ * SE4040 - Enterprise Application Development
+ *
+ * File: CreateStationRequest.cs
+ * Component: Microgrid Node and Station Management
+ * Component Owner: R A K Hansika (IT23140998)
+ *
+ * Purpose:
+ * Defines validated client fields for creating a solar station.
+ */
 using System.ComponentModel.DataAnnotations;
 
 namespace SmartSolarMicrogrid.Api.DTOs;

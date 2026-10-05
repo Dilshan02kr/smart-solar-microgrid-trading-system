@@ -1,4 +1,14 @@
-// Represents a server-controlled reservation persisted in MongoDB.
+/*
+ * Smart Solar Microgrid Trading System
+ * SE4040 - Enterprise Application Development
+ *
+ * File: EnergyReservation.cs
+ * Component: Reservation and Booking Management
+ * Component Owner: N A Illangasinghe (IT23391536)
+ *
+ * Purpose:
+ * Represents a server-controlled reservation persisted in MongoDB.
+ */
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
