@@ -42,6 +42,9 @@ class OperatorDashboardFragment : Fragment() {
         binding?.scanButton?.setOnClickListener {
             findNavController().navigate(R.id.action_operatorDashboardFragment_to_qrScannerFragment)
         }
+        binding?.reservationsButton?.setOnClickListener {
+            findNavController().navigate(R.id.action_operatorDashboardFragment_to_operatorReservationsFragment)
+        }
         binding?.logoutButton?.setOnClickListener {
             viewModel.logout()
             findNavController().navigate(R.id.action_global_loginFragment)

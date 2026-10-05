@@ -5,6 +5,14 @@ export interface DashboardSummaryResponse {
   approvedFutureReservationCount: number
 }
 
+export interface OperatorReservation {
+  reservationId: string
+  prosumerId: string
+  slotId: string
+  scheduledTime: string
+  status: ReservationStatus
+}
+
 export interface VerifyTransactionRequest {
   transactionReference: string
 }

@@ -179,4 +179,32 @@ public sealed class OperatorController(
                 "Access is denied."))
         };
     }
+
+    [HttpGet("reservations")]
+    [ProducesResponseType<IReadOnlyList<OperatorReservationResponse>>(StatusCodes.Status200OK)]
+    [ProducesResponseType<ApiErrorResponse>(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType<ApiErrorResponse>(StatusCodes.Status403Forbidden)]
+    public async Task<ActionResult<IReadOnlyList<OperatorReservationResponse>>> GetReservations(
+        CancellationToken cancellationToken)
+    {
+        // Station scope comes only from the authenticated operator's current database record.
+        var result = await dashboardService.GetReservationsAsync(
+            User.FindFirst("userId")?.Value,
+            cancellationToken);
+
+        return result.Status switch
+        {
+            OperatorDashboardStatus.Success => Ok(result.Reservations),
+            OperatorDashboardStatus.AuthenticationRequired => Unauthorized(new ApiErrorResponse(
+                AuthenticationErrorCodes.AuthenticationRequired,
+                "Authentication is required.")),
+            OperatorDashboardStatus.OperatorStationNotAssigned =>
+                StatusCode(StatusCodes.Status403Forbidden, new ApiErrorResponse(
+                    "OPERATOR_STATION_NOT_ASSIGNED",
+                    "The Grid Operator is not assigned to a station.")),
+            _ => StatusCode(StatusCodes.Status403Forbidden, new ApiErrorResponse(
+                AuthenticationErrorCodes.AccessDenied,
+                "Access is denied."))
+        };
+    }
 }

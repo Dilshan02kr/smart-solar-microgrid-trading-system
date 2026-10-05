@@ -2,6 +2,7 @@ import type { AxiosResponse } from 'axios'
 import type {
   CompleteReservationResponse,
   DashboardSummaryResponse,
+  OperatorReservation,
   VerifyTransactionRequest,
   VerifyTransactionResponse,
 } from '@/features/operator/types/operatorTypes'
@@ -18,6 +19,10 @@ async function dataOrNormalizedError<T>(request: Promise<AxiosResponse<T>>): Pro
 
 export function getOperatorDashboardSummary(signal?: AbortSignal): Promise<DashboardSummaryResponse> {
   return dataOrNormalizedError(apiClient.get<DashboardSummaryResponse>('/api/operator/dashboard/summary', { signal }))
+}
+
+export function getOperatorReservations(signal?: AbortSignal): Promise<OperatorReservation[]> {
+  return dataOrNormalizedError(apiClient.get<OperatorReservation[]>('/api/operator/reservations', { signal }))
 }
 
 export function verifyTransaction(request: VerifyTransactionRequest): Promise<VerifyTransactionResponse> {

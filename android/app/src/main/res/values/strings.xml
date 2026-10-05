@@ -4,6 +4,7 @@
     <string name="launch_title">Starting</string>
     <string name="session_checking">Checking your session&#8230;</string>
     <string name="retry">Retry</string>
+    <string name="navigate_back">Navigate back</string>
     <string name="use_prosumer_login">Use Prosumer login</string>
     <string name="login_title">Prosumer Login</string>
     <string name="login_subtitle">Sign in with your NIC and password.</string>
@@ -68,6 +69,13 @@
     <string name="view_slots">View Energy Slots</string>
     <string name="slots_title">Energy Slots</string>
     <string name="no_slots">No energy slots are available for this station.</string>
+    <string name="availability_filter_label">Availability</string>
+    <string name="available_only_filter">Available only</string>
+    <string name="all_slots_filter">All slots</string>
+    <string name="date_filter_label">Date</string>
+    <string name="all_dates_filter">All dates</string>
+    <string name="reset_filters">Reset filters</string>
+    <string name="no_matching_slots">No available slots match the selected filters.</string>
     <string name="slot_time_value">%1$s – %2$s</string>
     <string name="available">Available</string>
     <string name="unavailable">Unavailable</string>
@@ -107,6 +115,12 @@
     <string name="my_reservations_action">My Reservations</string>
     <string name="my_reservations_title">My Reservations</string>
     <string name="my_reservations_subtitle">Review current and previous reservations. Refresh to retrieve the latest server status.</string>
+    <string name="reservation_search_label">Search by station or transaction reference</string>
+    <string name="reservation_status_filter_label">Reservation status</string>
+    <string name="all_statuses">All</string>
+    <string name="reset_reservation_filters">Reset filters</string>
+    <string name="no_reservations_yet">No reservations yet.</string>
+    <string name="no_matching_reservations">No reservations match your filters.</string>
     <string name="refresh_reservations_action">Refresh Reservations</string>
     <string name="refresh_reservation_action">Refresh Reservation</string>
     <string name="pending_group">Pending</string>
@@ -145,6 +159,10 @@
     <string name="scan_reservation_qr">Scan Reservation QR</string>
     <string name="refresh_dashboard">Refresh Dashboard</string>
     <string name="operator_station_not_assigned">Your Grid Operator account is not assigned to a microgrid node. Contact a Backoffice administrator.</string>
+    <string name="view_operator_reservations">View Reservations</string>
+    <string name="operator_reservations_title">Operational Reservations</string>
+    <string name="operator_reservations_subtitle">Pending and approved reservations for your assigned microgrid node.</string>
+    <string name="operator_reservations_empty">No operational reservations match this status.</string>
     <string name="scan_qr_title">Scan Reservation QR</string>
     <string name="scan_qr_instruction">Align the Prosumer’s reservation QR within the camera view. Decoded content is verified by the server before any reservation is shown.</string>
     <string name="camera_permission_title">Camera access required</string>

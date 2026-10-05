@@ -18,5 +18,5 @@ export const navigationItems: NavigationItem[] = [
   { label: 'Energy Slots', path: '/slots', shortLabel: 'ES', allowedRoles: [UserRole.BACKOFFICE], available: false, unavailableLabel: 'Via Microgrid Nodes', unavailableTitle: 'Manage Energy Slots from a Microgrid Node.' },
   { label: 'Reservations', path: '/reservations', shortLabel: 'RS', allowedRoles: [UserRole.BACKOFFICE], available: true },
   { label: 'Operator Operations', path: '/operator/operations', shortLabel: 'OP', allowedRoles: [UserRole.GRID_OPERATOR], available: true },
-  { label: 'Components', path: '/components', shortLabel: 'UI', allowedRoles: [UserRole.BACKOFFICE, UserRole.GRID_OPERATOR], available: true },
+  { label: 'Reservations', path: '/operator/reservations', shortLabel: 'RS', allowedRoles: [UserRole.GRID_OPERATOR], available: true },
 ]

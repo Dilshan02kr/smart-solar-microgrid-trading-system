@@ -27,7 +27,8 @@
                     <TextView android:id="@+id/approved_count" android:layout_width="match_parent" android:layout_height="wrap_content" android:textAppearance="@style/TextAppearance.Material3.HeadlineMedium" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
-            <com.google.android.material.button.MaterialButton android:id="@+id/scan_button" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="@dimen/spacing_large" android:text="@string/scan_reservation_qr" />
+            <com.google.android.material.button.MaterialButton android:id="@+id/reservations_button" style="@style/Widget.Material3.Button.OutlinedButton" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="@dimen/spacing_large" android:text="@string/view_operator_reservations" />
+            <com.google.android.material.button.MaterialButton android:id="@+id/scan_button" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="@dimen/spacing_small" android:text="@string/scan_reservation_qr" />
             <com.google.android.material.button.MaterialButton android:id="@+id/refresh_button" style="@style/Widget.Material3.Button.OutlinedButton" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="@dimen/spacing_small" android:text="@string/refresh_dashboard" />
             <com.google.android.material.button.MaterialButton android:id="@+id/logout_button" style="@style/Widget.Material3.Button.TextButton" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="@dimen/spacing_small" android:text="@string/logout_action" />
         </LinearLayout>
