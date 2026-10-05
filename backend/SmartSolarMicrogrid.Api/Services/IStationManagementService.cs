@@ -1,4 +1,14 @@
-// Defines validated station creation, update, activation, and deactivation operations.
+/*
+ * Smart Solar Microgrid Trading System
+ * SE4040 - Enterprise Application Development
+ *
+ * File: IStationManagementService.cs
+ * Component: Microgrid Node and Station Management
+ * Component Owner: R A K Hansika (IT23140998)
+ *
+ * Purpose:
+ * Defines validated station creation, update, activation, and deactivation operations.
+ */
 using SmartSolarMicrogrid.Api.DTOs;
 
 namespace SmartSolarMicrogrid.Api.Services;

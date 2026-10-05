@@ -1,4 +1,14 @@
-// Verifies MongoDB connectivity and initializes required application indexes at startup.
+/*
+ * Smart Solar Microgrid Trading System
+ * SE4040 - Enterprise Application Development
+ *
+ * File: MongoDbInitializer.cs
+ * Component: Persistence Integration
+ * Component Owner: Kulunu Kasthuri Arachchi (IT23375628)
+ *
+ * Purpose:
+ * Verifies MongoDB connectivity and initializes required application indexes at startup.
+ */
 using MongoDB.Bson;
 using MongoDB.Driver;
 using SmartSolarMicrogrid.Api.Repositories;

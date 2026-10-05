@@ -1,4 +1,14 @@
-// Creates signed JWTs containing the authoritative user identity and role claims.
+/*
+ * Smart Solar Microgrid Trading System
+ * SE4040 - Enterprise Application Development
+ *
+ * File: JwtTokenService.cs
+ * Component: Authentication and Account Management
+ * Component Owner: WMDD Karunarathna (IT23145320)
+ *
+ * Purpose:
+ * Creates signed JWTs containing the authoritative user identity and role claims.
+ */
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;

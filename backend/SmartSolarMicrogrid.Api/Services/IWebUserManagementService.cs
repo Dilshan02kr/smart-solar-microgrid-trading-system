@@ -1,4 +1,14 @@
-// Defines Backoffice operations for managing Backoffice and Grid Operator accounts.
+/*
+ * Smart Solar Microgrid Trading System
+ * SE4040 - Enterprise Application Development
+ *
+ * File: IWebUserManagementService.cs
+ * Component: Web User and Account Management
+ * Component Owner: WMDD Karunarathna (IT23145320)
+ *
+ * Purpose:
+ * Defines Backoffice operations for managing Backoffice and Grid Operator accounts.
+ */
 using SmartSolarMicrogrid.Api.DTOs;
 
 namespace SmartSolarMicrogrid.Api.Services;
