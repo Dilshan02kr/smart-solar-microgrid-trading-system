@@ -191,12 +191,17 @@ builder.Services
     });
 
 builder.Services.AddAuthorization();
+builder.Services.AddMemoryCache();
 
 // MongoClient is thread-safe and intended to be reused for the application's lifetime.
 builder.Services.AddSingleton<IMongoClient>(serviceProvider =>
 {
     var settings = serviceProvider.GetRequiredService<IOptions<MongoDbSettings>>().Value;
-    return new MongoClient(settings.ConnectionString);
+    var clientSettings = MongoClientSettings.FromConnectionString(settings.ConnectionString);
+    clientSettings.ServerSelectionTimeout = TimeSpan.FromSeconds(10);
+    clientSettings.ConnectTimeout = TimeSpan.FromSeconds(10);
+    clientSettings.SocketTimeout = TimeSpan.FromSeconds(10);
+    return new MongoClient(clientSettings);
 });
 
 builder.Services.AddSingleton<IMongoDatabase>(serviceProvider =>
