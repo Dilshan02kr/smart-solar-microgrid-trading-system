@@ -44,6 +44,12 @@ public interface IEnergyBookingSlotRepository
         string slotId,
         CancellationToken cancellationToken = default);
 
+    // Sets only the operational availability flag and returns the authoritative document.
+    Task<EnergyBookingSlot?> SetAvailabilityAsync(
+        string slotId,
+        bool isAvailable,
+        CancellationToken cancellationToken = default);
+
     // Updates only mutable timing and capacity fields of a slot.
     Task<EnergyBookingSlot?> UpdateAsync(
         string id,

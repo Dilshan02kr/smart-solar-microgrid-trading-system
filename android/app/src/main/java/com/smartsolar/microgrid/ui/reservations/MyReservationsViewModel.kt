@@ -5,10 +5,14 @@ import androidx.lifecycle.viewModelScope
 import com.smartsolar.microgrid.core.error.AppError
 import com.smartsolar.microgrid.core.util.AppResult
 import com.smartsolar.microgrid.core.util.ReservationGroup
+import com.smartsolar.microgrid.core.util.ReservationFilter
+import com.smartsolar.microgrid.core.util.ReservationFilterCriteria
 import com.smartsolar.microgrid.core.util.ReservationPresentation
 import com.smartsolar.microgrid.data.repository.ReservationRepository
 import com.smartsolar.microgrid.data.repository.StationRepository
 import com.smartsolar.microgrid.domain.model.Reservation
+import com.smartsolar.microgrid.domain.model.ReservationStatus
+import com.smartsolar.microgrid.domain.model.Station
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
@@ -22,15 +26,22 @@ data class MyReservationsState(
     val isLoading: Boolean = false,
     val isRefreshing: Boolean = false,
     val reservations: List<Reservation> = emptyList(),
-    val stationNames: Map<String, String> = emptyMap(),
+    val stationsById: Map<String, Station> = emptyMap(),
     val selectedGroup: ReservationGroup = ReservationGroup.PENDING,
+    val filterCriteria: ReservationFilterCriteria = ReservationFilterCriteria(),
     val stationNamesUnavailable: Boolean = false,
     val error: AppError? = null,
 ) {
     val visibleItems: List<ReservationListItem>
-        get() = ReservationPresentation.inGroup(reservations, selectedGroup).map {
-            ReservationListItem(it, stationNames[it.stationId] ?: it.stationId)
+        get() = ReservationPresentation.inGroup(
+            ReservationFilter.apply(reservations, stationsById, filterCriteria),
+            selectedGroup,
+        ).map {
+            ReservationListItem(it, stationsById[it.stationId]?.name ?: it.stationId)
         }
+
+    val hasActiveFilters: Boolean
+        get() = filterCriteria.searchQuery.isNotBlank() || filterCriteria.status != null
 }
 
 class MyReservationsViewModel(
@@ -46,6 +57,22 @@ class MyReservationsViewModel(
 
     fun select(group: ReservationGroup) {
         mutableState.value = mutableState.value.copy(selectedGroup = group)
+    }
+
+    fun setSearch(query: String) {
+        mutableState.value = mutableState.value.copy(
+            filterCriteria = mutableState.value.filterCriteria.copy(searchQuery = query),
+        )
+    }
+
+    fun setStatus(status: ReservationStatus?) {
+        mutableState.value = mutableState.value.copy(
+            filterCriteria = mutableState.value.filterCriteria.copy(status = status),
+        )
+    }
+
+    fun resetFilters() {
+        mutableState.value = mutableState.value.copy(filterCriteria = ReservationFilter.reset())
     }
 
     fun load(refresh: Boolean = false) {
@@ -64,15 +91,15 @@ class MyReservationsViewModel(
                 )
                 is AppResult.Success -> {
                     val stationResult = stations.getStations()
-                    val names = (stationResult as? AppResult.Success)
+                    val stationsById = (stationResult as? AppResult.Success)
                         ?.value
-                        ?.associate { it.id to it.name }
+                        ?.associateBy { it.id }
                         .orEmpty()
                     mutableState.value = mutableState.value.copy(
                         isLoading = false,
                         isRefreshing = false,
                         reservations = reservationResult.value,
-                        stationNames = names,
+                        stationsById = stationsById,
                         stationNamesUnavailable = stationResult is AppResult.Error,
                         error = null,
                     )

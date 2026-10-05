@@ -4,7 +4,9 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.isVisible
 import androidx.core.view.updatePadding
+import androidx.navigation.fragment.NavHostFragment
 import com.smartsolar.microgrid.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
@@ -23,6 +25,21 @@ class MainActivity : AppCompatActivity() {
             windowInsets
         }
         ViewCompat.requestApplyInsets(binding.root)
+
+        val navHost = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+        val navController = navHost.navController
+        val rootDestinations = setOf(
+            R.id.launchFragment,
+            R.id.loginFragment,
+            R.id.prosumerHomeFragment,
+            R.id.operatorDashboardFragment,
+        )
+        binding.topAppBar.navigationContentDescription = getString(R.string.navigate_back)
+        binding.topAppBar.setNavigationOnClickListener { navController.navigateUp() }
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            binding.topAppBar.isVisible = destination.id !in rootDestinations
+            binding.topAppBar.title = destination.label
+        }
     }
 }
 

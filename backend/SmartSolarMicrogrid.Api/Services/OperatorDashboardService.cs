@@ -42,4 +42,35 @@ public sealed class OperatorDashboardService(
             OperatorDashboardStatus.Success,
             new DashboardSummaryResponse(pendingCount, approvedFutureCount));
     }
+
+    public async Task<OperatorReservationsResult> GetReservationsAsync(
+        string? operatorUserId,
+        CancellationToken cancellationToken = default)
+    {
+        // Resolve the current database assignment; no station identifier is accepted from the client.
+        var assignment = await operatorAssignmentService.ResolveAsync(operatorUserId, cancellationToken);
+        if (assignment.Status != OperatorAssignmentStatus.Success)
+        {
+            return new OperatorReservationsResult(MapAssignmentStatus(assignment.Status));
+        }
+
+        var reservations = await reservationRepository.GetOperationalByStationAsync(
+            assignment.StationId!,
+            cancellationToken);
+        return new OperatorReservationsResult(
+            OperatorDashboardStatus.Success,
+            reservations.Select(reservation => new OperatorReservationResponse(
+                reservation.Id,
+                reservation.ProsumerId,
+                reservation.SlotId,
+                reservation.ScheduledTime,
+                reservation.Status.ToString())).ToList());
+    }
+
+    private static OperatorDashboardStatus MapAssignmentStatus(OperatorAssignmentStatus status) => status switch
+    {
+        OperatorAssignmentStatus.AuthenticationRequired => OperatorDashboardStatus.AuthenticationRequired,
+        OperatorAssignmentStatus.StationNotAssigned => OperatorDashboardStatus.OperatorStationNotAssigned,
+        _ => OperatorDashboardStatus.AccessDenied
+    };
 }

@@ -85,6 +85,25 @@ public sealed class EnergyReservationRepository : IEnergyReservationRepository
             .ToListAsync(cancellationToken);
     }
 
+    public async Task<IReadOnlyList<EnergyReservation>> GetOperationalByStationAsync(
+        string stationId,
+        CancellationToken cancellationToken = default)
+    {
+        // Never accept a client-selected station here; callers supply the resolved operator assignment.
+        if (!ObjectId.TryParse(stationId, out _))
+        {
+            return [];
+        }
+
+        var builder = Builders<EnergyReservation>.Filter;
+        var filter = builder.Eq(reservation => reservation.StationId, stationId) &
+                     StatusIn(ReservationStatus.PENDING, ReservationStatus.APPROVED);
+        return await _reservations
+            .Find(filter)
+            .SortBy(reservation => reservation.ScheduledTime)
+            .ToListAsync(cancellationToken);
+    }
+
     public async Task<IReadOnlyList<EnergyReservation>> SearchAsync(
         string? prosumerId,
         ReservationStatus? status,
@@ -255,6 +274,21 @@ public sealed class EnergyReservationRepository : IEnergyReservationRepository
 
         var builder = Builders<EnergyReservation>.Filter;
         var filter = builder.Eq(reservation => reservation.StationId, stationId) &
+                     StatusIn(ReservationStatus.PENDING, ReservationStatus.APPROVED);
+        return await _reservations.Find(filter).AnyAsync(cancellationToken);
+    }
+
+    public async Task<bool> HasActiveReservationForSlotAsync(
+        string slotId,
+        CancellationToken cancellationToken = default)
+    {
+        if (!ObjectId.TryParse(slotId, out _))
+        {
+            return false;
+        }
+
+        var builder = Builders<EnergyReservation>.Filter;
+        var filter = builder.Eq(reservation => reservation.SlotId, slotId) &
                      StatusIn(ReservationStatus.PENDING, ReservationStatus.APPROVED);
         return await _reservations.Find(filter).AnyAsync(cancellationToken);
     }

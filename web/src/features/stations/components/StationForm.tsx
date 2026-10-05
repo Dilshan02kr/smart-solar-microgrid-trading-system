@@ -4,6 +4,7 @@ import { Alert } from '@/components/feedback/Alert'
 import { Button } from '@/components/ui/Button'
 import { Card } from '@/components/ui/Card'
 import { Input } from '@/components/ui/Input'
+import { StationLocationPicker } from '@/features/stations/components/StationLocationPicker'
 import type { CreateStationRequest, Station } from '@/features/stations/types/stationTypes'
 import type { ApiClientError } from '@/services/api/apiError'
 import { getApiFieldError } from '@/utils/apiFieldError'
@@ -83,6 +84,17 @@ export function StationForm({ station, apiError, isSubmitting, cancelTo, submitL
         <div className="form-grid">
           <Input label="Node name" value={values.name} onChange={(event) => updateField('name', event.target.value)} error={fieldError('name')} disabled={isSubmitting} required />
           <Input label="Location name" value={values.locationName} onChange={(event) => updateField('locationName', event.target.value)} error={fieldError('locationName')} disabled={isSubmitting} required />
+          <div className="form-grid__full">
+            <StationLocationPicker
+              latitude={values.latitude}
+              longitude={values.longitude}
+              disabled={isSubmitting}
+              onSelect={(latitude, longitude) => {
+                updateField('latitude', latitude.toFixed(6))
+                updateField('longitude', longitude.toFixed(6))
+              }}
+            />
+          </div>
           <Input label="Latitude" type="number" step="any" min="-90" max="90" value={values.latitude} onChange={(event) => updateField('latitude', event.target.value)} error={fieldError('latitude')} helperText="Decimal degrees from -90 to 90." disabled={isSubmitting} required />
           <Input label="Longitude" type="number" step="any" min="-180" max="180" value={values.longitude} onChange={(event) => updateField('longitude', event.target.value)} error={fieldError('longitude')} helperText="Decimal degrees from -180 to 180." disabled={isSubmitting} required />
           <Input label="Total capacity (kW)" type="number" step="any" min="0" value={values.totalCapacityKw} onChange={(event) => updateField('totalCapacityKw', event.target.value)} error={fieldError('totalCapacityKw')} disabled={isSubmitting} required />
