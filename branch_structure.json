@@ -1,0 +1,33 @@
+{
+  "default_branch": "main",
+  "branches": [
+    "develop",
+    "feature/android-final-integration",
+    "feature/android-maps",
+    "feature/android-operator",
+    "feature/android-reservations-2",
+    "feature/final-role-gap-fixes",
+    "feature/operator-verification",
+    "main"
+  ],
+  "parent": {
+    "develop": "main",
+    "feature/android-final-integration": "main",
+    "feature/android-maps": "main",
+    "feature/android-operator": "main",
+    "feature/android-reservations-2": "main",
+    "feature/final-role-gap-fixes": "main",
+    "feature/operator-verification": "main",
+    "main": null
+  },
+  "order": [
+    "main",
+    "develop",
+    "feature/android-final-integration",
+    "feature/android-maps",
+    "feature/android-operator",
+    "feature/android-reservations-2",
+    "feature/final-role-gap-fixes",
+    "feature/operator-verification"
+  ]
+}
