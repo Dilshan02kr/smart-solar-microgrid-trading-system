@@ -1,4 +1,14 @@
-// Defines the mutable date, time, and capacity fields of an energy slot.
+/*
+ * Smart Solar Microgrid Trading System
+ * SE4040 - Enterprise Application Development
+ *
+ * File: UpdateEnergyBookingSlotRequest.cs
+ * Component: Energy Slot Management
+ * Component Owner: R A K Hansika (IT23140998)
+ *
+ * Purpose:
+ * Defines the mutable date, time, and capacity fields of an energy slot.
+ */
 using System.ComponentModel.DataAnnotations;
 
 namespace SmartSolarMicrogrid.Api.DTOs;

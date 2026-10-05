@@ -1,4 +1,14 @@
-// Defines station-scoped dashboard aggregation for the current Grid Operator.
+/*
+ * Smart Solar Microgrid Trading System
+ * SE4040 - Enterprise Application Development
+ *
+ * File: IOperatorDashboardService.cs
+ * Component: Grid Operator Dashboard
+ * Component Owner: Kulunu Kasthuri Arachchi (IT23375628)
+ *
+ * Purpose:
+ * Defines station-scoped dashboard aggregation for the current Grid Operator.
+ */
 using SmartSolarMicrogrid.Api.DTOs;
 
 namespace SmartSolarMicrogrid.Api.Services;

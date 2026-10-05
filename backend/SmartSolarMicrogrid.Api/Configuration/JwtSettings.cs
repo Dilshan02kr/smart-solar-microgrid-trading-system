@@ -1,4 +1,14 @@
-// Represents JWT issuer, audience, signing, and expiration configuration.
+/*
+ * Smart Solar Microgrid Trading System
+ * SE4040 - Enterprise Application Development
+ *
+ * File: JwtSettings.cs
+ * Component: Authentication and Account Management
+ * Component Owner: WMDD Karunarathna (IT23145320)
+ *
+ * Purpose:
+ * Represents JWT issuer, audience, signing, and expiration configuration.
+ */
 namespace SmartSolarMicrogrid.Api.Configuration;
 
 public sealed class JwtSettings

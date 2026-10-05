@@ -1,4 +1,14 @@
-// Exposes Prosumer registration, self-service profile, and Backoffice lifecycle operations.
+/*
+ * Smart Solar Microgrid Trading System
+ * SE4040 - Enterprise Application Development
+ *
+ * File: ProsumersController.cs
+ * Component: Prosumer Account Management
+ * Component Owner: WMDD Karunarathna (IT23145320)
+ *
+ * Purpose:
+ * Exposes Prosumer registration, self-service profile, and Backoffice lifecycle operations.
+ */
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SmartSolarMicrogrid.Api.Common;

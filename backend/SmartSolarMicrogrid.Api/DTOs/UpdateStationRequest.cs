@@ -1,4 +1,14 @@
-// Defines validated mutable fields for an existing solar station.
+/*
+ * Smart Solar Microgrid Trading System
+ * SE4040 - Enterprise Application Development
+ *
+ * File: UpdateStationRequest.cs
+ * Component: Microgrid Node and Station Management
+ * Component Owner: R A K Hansika (IT23140998)
+ *
+ * Purpose:
+ * Defines validated mutable fields for an existing solar station.
+ */
 using System.ComponentModel.DataAnnotations;
 
 namespace SmartSolarMicrogrid.Api.DTOs;

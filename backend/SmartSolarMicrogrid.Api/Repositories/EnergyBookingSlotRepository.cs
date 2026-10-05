@@ -1,4 +1,14 @@
-// Provides MongoDB persistence and atomic availability operations for energy booking slots.
+/*
+ * Smart Solar Microgrid Trading System
+ * SE4040 - Enterprise Application Development
+ *
+ * File: EnergyBookingSlotRepository.cs
+ * Component: Energy Slot Management
+ * Component Owner: R A K Hansika (IT23140998)
+ *
+ * Purpose:
+ * Provides MongoDB persistence and atomic availability operations for energy booking slots.
+ */
 using MongoDB.Bson;
 using MongoDB.Driver;
 using SmartSolarMicrogrid.Api.Models;
@@ -136,6 +146,7 @@ public sealed class EnergyBookingSlotRepository : IEnergyBookingSlotRepository
         bool isAvailable,
         CancellationToken cancellationToken = default)
     {
+        // Atomically updates the operational availability of the identified energy slot.
         if (!ObjectId.TryParse(slotId, out var objectId))
         {
             return null;

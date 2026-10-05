@@ -1,4 +1,14 @@
-// Exposes station-scoped verification, completion, and dashboard operations for Grid Operators.
+/*
+ * Smart Solar Microgrid Trading System
+ * SE4040 - Enterprise Application Development
+ *
+ * File: OperatorController.cs
+ * Component: Grid Operator Workflow
+ * Component Owner: Kulunu Kasthuri Arachchi (IT23375628)
+ *
+ * Purpose:
+ * Exposes station-scoped verification, completion, and dashboard operations for Grid Operators.
+ */
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SmartSolarMicrogrid.Api.Common;
@@ -24,6 +34,7 @@ public sealed class OperatorController(
     public async Task<ActionResult<IReadOnlyList<EnergyBookingSlotResponse>>> GetSlots(
         CancellationToken cancellationToken)
     {
+        // Returns energy slots belonging only to the authenticated operator's assigned station.
         var result = await slotService.GetSlotsAsync(User.FindFirst("userId")?.Value, cancellationToken);
         return result.Status switch
         {
@@ -54,6 +65,7 @@ public sealed class OperatorController(
         UpdateOperatorSlotAvailabilityRequest request,
         CancellationToken cancellationToken)
     {
+        // Updates slot availability only after validating the operator's assigned station.
         var result = await slotService.SetAvailabilityAsync(
             User.FindFirst("userId")?.Value,
             slotId,

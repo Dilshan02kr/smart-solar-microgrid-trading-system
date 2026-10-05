@@ -1,4 +1,14 @@
-// Implements slot validation, overlap prevention, and safe DTO mapping.
+/*
+ * Smart Solar Microgrid Trading System
+ * SE4040 - Enterprise Application Development
+ *
+ * File: EnergyBookingSlotService.cs
+ * Component: Energy Slot Management
+ * Component Owner: R A K Hansika (IT23140998)
+ *
+ * Purpose:
+ * Implements slot validation, overlap prevention, and safe DTO mapping.
+ */
 using MongoDB.Bson;
 using SmartSolarMicrogrid.Api.DTOs;
 using SmartSolarMicrogrid.Api.Models;

@@ -1,4 +1,19 @@
-// Configures dependency injection, security, persistence, CORS, and the HTTP pipeline.
+/*
+ * Smart Solar Microgrid Trading System
+ * SE4040 - Enterprise Application Development
+ *
+ * File: Program.cs
+ * Component: Application Configuration and Integration
+ *
+ * Component Owners:
+ * - WMDD Karunarathna (IT23145320) — authentication and account-management registration
+ * - R A K Hansika (IT23140998) — station and energy-slot registration
+ * - N A Illangasinghe (IT23391536) — reservation workflow registration
+ * - Kulunu Kasthuri Arachchi (IT23375628) — operator workflow and application integration
+ *
+ * Purpose:
+ * Configures API services, persistence, security middleware, and component integration.
+ */
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
