@@ -11,9 +11,21 @@
         android:orientation="vertical"
         android:padding="@dimen/screen_padding">
 
+        <ImageView
+            android:layout_width="@dimen/brand_logo_form_size"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:adjustViewBounds="true"
+            android:contentDescription="@string/app_logo_description"
+            android:maxHeight="@dimen/brand_logo_form_size"
+            android:scaleType="fitCenter"
+            android:src="@drawable/smart_solar_logo" />
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_small"
+            android:gravity="center"
             android:text="@string/app_name"
             android:textAppearance="@style/TextAppearance.Material3.TitleLarge"
             android:textColor="@color/text_primary" />

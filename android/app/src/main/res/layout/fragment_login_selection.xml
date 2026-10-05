@@ -12,19 +12,15 @@
         android:orientation="vertical"
         android:padding="@dimen/screen_padding">
 
-        <FrameLayout
-            android:layout_width="88dp"
-            android:layout_height="88dp"
+        <ImageView
+            android:layout_width="@dimen/brand_logo_auth_size"
+            android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:background="@drawable/splash_logo_background"
-            android:padding="20dp">
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:contentDescription="@string/app_logo_description"
-                android:src="@drawable/ic_app_icon"
-                app:tint="@color/energy_green" />
-        </FrameLayout>
+            android:adjustViewBounds="true"
+            android:contentDescription="@string/app_logo_description"
+            android:maxHeight="@dimen/brand_logo_auth_size"
+            android:scaleType="fitCenter"
+            android:src="@drawable/smart_solar_logo" />
 
         <TextView
             android:layout_width="match_parent"

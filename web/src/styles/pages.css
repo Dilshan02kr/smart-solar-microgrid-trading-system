@@ -20,10 +20,10 @@
 
 .centered-page { display: grid; min-height: 100vh; place-items: center; padding: var(--space-lg); background: var(--color-background); }
 .centered-page__panel { width: min(100%, 30rem); }
-.centered-page__brand { display: flex; align-items: center; gap: 0.75rem; margin-bottom: var(--space-lg); }
+.centered-page__brand { display: flex; flex-direction: column; align-items: center; gap: var(--space-sm); margin-bottom: var(--space-lg); text-align: center; }
 .centered-page__brand strong, .centered-page__brand small { display: block; }
 .centered-page__brand small { color: var(--color-text-muted); font-size: var(--font-size-xs); }
-.centered-page__brand-mark { display: grid; width: 2.75rem; height: 2.75rem; place-items: center; border-radius: var(--radius-md); background: var(--color-primary); color: var(--color-text-on-primary); font-weight: var(--font-weight-bold); }
+.centered-page__logo { width: clamp(7rem, 28vw, 10rem); height: auto; object-fit: contain; }
 .centered-page__eyebrow { margin-bottom: var(--space-xs); color: var(--color-primary); font-size: var(--font-size-xs); font-weight: var(--font-weight-bold); letter-spacing: 0.08em; text-transform: uppercase; }
 .centered-page__title { margin-bottom: var(--space-sm); font-size: var(--font-size-page-title); }
 .centered-page__description { margin-bottom: var(--space-lg); color: var(--color-text-secondary); }

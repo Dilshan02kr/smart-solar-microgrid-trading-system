@@ -1,4 +1,5 @@
 import { NavLink } from 'react-router-dom'
+import smartSolarLogo from '@/assets/branding/smart-solar-logo.png'
 import { navigationItems } from '@/components/navigation/navigation'
 import type { UserRole } from '@/features/auth/types/authTypes'
 
@@ -21,9 +22,9 @@ export function Sidebar({ open, inertWhenClosed, onNavigate, role }: SidebarProp
       inert={inertWhenClosed || undefined}
       tabIndex={-1}
     >
-      <div className="brand">
-        <span className="brand__mark" aria-hidden="true">S</span>
-        <span><strong>Smart Solar</strong><small>Microgrid Platform</small></span>
+      <div className="brand brand--sidebar">
+        <img className="brand__logo" src={smartSolarLogo} alt="Smart Solar" />
+        <small>Microgrid Trading System</small>
       </div>
       <nav className="sidebar__nav">
         <p className="sidebar__section-label">Workspace</p>

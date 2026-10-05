@@ -28,9 +28,10 @@
 }
 
 .brand { display: flex; align-items: center; gap: 0.75rem; padding: 0 var(--space-sm) var(--space-xl); }
-.brand__mark { display: grid; width: 2.5rem; height: 2.5rem; flex: 0 0 auto; place-items: center; border-radius: var(--radius-md); background: var(--color-primary); color: var(--color-text-on-primary); font-weight: var(--font-weight-bold); }
+.brand--sidebar { flex-direction: column; gap: var(--space-xs); text-align: center; }
+.brand__logo { width: clamp(7.5rem, 10vw, 9.5rem); height: auto; object-fit: contain; }
 .brand strong, .brand small { display: block; }
-.brand small { margin-top: 0.125rem; color: var(--color-border); font-size: var(--font-size-xs); }
+.brand small { color: var(--color-border); font-size: var(--font-size-xs); }
 .sidebar__nav { display: flex; flex-direction: column; gap: var(--space-xs); }
 .sidebar__section-label { margin: 0 0 var(--space-sm); padding: 0 var(--space-sm); color: var(--color-border); font-size: var(--font-size-xs); font-weight: var(--font-weight-semibold); letter-spacing: 0.08em; text-transform: uppercase; }
 .sidebar__link { display: flex; align-items: center; gap: 0.75rem; padding: 0.7rem var(--space-sm); border-radius: var(--radius-md); color: var(--color-text-on-dark); font-size: var(--font-size-sm); font-weight: var(--font-weight-medium); text-decoration: none; transition: background-color var(--transition-fast); }
