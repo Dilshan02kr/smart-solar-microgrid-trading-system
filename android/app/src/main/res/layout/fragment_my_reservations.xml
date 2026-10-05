@@ -167,6 +167,7 @@
             android:layout_marginTop="@dimen/spacing_small"
             android:clipToPadding="false"
             android:paddingBottom="@dimen/spacing_medium"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

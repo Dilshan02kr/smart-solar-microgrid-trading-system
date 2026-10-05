@@ -17,6 +17,10 @@ class ReservationFilterTest {
     private val stations = mapOf("station" to Station("station", "Harbour Solar", "Colombo Port", 6.9, 79.8, 10.0, "Daily", StationStatus.ACTIVE, "", ""))
 
     @Test fun `blank search and all statuses returns everything`() = assertEquals(all, ReservationFilter.apply(all, stations))
+    @Test fun `pending with blank search and all statuses is retained`() = assertEquals(listOf(pending), ReservationFilter.apply(listOf(pending), stations))
+    @Test fun `approved with blank search and all statuses is retained`() = assertEquals(listOf(approved), ReservationFilter.apply(listOf(approved), stations))
+    @Test fun `pending with null transaction reference and blank search is retained`() = assertEquals(listOf(pending), ReservationFilter.apply(listOf(pending), stations, ReservationFilterCriteria(searchQuery = "   ")))
+    @Test fun `missing station enrichment retains reservation for blank search`() = assertEquals(listOf(pending), ReservationFilter.apply(listOf(pending), emptyMap()))
     @Test fun `station name search is case insensitive`() = assertEquals(all, ReservationFilter.apply(all, stations, ReservationFilterCriteria("harbour SOLAR")))
     @Test fun `station location search works`() = assertEquals(all, ReservationFilter.apply(all, stations, ReservationFilterCriteria("colombo port")))
     @Test fun `unknown search returns empty`() = assertTrue(ReservationFilter.apply(all, stations, ReservationFilterCriteria("unknown")).isEmpty())

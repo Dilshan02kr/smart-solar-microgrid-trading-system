@@ -83,7 +83,9 @@ class MyReservationsFragment : Fragment() {
             currentBinding.statusFilter.setText(statusLabel, false)
         }
         adapter.submitList(state.visibleItems)
-        currentBinding.emptyMessage.isVisible = state.visibleItems.isEmpty()
+        val hasVisibleItems = state.visibleItems.isNotEmpty()
+        currentBinding.reservationList.isVisible = hasVisibleItems
+        currentBinding.emptyMessage.isVisible = !hasVisibleItems
         currentBinding.emptyMessage.setText(
             when {
                 state.reservations.isEmpty() -> R.string.no_reservations_yet
