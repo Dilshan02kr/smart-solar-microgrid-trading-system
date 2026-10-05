@@ -20,7 +20,9 @@
     <fragment android:id="@+id/operatorDashboardFragment" android:name="com.smartsolar.microgrid.ui.operator.OperatorDashboardFragment" android:label="@string/operator_dashboard_title">
         <action android:id="@+id/action_operatorDashboardFragment_to_qrScannerFragment" app:destination="@id/qrScannerFragment" />
         <action android:id="@+id/action_operatorDashboardFragment_to_operatorReservationsFragment" app:destination="@id/operatorReservationsFragment" />
+        <action android:id="@+id/action_operatorDashboardFragment_to_operatorSlotsFragment" app:destination="@id/operatorSlotsFragment" />
     </fragment>
+    <fragment android:id="@+id/operatorSlotsFragment" android:name="com.smartsolar.microgrid.ui.operator.OperatorSlotsFragment" android:label="@string/operator_slots_title" />
     <fragment android:id="@+id/operatorReservationsFragment" android:name="com.smartsolar.microgrid.ui.operator.OperatorReservationsFragment" android:label="@string/operator_reservations_title" />
     <fragment android:id="@+id/qrScannerFragment" android:name="com.smartsolar.microgrid.ui.operator.QrScannerFragment" android:label="@string/scan_qr_title">
         <action android:id="@+id/action_qrScannerFragment_to_verifiedTransactionFragment" app:destination="@id/verifiedTransactionFragment" />

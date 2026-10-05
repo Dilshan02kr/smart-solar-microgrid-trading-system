@@ -85,6 +85,11 @@ public interface IEnergyReservationRepository
         string stationId,
         CancellationToken cancellationToken = default);
 
+    // Determine whether one slot is owned by a pending or approved reservation.
+    Task<bool> HasActiveReservationForSlotAsync(
+        string slotId,
+        CancellationToken cancellationToken = default);
+
     // Count station reservations in an authoritative status.
     Task<long> CountByStationAndStatusAsync(
         string stationId,

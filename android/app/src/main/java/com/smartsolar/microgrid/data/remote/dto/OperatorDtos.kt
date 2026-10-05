@@ -19,6 +19,10 @@ data class VerifyTransactionRequestDto(
     val transactionReference: String,
 )
 
+data class UpdateOperatorSlotAvailabilityRequestDto(
+    val isAvailable: Boolean,
+)
+
 data class OperatorReservationResponseDto(
     val reservationId: String,
     val prosumerId: String,

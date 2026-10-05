@@ -206,6 +206,7 @@ builder.Services.AddScoped<IReservationService, ReservationService>();
 builder.Services.AddScoped<IJwtTokenService, JwtTokenService>();
 builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
 builder.Services.AddScoped<IOperatorAssignmentService, OperatorAssignmentService>();
+builder.Services.AddScoped<IOperatorSlotService, OperatorSlotService>();
 builder.Services.AddScoped<ActiveAccountJwtBearerEvents>();
 
 // Member 4 Transaction Verification & Completion Services

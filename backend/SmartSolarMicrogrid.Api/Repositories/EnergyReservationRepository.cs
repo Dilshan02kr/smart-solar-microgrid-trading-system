@@ -278,6 +278,21 @@ public sealed class EnergyReservationRepository : IEnergyReservationRepository
         return await _reservations.Find(filter).AnyAsync(cancellationToken);
     }
 
+    public async Task<bool> HasActiveReservationForSlotAsync(
+        string slotId,
+        CancellationToken cancellationToken = default)
+    {
+        if (!ObjectId.TryParse(slotId, out _))
+        {
+            return false;
+        }
+
+        var builder = Builders<EnergyReservation>.Filter;
+        var filter = builder.Eq(reservation => reservation.SlotId, slotId) &
+                     StatusIn(ReservationStatus.PENDING, ReservationStatus.APPROVED);
+        return await _reservations.Find(filter).AnyAsync(cancellationToken);
+    }
+
     public async Task<long> CountByStationAndStatusAsync(
         string stationId,
         ReservationStatus status,

@@ -45,6 +45,9 @@ class OperatorDashboardFragment : Fragment() {
         binding?.reservationsButton?.setOnClickListener {
             findNavController().navigate(R.id.action_operatorDashboardFragment_to_operatorReservationsFragment)
         }
+        binding?.slotsButton?.setOnClickListener {
+            findNavController().navigate(R.id.action_operatorDashboardFragment_to_operatorSlotsFragment)
+        }
         binding?.logoutButton?.setOnClickListener {
             viewModel.logout()
             findNavController().navigate(R.id.action_global_loginFragment)

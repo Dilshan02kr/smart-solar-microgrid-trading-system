@@ -31,6 +31,8 @@ Set `VITE_API_BASE_URL` to the backend origin; the shared Axios client in `src/s
 
 The JWT is stored only in `sessionStorage`. On startup, the application validates a stored token through `GET /api/auth/me`; it never treats decoded or cached profile data as authoritative. Web access is restricted to `BACKOFFICE` and `GRID_OPERATOR`. A 401 clears the session, while a 403 preserves it and is handled as an authorization failure.
 
-Backoffice and Grid Operator routes are protected by shared authentication and role guards. Backoffice manages users, Prosumers, microgrid nodes, slots, and reservations. Grid Operators receive a station-scoped dashboard and transaction verification/completion workflow.
+Backoffice and Grid Operator routes are protected by shared authentication and role guards. Backoffice manages users, Prosumers, microgrid nodes, slots, and reservations. Grid Operators receive a station-scoped dashboard, existing-slot availability management, reservation monitoring, and transaction verification/completion workflow.
+
+Backoffice station create/edit forms use `VITE_GOOGLE_MAPS_API_KEY` for visual coordinate selection. Use a browser key restricted by HTTP referrer with Maps JavaScript API enabled. If the variable is empty or Maps cannot load, manual latitude/longitude entry remains available. This browser credential is separate from Android's package/SHA-restricted `MAPS_API_KEY`.
 
 For local browser integration, configure the backend's existing `Cors:AllowedOrigins` setting to include the Vite origin, commonly `http://localhost:5173`. Keep the origin explicit; do not enable unrestricted CORS.

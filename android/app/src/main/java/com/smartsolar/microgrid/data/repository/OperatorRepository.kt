@@ -4,6 +4,8 @@ import com.smartsolar.microgrid.core.error.ErrorNormalizer
 import com.smartsolar.microgrid.core.util.AppResult
 import com.smartsolar.microgrid.data.remote.OperatorApiService
 import com.smartsolar.microgrid.data.remote.dto.VerifyTransactionRequestDto
+import com.smartsolar.microgrid.data.remote.dto.UpdateOperatorSlotAvailabilityRequestDto
+import com.smartsolar.microgrid.domain.model.EnergySlot
 import com.smartsolar.microgrid.domain.model.OperatorDashboardSummary
 import com.smartsolar.microgrid.domain.model.OperatorReservation
 import com.smartsolar.microgrid.domain.model.OperatorTransaction
@@ -19,6 +21,17 @@ class OperatorRepository(
 
     suspend fun getReservations(): AppResult<List<OperatorReservation>> = execute {
         api.getReservations().map { it.toDomainOrNull() ?: throw InvalidOperatorContractException() }
+    }
+
+    suspend fun getSlots(): AppResult<List<EnergySlot>> = execute {
+        api.getSlots().map { it.toDomain() }
+    }
+
+    suspend fun updateSlotAvailability(slotId: String, isAvailable: Boolean): AppResult<EnergySlot> = execute {
+        api.updateSlotAvailability(
+            slotId,
+            UpdateOperatorSlotAvailabilityRequestDto(isAvailable),
+        ).toDomain()
     }
 
     suspend fun verifyTransaction(transactionReference: String): AppResult<OperatorTransaction> = execute {

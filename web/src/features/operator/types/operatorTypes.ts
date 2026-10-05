@@ -1,4 +1,5 @@
 import type { ReservationStatus } from '@/features/reservations/types/reservationTypes'
+import type { EnergyBookingSlot } from '@/features/slots/types/slotTypes'
 
 export interface DashboardSummaryResponse {
   pendingReservationCount: number
@@ -38,3 +39,9 @@ export interface CompleteReservationResponse {
 }
 
 export type OperatorTransaction = VerifyTransactionResponse | CompleteReservationResponse
+
+export type OperatorSlot = EnergyBookingSlot
+
+export interface UpdateOperatorSlotAvailabilityRequest {
+  isAvailable: boolean
+}
