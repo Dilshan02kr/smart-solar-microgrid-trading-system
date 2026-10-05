@@ -1,4 +1,14 @@
-// Exposes Backoffice-only management endpoints for Backoffice and Grid Operator users.
+/*
+ * Smart Solar Microgrid Trading System
+ * SE4040 - Enterprise Application Development
+ *
+ * File: UsersController.cs
+ * Component: Web User and Account Management
+ * Component Owner: WMDD Karunarathna (IT23145320)
+ *
+ * Purpose:
+ * Exposes Backoffice-only management endpoints for Backoffice and Grid Operator users.
+ */
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SmartSolarMicrogrid.Api.Common;

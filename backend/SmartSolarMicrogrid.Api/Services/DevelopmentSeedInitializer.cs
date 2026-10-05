@@ -1,4 +1,19 @@
-// Seeds initial development-only station, users, slots, and reservations when explicitly enabled.
+/*
+ * Smart Solar Microgrid Trading System
+ * SE4040 - Enterprise Application Development
+ *
+ * File: DevelopmentSeedInitializer.cs
+ * Component: Development Data Integration
+ *
+ * Component Owners:
+ * - WMDD Karunarathna (IT23145320) — development user and Prosumer accounts
+ * - R A K Hansika (IT23140998) — development stations and energy slots
+ * - N A Illangasinghe (IT23391536) — development reservation scenarios
+ * - Kulunu Kasthuri Arachchi (IT23375628) — hosted-service integration and operator scenarios
+ *
+ * Purpose:
+ * Creates isolated development data spanning users, stations, slots, reservations, and operator workflows.
+ */
 using System.Security.Cryptography;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
@@ -66,10 +81,12 @@ public sealed class DevelopmentSeedInitializer(
         logger.LogInformation("Development seed data initialization completed successfully.");
     }
 
+    // Completes immediately because development seeding owns no shutdown resources.
     public Task StopAsync(CancellationToken cancellationToken) => Task.CompletedTask;
 
     private async Task<SolarStationInfo> EnsureStationAsync(CancellationToken cancellationToken)
     {
+        // Reuses or creates the development station required by the sample workflows.
         var existingStations = await stationRepository.GetAllAsync(cancellationToken);
         var station = existingStations.FirstOrDefault(s =>
             string.Equals(s.Name, SeedStationName, StringComparison.OrdinalIgnoreCase));
@@ -112,6 +129,7 @@ public sealed class DevelopmentSeedInitializer(
         string password,
         CancellationToken cancellationToken)
     {
+        // Reuses or creates the development Grid Operator assigned to the sample station.
         var operatorUser = await userRepository.GetByEmailAsync(OperatorEmail, cancellationToken);
         if (operatorUser is null)
         {
@@ -175,6 +193,7 @@ public sealed class DevelopmentSeedInitializer(
         string password,
         CancellationToken cancellationToken)
     {
+        // Reuses or creates the active development Prosumer used by reservation scenarios.
         var prosumerUser = await userRepository.GetByEmailAsync(ProsumerEmail, cancellationToken)
                            ?? await userRepository.GetByNicAsync(ProsumerNic, cancellationToken);
 
@@ -220,6 +239,7 @@ public sealed class DevelopmentSeedInitializer(
         ObjectId stationId,
         CancellationToken cancellationToken)
     {
+        // Ensures the development station has slots supporting each sample reservation state.
         var todayUtc = DateTime.UtcNow.Date;
         var tomorrowUtc = todayUtc.AddDays(1);
         var yesterdayUtc = todayUtc.AddDays(-1);
@@ -278,6 +298,7 @@ public sealed class DevelopmentSeedInitializer(
         double capacityKw,
         CancellationToken cancellationToken)
     {
+        // Reuses a matching development slot or persists a new one with the requested schedule.
         var existing = existingSlots.FirstOrDefault(s =>
             s.Date.Date == date.Date &&
             s.StartTime == startTime &&
@@ -325,6 +346,7 @@ public sealed class DevelopmentSeedInitializer(
         IReadOnlyList<EnergyBookingSlot> slots,
         CancellationToken cancellationToken)
     {
+        // Creates missing development reservations that demonstrate each lifecycle state.
         var existingReservations = await reservationRepository.GetByProsumerAsync(prosumerId, cancellationToken);
 
         var todayUtc = DateTime.UtcNow.Date;
@@ -477,6 +499,7 @@ public sealed class DevelopmentSeedInitializer(
         }
     }
 
+    // Generates a cryptographically random reference for a development reservation.
     private static string GenerateTransactionReference() =>
         Convert.ToHexString(RandomNumberGenerator.GetBytes(32));
 }

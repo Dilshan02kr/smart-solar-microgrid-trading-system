@@ -1,4 +1,14 @@
-// Defines Backoffice lifecycle and authenticated self-profile operations for Prosumers.
+/*
+ * Smart Solar Microgrid Trading System
+ * SE4040 - Enterprise Application Development
+ *
+ * File: IProsumerManagementService.cs
+ * Component: Prosumer Account Management
+ * Component Owner: WMDD Karunarathna (IT23145320)
+ *
+ * Purpose:
+ * Defines Backoffice lifecycle and authenticated self-profile operations for Prosumers.
+ */
 using SmartSolarMicrogrid.Api.DTOs;
 
 namespace SmartSolarMicrogrid.Api.Services;

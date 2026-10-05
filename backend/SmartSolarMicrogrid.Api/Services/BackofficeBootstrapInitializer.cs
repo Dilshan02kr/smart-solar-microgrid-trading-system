@@ -1,4 +1,17 @@
-// Creates the configured initial Backoffice account when none exists.
+/*
+ * Smart Solar Microgrid Trading System
+ * SE4040 - Enterprise Application Development
+ *
+ * File: BackofficeBootstrapInitializer.cs
+ * Component: Authentication Bootstrap Integration
+ *
+ * Component Owners:
+ * - WMDD Karunarathna (IT23145320) — initial Backoffice account security
+ * - Kulunu Kasthuri Arachchi (IT23375628) — startup integration
+ *
+ * Purpose:
+ * Validates bootstrap settings and creates the initial Backoffice account during application startup.
+ */
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
@@ -16,13 +29,13 @@ public sealed class BackofficeBootstrapInitializer(
 {
     public async Task StartAsync(CancellationToken cancellationToken)
     {
+        // Creates the configured active Backoffice account when bootstrap provisioning is enabled.
         var settings = bootstrapOptions.Value;
         if (string.IsNullOrWhiteSpace(settings.Email))
         {
             return;
         }
 
-        // Creates the configured active Backoffice user if this specific account does not exist.
         if (await userDetailsRepository.GetByEmailAsync(settings.Email.Trim().ToLowerInvariant(), cancellationToken) is not null)
         {
             logger.LogInformation("Backoffice account '{Email}' already exists; bootstrap skipped.", settings.Email);
