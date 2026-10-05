@@ -72,7 +72,7 @@ class MyReservationsFragment : Fragment() {
         currentBinding.contentContainer.isVisible = !state.isLoading && state.error == null
         state.error?.let {
             currentBinding.errorMessage.text = it.message
-            if (it.httpStatus == 401) findNavController().navigate(R.id.action_global_loginFragment)
+            if (it.httpStatus == 401) findNavController().navigate(R.id.action_global_loginSelectionFragment)
         }
         currentBinding.stationWarning.isVisible = state.stationNamesUnavailable
         if (currentBinding.searchInput.text?.toString() != state.filterCriteria.searchQuery) {

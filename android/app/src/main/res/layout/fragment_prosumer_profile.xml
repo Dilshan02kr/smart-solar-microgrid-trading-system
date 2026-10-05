@@ -10,12 +10,10 @@
         android:orientation="vertical"
         android:padding="@dimen/screen_padding">
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/profile_title"
-            android:textAppearance="@style/TextAppearance.Material3.HeadlineMedium"
-            android:textColor="@color/text_primary" />
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:gravity="center_vertical" android:orientation="horizontal">
+            <ImageView android:layout_width="@dimen/brand_logo_compact_size" android:layout_height="wrap_content" android:adjustViewBounds="true" android:contentDescription="@string/app_logo_description" android:maxHeight="@dimen/brand_logo_compact_size" android:scaleType="fitCenter" android:src="@drawable/smart_solar_logo" />
+            <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_marginStart="@dimen/spacing_medium" android:layout_weight="1" android:text="@string/profile_title" android:textAppearance="@style/TextAppearance.Material3.HeadlineMedium" android:textColor="@color/text_primary" />
+        </LinearLayout>
 
         <com.google.android.material.progressindicator.CircularProgressIndicator
             android:id="@+id/progress_indicator"
@@ -64,6 +62,8 @@
             <TextView android:id="@+id/phone_value" android:layout_width="match_parent" android:layout_height="wrap_content" android:textColor="@color/text_primary" />
             <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="@dimen/spacing_medium" android:text="@string/status_label" android:textColor="@color/text_secondary" />
             <TextView android:id="@+id/status_value" android:layout_width="match_parent" android:layout_height="wrap_content" android:textColor="@color/status_success" />
+            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="@dimen/spacing_medium" android:text="@string/role_label" android:textColor="@color/text_secondary" />
+            <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="@string/prosumer_role_value" android:textColor="@color/text_primary" />
             <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="@dimen/spacing_medium" android:text="@string/created_label" android:textColor="@color/text_secondary" />
             <TextView android:id="@+id/created_value" android:layout_width="match_parent" android:layout_height="wrap_content" android:textColor="@color/text_primary" />
             <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="@dimen/spacing_medium" android:text="@string/updated_label" android:textColor="@color/text_secondary" />
@@ -75,12 +75,24 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/spacing_large"
                 android:text="@string/edit_profile_action" />
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/divider_thickness"
+                android:layout_marginTop="@dimen/spacing_large"
+                android:background="?attr/colorOutlineVariant" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_medium"
+                android:text="@string/account_security_title"
+                android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
+                android:textColor="@color/text_primary" />
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/deactivate_button"
                 style="@style/Widget.Material3.Button.OutlinedButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/spacing_small"
+                android:layout_marginTop="@dimen/spacing_medium"
                 android:text="@string/deactivate_action"
                 android:textColor="@color/status_error" />
             <com.google.android.material.button.MaterialButton

@@ -45,10 +45,6 @@ class LoginFragment : Fragment() {
         binding?.createAccountButton?.setOnClickListener {
             findNavController().navigate(R.id.action_loginFragment_to_registerFragment)
         }
-        binding?.operatorLoginButton?.setOnClickListener {
-            findNavController().navigate(R.id.action_loginFragment_to_operatorLoginFragment)
-        }
-
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.state.collect(::render)
@@ -69,7 +65,6 @@ class LoginFragment : Fragment() {
         val currentBinding = binding ?: return
         currentBinding.loginButton.isEnabled = !state.isLoading
         currentBinding.createAccountButton.isEnabled = !state.isLoading
-        currentBinding.operatorLoginButton.isEnabled = !state.isLoading
         currentBinding.progressIndicator.isVisible = state.isLoading
 
         state.validationErrors.forEach { field ->

@@ -33,7 +33,6 @@ class OperatorLoginFragment : Fragment() {
 
     override fun onViewCreated(view: View, state: Bundle?) {
         binding?.loginButton?.setOnClickListener { submit() }
-        binding?.prosumerLoginButton?.setOnClickListener { findNavController().navigateUp() }
         binding?.passwordInput?.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) submit()
             actionId == EditorInfo.IME_ACTION_DONE
@@ -60,7 +59,6 @@ class OperatorLoginFragment : Fragment() {
         val current = binding ?: return
         current.progressIndicator.isVisible = state.isLoading
         current.loginButton.isEnabled = !state.isLoading
-        current.prosumerLoginButton.isEnabled = !state.isLoading
         state.validationErrors.forEach {
             when (it) {
                 FormField.EMAIL -> current.emailLayout.error = getString(R.string.error_invalid_email)

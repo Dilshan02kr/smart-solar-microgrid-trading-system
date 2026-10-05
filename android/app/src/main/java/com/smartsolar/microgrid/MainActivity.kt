@@ -30,7 +30,7 @@ class MainActivity : AppCompatActivity() {
         val navController = navHost.navController
         val rootDestinations = setOf(
             R.id.launchFragment,
-            R.id.loginFragment,
+            R.id.loginSelectionFragment,
             R.id.prosumerHomeFragment,
             R.id.operatorDashboardFragment,
         )

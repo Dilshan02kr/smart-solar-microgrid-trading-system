@@ -10,7 +10,8 @@
    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="@dimen/spacing_medium" android:text="@string/date_label"/><TextView android:id="@+id/date_value" android:layout_width="match_parent" android:layout_height="wrap_content"/>
    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="@dimen/spacing_medium" android:text="@string/time_label"/><TextView android:id="@+id/time_value" android:layout_width="match_parent" android:layout_height="wrap_content"/>
    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="@dimen/spacing_medium" android:text="@string/capacity_label"/><TextView android:id="@+id/capacity_value" android:layout_width="match_parent" android:layout_height="wrap_content"/>
-   <com.google.android.material.button.MaterialButton android:id="@+id/confirm_button" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="@dimen/spacing_large" android:text="@string/confirm_booking"/>
+   <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="@dimen/spacing_large" android:background="@color/surface_variant" android:padding="@dimen/spacing_medium" android:text="@string/pending_booking_explanation" android:textColor="@color/text_secondary"/>
+   <com.google.android.material.button.MaterialButton android:id="@+id/confirm_button" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="@dimen/spacing_medium" android:text="@string/confirm_booking"/>
   </LinearLayout>
  </LinearLayout>
 </androidx.core.widget.NestedScrollView>

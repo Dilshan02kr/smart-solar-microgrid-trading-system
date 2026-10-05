@@ -8,6 +8,8 @@
     <color name="status_error">#BA1A1A</color>
     <color name="surface_background">#F4F8F5</color>
     <color name="surface_card">#FFFFFF</color>
+    <color name="surface_variant">#EAF2EE</color>
+    <color name="outline_soft">#CFDDD6</color>
     <color name="text_primary">#17211B</color>
     <color name="text_secondary">#536158</color>
     <color name="white">#FFFFFF</color>

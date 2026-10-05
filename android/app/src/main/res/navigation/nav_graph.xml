@@ -3,19 +3,22 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/nav_graph"
     app:startDestination="@id/launchFragment">
-    <action android:id="@+id/action_global_loginFragment" app:destination="@id/loginFragment" app:popUpTo="@id/nav_graph" app:popUpToInclusive="true" />
+    <action android:id="@+id/action_global_loginSelectionFragment" app:destination="@id/loginSelectionFragment" app:popUpTo="@id/nav_graph" app:popUpToInclusive="true" />
     <fragment android:id="@+id/launchFragment" android:name="com.smartsolar.microgrid.ui.launch.LaunchFragment" android:label="@string/launch_title">
-        <action android:id="@+id/action_launchFragment_to_loginFragment" app:destination="@id/loginFragment" app:popUpTo="@id/launchFragment" app:popUpToInclusive="true" />
+        <action android:id="@+id/action_launchFragment_to_loginSelectionFragment" app:destination="@id/loginSelectionFragment" app:popUpTo="@id/launchFragment" app:popUpToInclusive="true" />
         <action android:id="@+id/action_launchFragment_to_prosumerHomeFragment" app:destination="@id/prosumerHomeFragment" app:popUpTo="@id/launchFragment" app:popUpToInclusive="true" />
         <action android:id="@+id/action_launchFragment_to_operatorDashboardFragment" app:destination="@id/operatorDashboardFragment" app:popUpTo="@id/launchFragment" app:popUpToInclusive="true" />
     </fragment>
+    <fragment android:id="@+id/loginSelectionFragment" android:name="com.smartsolar.microgrid.ui.auth.LoginSelectionFragment" android:label="@string/login_selection_title">
+        <action android:id="@+id/action_loginSelectionFragment_to_loginFragment" app:destination="@id/loginFragment" />
+        <action android:id="@+id/action_loginSelectionFragment_to_operatorLoginFragment" app:destination="@id/operatorLoginFragment" />
+    </fragment>
     <fragment android:id="@+id/loginFragment" android:name="com.smartsolar.microgrid.ui.auth.LoginFragment" android:label="@string/login_title">
         <action android:id="@+id/action_loginFragment_to_registerFragment" app:destination="@id/registerFragment" />
-        <action android:id="@+id/action_loginFragment_to_operatorLoginFragment" app:destination="@id/operatorLoginFragment" />
-        <action android:id="@+id/action_loginFragment_to_prosumerHomeFragment" app:destination="@id/prosumerHomeFragment" app:popUpTo="@id/loginFragment" app:popUpToInclusive="true" />
+        <action android:id="@+id/action_loginFragment_to_prosumerHomeFragment" app:destination="@id/prosumerHomeFragment" app:popUpTo="@id/nav_graph" app:popUpToInclusive="true" />
     </fragment>
     <fragment android:id="@+id/operatorLoginFragment" android:name="com.smartsolar.microgrid.ui.operator.OperatorLoginFragment" android:label="@string/operator_login_title">
-        <action android:id="@+id/action_operatorLoginFragment_to_operatorDashboardFragment" app:destination="@id/operatorDashboardFragment" app:popUpTo="@id/loginFragment" app:popUpToInclusive="true" />
+        <action android:id="@+id/action_operatorLoginFragment_to_operatorDashboardFragment" app:destination="@id/operatorDashboardFragment" app:popUpTo="@id/nav_graph" app:popUpToInclusive="true" />
     </fragment>
     <fragment android:id="@+id/operatorDashboardFragment" android:name="com.smartsolar.microgrid.ui.operator.OperatorDashboardFragment" android:label="@string/operator_dashboard_title">
         <action android:id="@+id/action_operatorDashboardFragment_to_qrScannerFragment" app:destination="@id/qrScannerFragment" />
@@ -36,7 +39,7 @@
         <action android:id="@+id/action_prosumerHomeFragment_to_stationsFragment" app:destination="@id/stationsFragment" />
         <action android:id="@+id/action_prosumerHomeFragment_to_myReservationsFragment" app:destination="@id/myReservationsFragment" />
         <action android:id="@+id/action_prosumerHomeFragment_to_prosumerProfileFragment" app:destination="@id/prosumerProfileFragment" />
-        <action android:id="@+id/action_prosumerHomeFragment_to_loginFragment" app:destination="@id/loginFragment" app:popUpTo="@id/nav_graph" app:popUpToInclusive="true" />
+        <action android:id="@+id/action_prosumerHomeFragment_to_loginSelectionFragment" app:destination="@id/loginSelectionFragment" app:popUpTo="@id/nav_graph" app:popUpToInclusive="true" />
     </fragment>
     <fragment android:id="@+id/myReservationsFragment" android:name="com.smartsolar.microgrid.ui.reservations.MyReservationsFragment" android:label="@string/my_reservations_title">
         <action android:id="@+id/action_myReservationsFragment_to_reservationDetailsFragment" app:destination="@id/reservationDetailsFragment" />
@@ -44,10 +47,10 @@
     </fragment>
     <fragment android:id="@+id/prosumerProfileFragment" android:name="com.smartsolar.microgrid.ui.prosumer.ProsumerProfileFragment" android:label="@string/profile_title">
         <action android:id="@+id/action_prosumerProfileFragment_to_editProsumerProfileFragment" app:destination="@id/editProsumerProfileFragment" />
-        <action android:id="@+id/action_prosumerProfileFragment_to_loginFragment" app:destination="@id/loginFragment" app:popUpTo="@id/nav_graph" app:popUpToInclusive="true" />
+        <action android:id="@+id/action_prosumerProfileFragment_to_loginSelectionFragment" app:destination="@id/loginSelectionFragment" app:popUpTo="@id/nav_graph" app:popUpToInclusive="true" />
     </fragment>
     <fragment android:id="@+id/editProsumerProfileFragment" android:name="com.smartsolar.microgrid.ui.prosumer.EditProsumerProfileFragment" android:label="@string/edit_profile_title">
-        <action android:id="@+id/action_editProsumerProfileFragment_to_loginFragment" app:destination="@id/loginFragment" app:popUpTo="@id/nav_graph" app:popUpToInclusive="true" />
+        <action android:id="@+id/action_editProsumerProfileFragment_to_loginSelectionFragment" app:destination="@id/loginSelectionFragment" app:popUpTo="@id/nav_graph" app:popUpToInclusive="true" />
     </fragment>
     <fragment android:id="@+id/stationsFragment" android:name="com.smartsolar.microgrid.ui.stations.StationsFragment" android:label="@string/stations_title">
         <action android:id="@+id/action_stationsFragment_to_stationDetailsFragment" app:destination="@id/stationDetailsFragment" />

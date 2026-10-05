@@ -43,7 +43,7 @@ class ReservationDetailsFragment : Fragment() {
     }
     private fun render(state:ReservationDetailsState){
         val b=binding?:return;b.progressIndicator.isVisible=state.isLoading||state.isCancelling;b.errorContainer.isVisible=state.error!=null;b.contentContainer.isVisible=state.content!=null
-        state.error?.let{b.errorMessage.text=it.message;if(it.httpStatus==401)findNavController().navigate(R.id.action_global_loginFragment)}
+        state.error?.let{b.errorMessage.text=it.message;if(it.httpStatus==401)findNavController().navigate(R.id.action_global_loginSelectionFragment)}
         state.actionError?.let{cancelDialog?.dismiss();cancelDialog=null;Snackbar.make(b.root,it.message,Snackbar.LENGTH_LONG).show()}
         state.content?.let{content->val r=content.reservation;b.reservationIdValue.text=r.reservationId;b.stationValue.text=content.station?.name?:r.stationId;b.slotValue.text=content.slot?.let{getString(R.string.slot_summary,BookingPresentation.date(it.date),BookingPresentation.time(it.startTime),BookingPresentation.time(it.endTime))}?:r.slotId
             b.scheduledValue.text=BookingPresentation.timestamp(r.scheduledTime);b.statusValue.text=r.status.name;b.referenceValue.text=r.transactionReference?:getString(R.string.reference_not_issued);b.createdValue.text=BookingPresentation.timestamp(r.createdAt);b.updatedValue.text=BookingPresentation.timestamp(r.updatedAt);b.completedValue.text=r.completedAt?.let{BookingPresentation.timestamp(it)}?:getString(R.string.not_applicable)

@@ -1,5 +1,6 @@
 import { useState, type FormEvent } from 'react'
 import { useNavigate } from 'react-router-dom'
+import smartSolarLogo from '@/assets/branding/smart-solar-logo.png'
 import { Alert } from '@/components/feedback/Alert'
 import { Button } from '@/components/ui/Button'
 import { Card } from '@/components/ui/Card'
@@ -35,8 +36,8 @@ export function LoginPage() {
     <main className="centered-page">
       <Card className="centered-page__panel">
         <div className="centered-page__brand">
-          <span className="centered-page__brand-mark" aria-hidden="true">S</span>
-          <span><strong>Smart Solar</strong><small>Microgrid Platform</small></span>
+          <img className="centered-page__logo" src={smartSolarLogo} alt="Smart Solar" />
+          <div><strong>Smart Solar Microgrid Trading System</strong><small>Backoffice and Grid Operator portal</small></div>
         </div>
         <p className="centered-page__eyebrow">Secure Web access</p>
         <h1 className="centered-page__title">Sign in</h1>

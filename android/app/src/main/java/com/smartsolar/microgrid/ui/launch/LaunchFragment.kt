@@ -54,8 +54,8 @@ class LaunchFragment : Fragment() {
 
         if (findNavController().currentDestination?.id != R.id.launchFragment) return
         when (state) {
-            LaunchUiState.NavigateToLogin ->
-                findNavController().navigate(R.id.action_launchFragment_to_loginFragment)
+            LaunchUiState.NavigateToLoginSelection ->
+                findNavController().navigate(R.id.action_launchFragment_to_loginSelectionFragment)
             LaunchUiState.NavigateToProsumerHome ->
                 findNavController().navigate(R.id.action_launchFragment_to_prosumerHomeFragment)
             LaunchUiState.NavigateToOperatorDashboard ->

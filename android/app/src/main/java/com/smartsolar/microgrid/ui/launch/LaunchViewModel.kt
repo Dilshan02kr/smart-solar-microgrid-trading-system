@@ -9,6 +9,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.Job
 import com.smartsolar.microgrid.domain.model.SessionDestination
 import com.smartsolar.microgrid.domain.model.SessionRouting
 
@@ -17,27 +18,30 @@ class LaunchViewModel(
 ) : ViewModel() {
     private val mutableState = MutableStateFlow<LaunchUiState>(LaunchUiState.Loading)
     val state: StateFlow<LaunchUiState> = mutableState.asStateFlow()
+    private var restoreJob: Job? = null
 
     init {
-        restoreSession()
+        restoreSession(enforceMinimumDuration = true)
     }
 
     fun retry() {
-        restoreSession()
+        restoreSession(enforceMinimumDuration = false)
     }
 
     fun continueToLogin() {
         sessionRepository.clearSession()
-        mutableState.value = LaunchUiState.NavigateToLogin
+        mutableState.value = LaunchUiState.NavigateToLoginSelection
     }
 
-    private fun restoreSession() {
+    private fun restoreSession(enforceMinimumDuration: Boolean) {
+        if (restoreJob?.isActive == true) return
         mutableState.value = LaunchUiState.Loading
-        viewModelScope.launch {
-            mutableState.value = when (val result = sessionRepository.restoreSession()) {
-                is AppResult.Success -> if (result.value == null) {
-                    LaunchUiState.NavigateToLogin
-                } else when (SessionRouting.destination(result.value)) {
+        restoreJob = viewModelScope.launch {
+            val restore = suspend { sessionRepository.restoreSession() }
+            val result = if (enforceMinimumDuration) awaitSplashReady(restore) else restore()
+            mutableState.value = when (result) {
+                is AppResult.Success -> when (SessionRouting.destination(result.value)) {
+                    SessionDestination.LOGIN_SELECTION -> LaunchUiState.NavigateToLoginSelection
                     SessionDestination.PROSUMER_HOME -> LaunchUiState.NavigateToProsumerHome
                     SessionDestination.OPERATOR_DASHBOARD -> LaunchUiState.NavigateToOperatorDashboard
                     SessionDestination.UNSUPPORTED -> LaunchUiState.Error(
@@ -45,7 +49,7 @@ class LaunchViewModel(
                     )
                 }
                 is AppResult.Error -> if (result.error.httpStatus == 401) {
-                    LaunchUiState.NavigateToLogin
+                    LaunchUiState.NavigateToLoginSelection
                 } else {
                     LaunchUiState.Error(result.error)
                 }
@@ -56,7 +60,7 @@ class LaunchViewModel(
 
 sealed interface LaunchUiState {
     data object Loading : LaunchUiState
-    data object NavigateToLogin : LaunchUiState
+    data object NavigateToLoginSelection : LaunchUiState
     data object NavigateToProsumerHome : LaunchUiState
     data object NavigateToOperatorDashboard : LaunchUiState
     data class Error(val error: AppError) : LaunchUiState

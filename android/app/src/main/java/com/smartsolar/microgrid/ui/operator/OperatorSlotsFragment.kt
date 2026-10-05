@@ -66,7 +66,7 @@ class OperatorSlotsFragment : Fragment() {
             current.errorMessage.text = if (it.code == "OPERATOR_STATION_NOT_ASSIGNED") {
                 getString(R.string.operator_station_not_assigned)
             } else it.message
-            if (it.httpStatus == 401) findNavController().navigate(R.id.action_global_loginFragment)
+            if (it.httpStatus == 401) findNavController().navigate(R.id.action_global_loginSelectionFragment)
         }
         state.mutationError?.let {
             val message = if (it.code == "SLOT_HAS_ACTIVE_RESERVATION") {

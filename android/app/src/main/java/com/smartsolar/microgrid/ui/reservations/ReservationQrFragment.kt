@@ -62,12 +62,13 @@ class ReservationQrFragment : Fragment() {
         )
         state.error?.let {
             currentBinding.errorMessage.text = it.message
-            if (it.httpStatus == 401) findNavController().navigate(R.id.action_global_loginFragment)
+            if (it.httpStatus == 401) findNavController().navigate(R.id.action_global_loginSelectionFragment)
         }
         state.content?.let { content ->
             currentPayload = content.payload
             currentBinding.referenceValue.text = content.payload
             currentBinding.stationValue.text = content.stationName
+            currentBinding.statusValue.text = content.reservation.status.name
             currentBinding.scheduledValue.text = BookingPresentation.timestamp(content.reservation.scheduledTime)
             currentBinding.qrImage.contentDescription = getString(R.string.qr_content_description, content.payload)
             val horizontalPadding = resources.getDimensionPixelSize(R.dimen.screen_padding) * 2

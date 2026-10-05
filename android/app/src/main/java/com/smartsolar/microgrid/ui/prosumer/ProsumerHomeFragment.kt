@@ -10,6 +10,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.smartsolar.microgrid.R
 import com.smartsolar.microgrid.SmartSolarApplication
 import com.smartsolar.microgrid.data.repository.SessionState
@@ -21,7 +22,7 @@ class ProsumerHomeFragment : Fragment() {
     private var binding: FragmentProsumerHomeBinding? = null
     private val viewModel: ProsumerHomeViewModel by viewModels {
         val container = (requireActivity().application as SmartSolarApplication).appContainer
-        AppViewModelFactory { ProsumerHomeViewModel(container.sessionRepository) }
+        AppViewModelFactory { ProsumerHomeViewModel(container.sessionRepository, container.reservationRepository) }
     }
 
     override fun onCreateView(
@@ -36,16 +37,21 @@ class ProsumerHomeFragment : Fragment() {
         binding?.stationsButton?.setOnClickListener {
             findNavController().navigate(R.id.action_prosumerHomeFragment_to_stationsFragment)
         }
+        binding?.findStationsButton?.setOnClickListener {
+            findNavController().navigate(R.id.action_prosumerHomeFragment_to_stationsFragment)
+        }
         binding?.profileButton?.setOnClickListener {
             findNavController().navigate(R.id.action_prosumerHomeFragment_to_prosumerProfileFragment)
         }
         binding?.reservationsButton?.setOnClickListener {
             findNavController().navigate(R.id.action_prosumerHomeFragment_to_myReservationsFragment)
         }
-        binding?.logoutButton?.setOnClickListener { viewModel.logout() }
+        binding?.logoutButton?.setOnClickListener { confirmLogout() }
+        binding?.refreshButton?.setOnClickListener { viewModel.refresh() }
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.sessionState.collect(::render)
+                launch { viewModel.sessionState.collect(::render) }
+                launch { viewModel.dashboardState.collect(::renderDashboard) }
             }
         }
     }
@@ -60,15 +66,34 @@ class ProsumerHomeFragment : Fragment() {
                 )
                 currentBinding.roleValue.text = state.user.role.name
             }
-            SessionState.Unauthenticated -> navigateToLogin()
+            SessionState.Unauthenticated -> navigateToLoginSelection()
             is SessionState.Failed -> currentBinding.welcomeMessage.text = state.error.message
             SessionState.Initializing -> Unit
         }
     }
 
-    private fun navigateToLogin() {
+    private fun confirmLogout() {
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle(R.string.logout_confirmation_title)
+            .setMessage(R.string.logout_confirmation_message)
+            .setNegativeButton(R.string.cancel, null)
+            .setPositiveButton(R.string.logout_confirmation_action) { _, _ -> viewModel.logout() }
+            .show()
+    }
+
+    private fun renderDashboard(state: ProsumerDashboardState) {
+        val currentBinding = binding ?: return
+        currentBinding.dashboardProgress.visibility = if (state.isLoading) View.VISIBLE else View.GONE
+        currentBinding.dashboardError.visibility = if (state.error != null) View.VISIBLE else View.GONE
+        currentBinding.dashboardError.text = state.error?.message
+        currentBinding.pendingCount.text = getString(R.string.count_value, state.pendingCount)
+        currentBinding.approvedCount.text = getString(R.string.count_value, state.approvedCount)
+        currentBinding.completedCount.text = getString(R.string.count_value, state.completedCount)
+    }
+
+    private fun navigateToLoginSelection() {
         if (findNavController().currentDestination?.id == R.id.prosumerHomeFragment) {
-            findNavController().navigate(R.id.action_prosumerHomeFragment_to_loginFragment)
+            findNavController().navigate(R.id.action_prosumerHomeFragment_to_loginSelectionFragment)
         }
     }
 

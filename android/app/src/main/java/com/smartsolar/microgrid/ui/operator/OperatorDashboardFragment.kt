@@ -11,6 +11,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.smartsolar.microgrid.R
 import com.smartsolar.microgrid.SmartSolarApplication
 import com.smartsolar.microgrid.core.util.OperatorErrorMessage
@@ -48,10 +49,7 @@ class OperatorDashboardFragment : Fragment() {
         binding?.slotsButton?.setOnClickListener {
             findNavController().navigate(R.id.action_operatorDashboardFragment_to_operatorSlotsFragment)
         }
-        binding?.logoutButton?.setOnClickListener {
-            viewModel.logout()
-            findNavController().navigate(R.id.action_global_loginFragment)
-        }
+        binding?.logoutButton?.setOnClickListener { confirmLogout() }
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.state.collect(::render)
@@ -74,13 +72,25 @@ class OperatorDashboardFragment : Fragment() {
                 OperatorErrorMessage.STATION_NOT_ASSIGNED -> getString(R.string.operator_station_not_assigned)
                 else -> error.message
             }
-            if (error.httpStatus == 401) findNavController().navigate(R.id.action_global_loginFragment)
+            if (error.httpStatus == 401) findNavController().navigate(R.id.action_global_loginSelectionFragment)
         }
         state.summary?.let {
             current.pendingCount.text = getString(R.string.count_value, it.pendingReservationCount)
             current.approvedCount.text = getString(R.string.count_value, it.approvedFutureReservationCount)
             current.stationValue.text = state.stationLabel ?: getString(R.string.station_context_unavailable)
         }
+    }
+
+    private fun confirmLogout() {
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle(R.string.logout_confirmation_title)
+            .setMessage(R.string.logout_confirmation_message)
+            .setNegativeButton(R.string.cancel, null)
+            .setPositiveButton(R.string.logout_confirmation_action) { _, _ ->
+                viewModel.logout()
+                findNavController().navigate(R.id.action_global_loginSelectionFragment)
+            }
+            .show()
     }
 
     override fun onDestroyView() {

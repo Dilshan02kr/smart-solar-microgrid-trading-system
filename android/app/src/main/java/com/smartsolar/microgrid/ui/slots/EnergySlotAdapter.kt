@@ -16,11 +16,16 @@ class EnergySlotAdapter(private val onBook: (EnergySlot) -> Unit) : ListAdapter<
     override fun onBindViewHolder(holder: Holder, position: Int) = holder.bind(getItem(position))
     inner class Holder(private val binding: ItemEnergySlotBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(slot: EnergySlot) = with(binding) {
+            val withinBookingWindow = BookingPresentation.isWithinBookingWindow(slot)
             dateValue.text = BookingPresentation.date(slot.date)
             timeValue.text = root.context.getString(R.string.slot_time_value, BookingPresentation.time(slot.startTime), BookingPresentation.time(slot.endTime))
             capacityValue.text = root.context.getString(R.string.capacity_value, slot.capacityKw)
-            availabilityValue.setText(if (slot.isAvailable) R.string.available else R.string.unavailable)
-            bookButton.isVisible = slot.isAvailable
+            availabilityValue.setText(when {
+                !slot.isAvailable -> R.string.unavailable
+                !withinBookingWindow -> R.string.outside_booking_window
+                else -> R.string.available
+            })
+            bookButton.isVisible = slot.isAvailable && withinBookingWindow
             bookButton.setOnClickListener { onBook(slot) }
         }
     }
