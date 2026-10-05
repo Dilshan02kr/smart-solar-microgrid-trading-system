@@ -1,4 +1,14 @@
-// Defines station-authorized verification of reservation transaction references.
+/*
+ * Smart Solar Microgrid Trading System
+ * SE4040 - Enterprise Application Development
+ *
+ * File: ITransactionVerificationService.cs
+ * Component: QR Verification and Transaction Completion
+ * Component Owner: Kulunu Kasthuri Arachchi (IT23375628)
+ *
+ * Purpose:
+ * Defines station-authorized verification of reservation transaction references.
+ */
 using SmartSolarMicrogrid.Api.DTOs;
 
 namespace SmartSolarMicrogrid.Api.Services;

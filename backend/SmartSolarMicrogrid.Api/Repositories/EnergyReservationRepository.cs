@@ -1,4 +1,14 @@
-// Provides focused, concurrency-aware MongoDB access for energy reservations.
+/*
+ * Smart Solar Microgrid Trading System
+ * SE4040 - Enterprise Application Development
+ *
+ * File: EnergyReservationRepository.cs
+ * Component: Reservation and Booking Management
+ * Component Owner: N A Illangasinghe (IT23391536)
+ *
+ * Purpose:
+ * Provides focused, concurrency-aware MongoDB access for energy reservations.
+ */
 using System.Text.RegularExpressions;
 using MongoDB.Bson;
 using MongoDB.Driver;
@@ -282,6 +292,7 @@ public sealed class EnergyReservationRepository : IEnergyReservationRepository
         string slotId,
         CancellationToken cancellationToken = default)
     {
+        // Checks whether a pending or approved reservation currently occupies the specified slot.
         if (!ObjectId.TryParse(slotId, out _))
         {
             return false;

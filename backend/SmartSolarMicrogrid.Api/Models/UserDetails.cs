@@ -1,4 +1,14 @@
-// Represents a MongoDB-backed user account shared by all supported roles.
+/*
+ * Smart Solar Microgrid Trading System
+ * SE4040 - Enterprise Application Development
+ *
+ * File: UserDetails.cs
+ * Component: Web User and Account Management
+ * Component Owner: WMDD Karunarathna (IT23145320)
+ *
+ * Purpose:
+ * Represents a MongoDB-backed user account shared by all supported roles.
+ */
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 

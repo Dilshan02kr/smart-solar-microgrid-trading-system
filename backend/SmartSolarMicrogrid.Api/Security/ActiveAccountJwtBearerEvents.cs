@@ -1,4 +1,14 @@
-// Enforces current database role and ACTIVE account status for every validated JWT.
+/*
+ * Smart Solar Microgrid Trading System
+ * SE4040 - Enterprise Application Development
+ *
+ * File: ActiveAccountJwtBearerEvents.cs
+ * Component: Authentication and Account Management
+ * Component Owner: WMDD Karunarathna (IT23145320)
+ *
+ * Purpose:
+ * Enforces current database role and ACTIVE account status for every validated JWT.
+ */
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using SmartSolarMicrogrid.Api.Common;
 using SmartSolarMicrogrid.Api.Models;

@@ -1,4 +1,14 @@
-// Exposes login and current-user endpoints backed by centralized authentication services.
+/*
+ * Smart Solar Microgrid Trading System
+ * SE4040 - Enterprise Application Development
+ *
+ * File: AuthController.cs
+ * Component: Authentication and Account Management
+ * Component Owner: WMDD Karunarathna (IT23145320)
+ *
+ * Purpose:
+ * Exposes login and current-user endpoints backed by centralized authentication services.
+ */
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SmartSolarMicrogrid.Api.Common;
