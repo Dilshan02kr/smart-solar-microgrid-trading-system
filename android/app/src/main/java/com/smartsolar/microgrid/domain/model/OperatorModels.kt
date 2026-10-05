@@ -5,6 +5,14 @@ data class OperatorDashboardSummary(
     val approvedFutureReservationCount: Long,
 )
 
+data class OperatorReservation(
+    val reservationId: String,
+    val prosumerId: String,
+    val slotId: String,
+    val scheduledTime: String,
+    val status: ReservationStatus,
+)
+
 data class OperatorTransaction(
     val reservationId: String,
     val transactionReference: String,

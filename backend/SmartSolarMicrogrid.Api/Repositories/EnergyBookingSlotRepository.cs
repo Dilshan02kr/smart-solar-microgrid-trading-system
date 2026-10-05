@@ -131,6 +131,30 @@ public sealed class EnergyBookingSlotRepository : IEnergyBookingSlotRepository
         return result.MatchedCount == 1;
     }
 
+    public async Task<EnergyBookingSlot?> SetAvailabilityAsync(
+        string slotId,
+        bool isAvailable,
+        CancellationToken cancellationToken = default)
+    {
+        if (!ObjectId.TryParse(slotId, out var objectId))
+        {
+            return null;
+        }
+
+        var update = Builders<EnergyBookingSlot>.Update
+            .Set(slot => slot.IsAvailable, isAvailable)
+            .Set(slot => slot.UpdatedAt, DateTime.UtcNow);
+
+        return await _slots.FindOneAndUpdateAsync(
+            slot => slot.Id == objectId,
+            update,
+            new FindOneAndUpdateOptions<EnergyBookingSlot>
+            {
+                ReturnDocument = ReturnDocument.After
+            },
+            cancellationToken);
+    }
+
     public async Task<EnergyBookingSlot?> UpdateAsync(
         string id,
         DateTime date,

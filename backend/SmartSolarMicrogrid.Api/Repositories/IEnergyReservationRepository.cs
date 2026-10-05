@@ -24,6 +24,11 @@ public interface IEnergyReservationRepository
         string prosumerId,
         CancellationToken cancellationToken = default);
 
+    // Retrieve pending and approved reservations for one authoritative station assignment.
+    Task<IReadOnlyList<EnergyReservation>> GetOperationalByStationAsync(
+        string stationId,
+        CancellationToken cancellationToken = default);
+
     // Search reservations for Backoffice administration.
     Task<IReadOnlyList<EnergyReservation>> SearchAsync(
         string? prosumerId,
@@ -78,6 +83,11 @@ public interface IEnergyReservationRepository
     // Determine whether a station has pending or approved reservations.
     Task<bool> HasActiveReservationsForStationAsync(
         string stationId,
+        CancellationToken cancellationToken = default);
+
+    // Determine whether one slot is owned by a pending or approved reservation.
+    Task<bool> HasActiveReservationForSlotAsync(
+        string slotId,
         CancellationToken cancellationToken = default);
 
     // Count station reservations in an authoritative status.

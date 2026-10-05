@@ -4,8 +4,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
+import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -16,6 +18,7 @@ import com.smartsolar.microgrid.R
 import com.smartsolar.microgrid.SmartSolarApplication
 import com.smartsolar.microgrid.core.util.ReservationGroup
 import com.smartsolar.microgrid.databinding.FragmentMyReservationsBinding
+import com.smartsolar.microgrid.domain.model.ReservationStatus
 import com.smartsolar.microgrid.ui.common.AppViewModelFactory
 import kotlinx.coroutines.launch
 
@@ -35,6 +38,12 @@ class MyReservationsFragment : Fragment() {
         binding?.reservationList?.adapter = adapter
         binding?.refreshButton?.setOnClickListener { viewModel.load(refresh = true) }
         binding?.retryButton?.setOnClickListener { viewModel.load() }
+        binding?.searchInput?.doAfterTextChanged { viewModel.setSearch(it?.toString().orEmpty()) }
+        val statuses = listOf<ReservationStatus?>(null) + ReservationStatus.entries
+        val statusLabels = listOf(getString(R.string.all_statuses)) + ReservationStatus.entries.map { it.name }
+        binding?.statusFilter?.setAdapter(ArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line, statusLabels))
+        binding?.statusFilter?.setOnItemClickListener { _, _, position, _ -> viewModel.setStatus(statuses[position]) }
+        binding?.resetFiltersButton?.setOnClickListener { viewModel.resetFilters() }
         binding?.filterGroup?.addOnButtonCheckedListener { _, checkedId, isChecked ->
             if (isChecked) viewModel.select(
                 when (checkedId) {
@@ -66,13 +75,24 @@ class MyReservationsFragment : Fragment() {
             if (it.httpStatus == 401) findNavController().navigate(R.id.action_global_loginFragment)
         }
         currentBinding.stationWarning.isVisible = state.stationNamesUnavailable
+        if (currentBinding.searchInput.text?.toString() != state.filterCriteria.searchQuery) {
+            currentBinding.searchInput.setText(state.filterCriteria.searchQuery)
+        }
+        val statusLabel = state.filterCriteria.status?.name ?: getString(R.string.all_statuses)
+        if (currentBinding.statusFilter.text.toString() != statusLabel) {
+            currentBinding.statusFilter.setText(statusLabel, false)
+        }
         adapter.submitList(state.visibleItems)
-        currentBinding.emptyMessage.isVisible = state.visibleItems.isEmpty()
+        val hasVisibleItems = state.visibleItems.isNotEmpty()
+        currentBinding.reservationList.isVisible = hasVisibleItems
+        currentBinding.emptyMessage.isVisible = !hasVisibleItems
         currentBinding.emptyMessage.setText(
-            when (state.selectedGroup) {
-                ReservationGroup.PENDING -> R.string.no_pending_reservations
-                ReservationGroup.APPROVED -> R.string.no_approved_reservations
-                ReservationGroup.HISTORY -> R.string.no_reservation_history
+            when {
+                state.reservations.isEmpty() -> R.string.no_reservations_yet
+                state.hasActiveFilters -> R.string.no_matching_reservations
+                state.selectedGroup == ReservationGroup.PENDING -> R.string.no_pending_reservations
+                state.selectedGroup == ReservationGroup.APPROVED -> R.string.no_approved_reservations
+                else -> R.string.no_reservation_history
             },
         )
     }

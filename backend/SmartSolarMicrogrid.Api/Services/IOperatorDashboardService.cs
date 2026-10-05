@@ -9,6 +9,11 @@ public interface IOperatorDashboardService
     Task<OperatorDashboardResult> GetSummaryAsync(
         string? operatorUserId,
         CancellationToken cancellationToken = default);
+
+    // Returns pending and approved reservations for the operator's current database assignment.
+    Task<OperatorReservationsResult> GetReservationsAsync(
+        string? operatorUserId,
+        CancellationToken cancellationToken = default);
 }
 
 public enum OperatorDashboardStatus
@@ -22,3 +27,7 @@ public enum OperatorDashboardStatus
 public sealed record OperatorDashboardResult(
     OperatorDashboardStatus Status,
     DashboardSummaryResponse? Response = null);
+
+public sealed record OperatorReservationsResult(
+    OperatorDashboardStatus Status,
+    IReadOnlyList<OperatorReservationResponse>? Reservations = null);

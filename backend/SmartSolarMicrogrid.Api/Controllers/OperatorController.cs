@@ -14,8 +14,83 @@ namespace SmartSolarMicrogrid.Api.Controllers;
 public sealed class OperatorController(
     ITransactionVerificationService verificationService,
     ITransactionCompletionService completionService,
-    IOperatorDashboardService dashboardService) : ControllerBase
+    IOperatorDashboardService dashboardService,
+    IOperatorSlotService slotService) : ControllerBase
 {
+    [HttpGet("slots")]
+    [ProducesResponseType<IReadOnlyList<EnergyBookingSlotResponse>>(StatusCodes.Status200OK)]
+    [ProducesResponseType<ApiErrorResponse>(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType<ApiErrorResponse>(StatusCodes.Status403Forbidden)]
+    public async Task<ActionResult<IReadOnlyList<EnergyBookingSlotResponse>>> GetSlots(
+        CancellationToken cancellationToken)
+    {
+        var result = await slotService.GetSlotsAsync(User.FindFirst("userId")?.Value, cancellationToken);
+        return result.Status switch
+        {
+            OperatorSlotStatus.Success => Ok(result.Slots),
+            OperatorSlotStatus.AuthenticationRequired => Unauthorized(new ApiErrorResponse(
+                AuthenticationErrorCodes.AuthenticationRequired,
+                "Authentication is required.")),
+            OperatorSlotStatus.OperatorStationNotAssigned => StatusCode(
+                StatusCodes.Status403Forbidden,
+                new ApiErrorResponse(
+                    OperatorErrorCodes.StationNotAssigned,
+                    "The Grid Operator is not assigned to a station.")),
+            _ => StatusCode(StatusCodes.Status403Forbidden, new ApiErrorResponse(
+                AuthenticationErrorCodes.AccessDenied,
+                "Access is denied."))
+        };
+    }
+
+    [HttpPatch("slots/{slotId}/availability")]
+    [ProducesResponseType<EnergyBookingSlotResponse>(StatusCodes.Status200OK)]
+    [ProducesResponseType<ApiErrorResponse>(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType<ApiErrorResponse>(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType<ApiErrorResponse>(StatusCodes.Status403Forbidden)]
+    [ProducesResponseType<ApiErrorResponse>(StatusCodes.Status404NotFound)]
+    [ProducesResponseType<ApiErrorResponse>(StatusCodes.Status409Conflict)]
+    public async Task<ActionResult<EnergyBookingSlotResponse>> SetSlotAvailability(
+        string slotId,
+        UpdateOperatorSlotAvailabilityRequest request,
+        CancellationToken cancellationToken)
+    {
+        var result = await slotService.SetAvailabilityAsync(
+            User.FindFirst("userId")?.Value,
+            slotId,
+            request.IsAvailable!.Value,
+            cancellationToken);
+
+        return result.Status switch
+        {
+            OperatorSlotStatus.Success => Ok(result.Slot),
+            OperatorSlotStatus.AuthenticationRequired => Unauthorized(new ApiErrorResponse(
+                AuthenticationErrorCodes.AuthenticationRequired,
+                "Authentication is required.")),
+            OperatorSlotStatus.OperatorStationNotAssigned => StatusCode(
+                StatusCodes.Status403Forbidden,
+                new ApiErrorResponse(
+                    OperatorErrorCodes.StationNotAssigned,
+                    "The Grid Operator is not assigned to a station.")),
+            OperatorSlotStatus.AccessDenied => StatusCode(
+                StatusCodes.Status403Forbidden,
+                new ApiErrorResponse(
+                    AuthenticationErrorCodes.AccessDenied,
+                    "The slot does not belong to the assigned station.")),
+            OperatorSlotStatus.InvalidSlotId => BadRequest(new ApiErrorResponse(
+                ReservationErrorCodes.InvalidSlotId,
+                "The supplied slot ID is invalid.")),
+            OperatorSlotStatus.SlotNotFound => NotFound(new ApiErrorResponse(
+                ReservationErrorCodes.SlotNotFound,
+                "No energy booking slot was found for the supplied ID.")),
+            OperatorSlotStatus.SlotHasActiveReservation => Conflict(new ApiErrorResponse(
+                OperatorErrorCodes.SlotHasActiveReservation,
+                "This slot cannot be made available while an active reservation exists.")),
+            _ => StatusCode(StatusCodes.Status403Forbidden, new ApiErrorResponse(
+                AuthenticationErrorCodes.AccessDenied,
+                "Access is denied."))
+        };
+    }
+
     [HttpPost("verify-transaction")]
     [ProducesResponseType<VerifyTransactionResponse>(StatusCodes.Status200OK)]
     [ProducesResponseType<ApiErrorResponse>(StatusCodes.Status400BadRequest)]
@@ -167,6 +242,34 @@ public sealed class OperatorController(
         return result.Status switch
         {
             OperatorDashboardStatus.Success => Ok(result.Response),
+            OperatorDashboardStatus.AuthenticationRequired => Unauthorized(new ApiErrorResponse(
+                AuthenticationErrorCodes.AuthenticationRequired,
+                "Authentication is required.")),
+            OperatorDashboardStatus.OperatorStationNotAssigned =>
+                StatusCode(StatusCodes.Status403Forbidden, new ApiErrorResponse(
+                    "OPERATOR_STATION_NOT_ASSIGNED",
+                    "The Grid Operator is not assigned to a station.")),
+            _ => StatusCode(StatusCodes.Status403Forbidden, new ApiErrorResponse(
+                AuthenticationErrorCodes.AccessDenied,
+                "Access is denied."))
+        };
+    }
+
+    [HttpGet("reservations")]
+    [ProducesResponseType<IReadOnlyList<OperatorReservationResponse>>(StatusCodes.Status200OK)]
+    [ProducesResponseType<ApiErrorResponse>(StatusCodes.Status401Unauthorized)]
+    [ProducesResponseType<ApiErrorResponse>(StatusCodes.Status403Forbidden)]
+    public async Task<ActionResult<IReadOnlyList<OperatorReservationResponse>>> GetReservations(
+        CancellationToken cancellationToken)
+    {
+        // Station scope comes only from the authenticated operator's current database record.
+        var result = await dashboardService.GetReservationsAsync(
+            User.FindFirst("userId")?.Value,
+            cancellationToken);
+
+        return result.Status switch
+        {
+            OperatorDashboardStatus.Success => Ok(result.Reservations),
             OperatorDashboardStatus.AuthenticationRequired => Unauthorized(new ApiErrorResponse(
                 AuthenticationErrorCodes.AuthenticationRequired,
                 "Authentication is required.")),

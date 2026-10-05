@@ -46,7 +46,7 @@ export function OperatorDashboardPage() {
       <PageHeader
         title="Grid Operator Dashboard"
         description="View reservation activity scoped by the server to your assigned microgrid node."
-        actions={<><Button variant="outline" onClick={refresh} disabled={isLoading}>Refresh</Button><Link className="button button--primary" to="/operator/operations">Verify Transaction</Link></>}
+        actions={<><Button variant="outline" onClick={refresh} disabled={isLoading}>Refresh</Button><Link className="button button--outline" to="/operator/slots">Energy Slots</Link><Link className="button button--outline" to="/operator/reservations">View Reservations</Link><Link className="button button--primary" to="/operator/operations">Verify Transaction</Link></>}
       />
       <PageContent>
         {isLoading ? (

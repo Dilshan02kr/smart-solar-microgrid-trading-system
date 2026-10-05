@@ -1,6 +1,7 @@
 package com.smartsolar.microgrid.data.remote.dto
 
 import com.smartsolar.microgrid.domain.model.OperatorDashboardSummary
+import com.smartsolar.microgrid.domain.model.OperatorReservation
 import com.smartsolar.microgrid.domain.model.OperatorTransaction
 import com.smartsolar.microgrid.domain.model.ReservationStatus
 
@@ -17,6 +18,22 @@ data class DashboardSummaryResponseDto(
 data class VerifyTransactionRequestDto(
     val transactionReference: String,
 )
+
+data class UpdateOperatorSlotAvailabilityRequestDto(
+    val isAvailable: Boolean,
+)
+
+data class OperatorReservationResponseDto(
+    val reservationId: String,
+    val prosumerId: String,
+    val slotId: String,
+    val scheduledTime: String,
+    val status: String,
+) {
+    fun toDomainOrNull(): OperatorReservation? = ReservationStatus.fromBackendValue(status)?.let {
+        OperatorReservation(reservationId, prosumerId, slotId, scheduledTime, it)
+    }
+}
 
 data class OperatorTransactionResponseDto(
     val reservationId: String,

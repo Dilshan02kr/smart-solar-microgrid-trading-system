@@ -2,6 +2,9 @@ import type { AxiosResponse } from 'axios'
 import type {
   CompleteReservationResponse,
   DashboardSummaryResponse,
+  OperatorReservation,
+  OperatorSlot,
+  UpdateOperatorSlotAvailabilityRequest,
   VerifyTransactionRequest,
   VerifyTransactionResponse,
 } from '@/features/operator/types/operatorTypes'
@@ -18,6 +21,24 @@ async function dataOrNormalizedError<T>(request: Promise<AxiosResponse<T>>): Pro
 
 export function getOperatorDashboardSummary(signal?: AbortSignal): Promise<DashboardSummaryResponse> {
   return dataOrNormalizedError(apiClient.get<DashboardSummaryResponse>('/api/operator/dashboard/summary', { signal }))
+}
+
+export function getOperatorReservations(signal?: AbortSignal): Promise<OperatorReservation[]> {
+  return dataOrNormalizedError(apiClient.get<OperatorReservation[]>('/api/operator/reservations', { signal }))
+}
+
+export function getOperatorSlots(signal?: AbortSignal): Promise<OperatorSlot[]> {
+  return dataOrNormalizedError(apiClient.get<OperatorSlot[]>('/api/operator/slots', { signal }))
+}
+
+export function updateOperatorSlotAvailability(
+  slotId: string,
+  request: UpdateOperatorSlotAvailabilityRequest,
+): Promise<OperatorSlot> {
+  return dataOrNormalizedError(apiClient.patch<OperatorSlot>(
+    `/api/operator/slots/${encodeURIComponent(slotId)}/availability`,
+    request,
+  ))
 }
 
 export function verifyTransaction(request: VerifyTransactionRequest): Promise<VerifyTransactionResponse> {

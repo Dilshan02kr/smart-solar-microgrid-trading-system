@@ -7,7 +7,6 @@ import { getRoleLabel } from '@/features/auth/utils/rolePresentation'
 
 const routeTitles: Record<string, string> = {
   '/': 'Dashboard',
-  '/components': 'Component showcase',
   '/users': 'Web users',
   '/users/new': 'Create Web user',
   '/prosumers': 'Prosumers',
@@ -16,6 +15,7 @@ const routeTitles: Record<string, string> = {
   '/stations/new': 'Create microgrid node',
   '/reservations': 'Reservations',
   '/operator/operations': 'Operator Operations',
+  '/operator/reservations': 'Operational Reservations',
   '/404': 'Page not found',
 }
 

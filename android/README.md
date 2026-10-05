@@ -39,7 +39,7 @@ This stage displays station markers and links them to the existing station-detai
 ## Supported mobile flows
 
 - Prosumers can register, sign in after activation, manage their own profile, browse stations/maps/slots, create and manage reservations, review reservation history, and display an approved reservation QR.
-- Grid Operators use a separate email login, see their server-assigned station dashboard, verify transaction references through QR scanning or manual fallback, and complete server-approved transfers.
+- Grid Operators use a separate email login, see their server-assigned station dashboard, manage availability of existing assigned-station slots, monitor operational reservations, verify transaction references through QR scanning or manual fallback, and complete server-approved transfers.
 - Backoffice administration remains web-only. Authentication, reservation mutations, active QR authority, operator assignment, verification, and completion always require the backend.
 
 `android.permission.CAMERA` is used only by the Grid Operator QR scanner. Device-location and storage permissions are not requested.
