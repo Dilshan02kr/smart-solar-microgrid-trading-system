@@ -1,4 +1,14 @@
-// Provides MongoDB persistence and atomic status changes for solar stations.
+/*
+ * Smart Solar Microgrid Trading System
+ * SE4040 - Enterprise Application Development
+ *
+ * File: SolarStationRepository.cs
+ * Component: Microgrid Node and Station Management
+ * Component Owner: R A K Hansika (IT23140998)
+ *
+ * Purpose:
+ * Provides MongoDB persistence and atomic status changes for solar stations.
+ */
 using MongoDB.Bson;
 using MongoDB.Driver;
 using SmartSolarMicrogrid.Api.Models;

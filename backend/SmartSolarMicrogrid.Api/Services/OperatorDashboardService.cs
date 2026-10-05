@@ -1,4 +1,14 @@
-// Produces pending and future-approved counts for the operator's assigned station.
+/*
+ * Smart Solar Microgrid Trading System
+ * SE4040 - Enterprise Application Development
+ *
+ * File: OperatorDashboardService.cs
+ * Component: Grid Operator Dashboard
+ * Component Owner: Kulunu Kasthuri Arachchi (IT23375628)
+ *
+ * Purpose:
+ * Produces pending and future-approved counts for the operator's assigned station.
+ */
 using SmartSolarMicrogrid.Api.DTOs;
 using SmartSolarMicrogrid.Api.Models;
 using SmartSolarMicrogrid.Api.Repositories;
@@ -67,6 +77,7 @@ public sealed class OperatorDashboardService(
                 reservation.Status.ToString())).ToList());
     }
 
+    // Maps assignment authorization outcomes to operator-dashboard service statuses.
     private static OperatorDashboardStatus MapAssignmentStatus(OperatorAssignmentStatus status) => status switch
     {
         OperatorAssignmentStatus.AuthenticationRequired => OperatorDashboardStatus.AuthenticationRequired,

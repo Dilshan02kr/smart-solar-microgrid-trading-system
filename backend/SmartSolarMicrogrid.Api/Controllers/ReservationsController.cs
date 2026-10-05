@@ -1,4 +1,14 @@
-// Exposes role-restricted reservation lifecycle endpoints using authenticated identity.
+/*
+ * Smart Solar Microgrid Trading System
+ * SE4040 - Enterprise Application Development
+ *
+ * File: ReservationsController.cs
+ * Component: Reservation and Booking Management
+ * Component Owner: N A Illangasinghe (IT23391536)
+ *
+ * Purpose:
+ * Exposes role-restricted reservation lifecycle endpoints using authenticated identity.
+ */
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SmartSolarMicrogrid.Api.Common;

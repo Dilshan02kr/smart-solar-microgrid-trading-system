@@ -1,4 +1,14 @@
-// Coordinates reservation lifecycle rules across users, stations, slots, and MongoDB.
+/*
+ * Smart Solar Microgrid Trading System
+ * SE4040 - Enterprise Application Development
+ *
+ * File: ReservationService.cs
+ * Component: Reservation and Booking Management
+ * Component Owner: N A Illangasinghe (IT23391536)
+ *
+ * Purpose:
+ * Coordinates reservation lifecycle rules across users, stations, slots, and MongoDB.
+ */
 using System.Security.Cryptography;
 using MongoDB.Bson;
 using SmartSolarMicrogrid.Api.DTOs;
